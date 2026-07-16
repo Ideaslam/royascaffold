@@ -40,9 +40,47 @@ viewer renders and the module-bundle template mirrors). The table below is the q
 
 ### Edge fields (the graph)
 
-`calls`, `uses`, `deps`, `implements`, `renders`, `owns`, `contracts`. Edges may be method-level
-(`SVC-DATA-DS.listLite`). `roya verify` resolves every edge to a real node; the index builds the
-reverse direction (`used_by`, `implemented_by`) automatically.
+`calls`, `uses`, `deps`, `implements`, `renders`, `receives`, `returns`, `owns`, `contracts`. Edges
+may be method-level (`SVC-DATA-DS.listLite`). `roya verify` resolves every edge to a real node; the
+index builds the reverse direction (`used_by`, `implemented_by`) automatically. `receives`/`returns`
+link a surface to the request/response DTO shapes it consumes and produces.
+
+### Where the map lives (file layout)
+
+| Path | Holds |
+|------|-------|
+| `map/modules/<module>.yaml` | one bundle per module: its features + logic/surface/ui/contract/dto/flow nodes |
+| `map/data/<domain>/<entity>.yaml` | **one entity per file** — the shared data model (see below) |
+| `map/architecture/` | domains, boundaries, auth |
+| `map/operational.yaml`, `map/rules.yaml` | flows/integrations, rules |
+| `map/index.yaml` | generated registry + graph (never hand-edit) |
+
+### Apps & repositories (which repo a node ships in)
+
+`profile.yaml → apps` lists every deliverable app/repository (key, `label`, `side`, `repo`,
+`framework`). Every **implementation node** is assigned to one or more of them:
+
+- **UI nodes** carry `app: <key>` (or `apps: [<key>, ...]` when a shared asset — e.g. a theme — ships
+  in several frontend repos).
+- **Server-side nodes** (`surface`/`logic`/`contract`/`data`/`integration`/`flow`) **default** to
+  `profile.default_app` (the API repo); set `apps:` only to override.
+- **Features and modules** are *aggregates* — the engine computes their apps as the **union** of their
+  members' apps, so a module naturally shows it spans (say) `backend` + `customer-portal`. Never set
+  `apps` on a feature or module.
+
+`verify` fails on an unknown app key (`APP_UNKNOWN`) and warns on a UI node with no app
+(`APP_UNASSIGNED`). The viewer renders an **Apps** view — pick an app to see its whole tree (modules →
+nodes by kind), and every node/module page shows the repos it ships in.
+
+### Entities & the data model
+
+Entities (`kind: data`, subtype `entity`/`collection`) are **not owned by a module** — many modules
+read and write the same entity. So each entity is its **own file** at `map/data/<domain>/<entity>.yaml`
+and carries a **`domain`** (its owner, which drives boundary checks) instead of a `module`. A module
+"uses" an entity through its logic **`deps: [ENT-...]`**; the viewer derives each module's *Entities
+used* list from those deps, and the *Data Model* view groups all entities by domain. DTOs
+(subtype `dto`) are endpoint-specific and stay in their module bundle, linked from a surface via
+`receives`/`returns`. Copy `engine/templates/entity.yaml` to add a new entity.
 
 ## ID governance
 

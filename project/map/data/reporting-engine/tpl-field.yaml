@@ -1,0 +1,24 @@
+# Entity ENT-TPL-FIELD — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-TPL-FIELD].
+id: ENT-TPL-FIELD
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: template_industry_fields
+workspace_scoped: false
+status: implemented
+history:
+  - change-049
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: industryId, type: ObjectId, ref: ENT-TPL-INDUSTRY, required: true, index: true}
+    - {name: key, type: String, required: true, constraints: canonical field name}
+    - {name: label, type: String, required: true}
+    - {name: dataType, type: String, enum: [string, number, date, boolean, category], required: true}
+    - {name: active, type: Boolean, required: true}
+  relations: many ENT-TPL-FIELD -> one ENT-TPL-INDUSTRY; blueprints reference only these canonical fields
+  indexes:
+    - '{ industryId }'
+  enums:
+    dataType: [string, number, date, boolean, category]

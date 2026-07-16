@@ -1,0 +1,21 @@
+# Entity ENT-TPL-INDUSTRY — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-TPL-INDUSTRY].
+id: ENT-TPL-INDUSTRY
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: template_industries
+workspace_scoped: false
+status: implemented
+history:
+  - change-049
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: key, type: String, required: true, index: unique}
+    - {name: nameEn, type: String, required: true}
+    - {name: nameAr, type: String, required: false, constraints: bilingual}
+    - {name: active, type: Boolean, required: true}
+  relations: one ENT-TPL-INDUSTRY -> many ENT-TPL-FIELD and many ENT-DASH-TEMPLATE
+  indexes:
+    - '{ key } unique'

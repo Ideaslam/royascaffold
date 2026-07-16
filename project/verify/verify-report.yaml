@@ -2,6 +2,7 @@ status: PASS
 checks:
   freshness: FRESH
   specs: COMPLETE
+  apps: OK
   links: OK
   conflicts: FOUND
   boundaries: OK

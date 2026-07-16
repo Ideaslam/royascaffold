@@ -33,6 +33,15 @@
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <span id="verify-badge" class="hidden px-2 py-1 rounded text-xs font-medium"></span>
+        <button onclick="location.hash='#/'" class="px-3 py-1.5 text-sm rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 transition hidden sm:inline">
+          Overview
+        </button>
+        <button onclick="location.hash='#/data'" class="px-3 py-1.5 text-sm rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 transition">
+          Data Model
+        </button>
+        <select id="app-jump" class="px-2 py-1.5 text-sm rounded-lg bg-white border border-slate-300 text-slate-700 transition hidden sm:inline">
+          <option value="">Apps…</option>
+        </select>
         <button id="btn-refresh" class="px-3 py-1.5 text-sm rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 transition">
           Refresh
         </button>

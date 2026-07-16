@@ -1,0 +1,18 @@
+# Entity ENT-WS-BRANDING — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-WS-BRANDING].
+id: ENT-WS-BRANDING
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: workspacebrandings
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: unique}
+    - {name: logoUrl, type: String, required: false, constraints: stored via R2}
+    - {name: colorTemplateId, type: ObjectId, ref: ENT-COLOR-TPL, required: false}
+  relations: one ENT-WORKSPACE -> one ENT-WS-BRANDING; references ENT-COLOR-TPL
+  indexes:
+    - '{ workspaceId } unique'

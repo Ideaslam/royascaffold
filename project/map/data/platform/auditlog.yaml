@@ -1,0 +1,27 @@
+# Entity ENT-AUDITLOG — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-AUDITLOG].
+id: ENT-AUDITLOG
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: auditlogs
+workspace_scoped: false
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: userId, type: ObjectId, ref: ENT-USER, required: false, index: true}
+    - {name: action, type: String, enum: [create, update, delete, share, export, login], required: true}
+    - {name: entityType, type: String, required: true, constraints: user | project | dashboard | csv | ...}
+    - {name: entityId, type: ObjectId, required: false}
+    - {name: oldValues, type: JSON, required: false, constraints: snapshot before change}
+    - {name: newValues, type: JSON, required: false, constraints: snapshot after change}
+    - {name: ip, type: String, required: false}
+    - {name: userAgent, type: String, required: false}
+    - {name: details, type: String, required: false}
+    - {name: timestamp, type: Date, required: true, index: true}
+  relations: many ENT-AUDITLOG -> one ENT-USER (actor); polymorphic entityType/entityId
+  indexes:
+    - '{ timestamp }'
+    - '{ userId }'
+  enums:
+    action: [create, update, delete, share, export, login]

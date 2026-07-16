@@ -1,0 +1,23 @@
+# Entity ENT-WS-MEMBERSHIP — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-WS-MEMBERSHIP].
+id: ENT-WS-MEMBERSHIP
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: workspacememberships
+workspace_scoped: false
+status: implemented
+history:
+  - change-008
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: userId, type: ObjectId, ref: ENT-USER, required: true, index: true}
+    - {name: role, type: String, enum: [owner, admin, member, viewer], required: true}
+    - {name: joinedAt, type: Date}
+  relations: 'join table: many-to-many ENT-USER <-> ENT-WORKSPACE; drives the workspace-role guard'
+  indexes:
+    - '{ workspaceId, userId } unique'
+  enums:
+    role: [owner, admin, member, viewer]

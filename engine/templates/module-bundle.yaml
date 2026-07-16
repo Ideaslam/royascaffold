@@ -4,6 +4,12 @@
 # One bundle per module — never one file per method. Delete the kinds you don't use.
 # Placeholders are quoted so this file stays valid YAML; drop the quotes when you fill real values.
 #
+# APP / REPOSITORY assignment — every implementation node belongs to one or more apps from
+# profile.yaml → apps. Server-side kinds (surface/logic/contract/data/integration/flow) DEFAULT to
+# profile.default_app, so you only set `apps:` on them to override. UI nodes MUST carry `app: <key>`
+# (single) or `apps: [<key>, ...]` (shared across repos). Features & modules span the union of their
+# members automatically — never set apps on them. The viewer's Apps view is built from this.
+#
 # The 12 universal KINDS (full descriptions in engine/kinds.yaml; short reminders inline below):
 #   module      — a code module: one bundle of related nodes (this file's header).
 #   feature     — a user-facing grouping of nodes (carries the detailed narrative).
@@ -48,18 +54,22 @@ features:
       edge_cases: ["invalid input", "not-found", "external failure"]
 
 nodes:
-  # ── data — a persisted shape (entity/collection/table) ──
-  - id: "ENT-<NAME>"
+  # ── ENTITIES (kind: data, subtype: entity/collection) DO NOT live here. ──
+  #    Entities are domain-owned and shared across modules, so each one is its own file at
+  #    project/map/data/<domain>/<entity>.yaml (copy engine/templates/entity.yaml to create one).
+  #    A module "uses" an entity through its logic `deps: [ENT-...]` — the viewer derives the
+  #    module's "Entities used" list from those deps. Never redefine an entity in a module bundle.
+
+  # ── data (dto) — a request/response payload shape. Surfaces link to it via receives/returns. ──
+  - id: "DTO-<NAME>-CREATE"
     kind: data
-    subtype: collection
+    subtype: dto
     status: planned
-    collection: "<collection>"
     spec:
+      of: "request body of EP-<MODULE>-01"
       fields:
-        - { name: _id, type: ObjectId, constraints: PK }
-        - { name: "<field>", type: String, constraints: required }
-      relations: "one <Other> -> many <Name>"
-      indexes: ["{ <field> }"]
+        - { name: "<field>", type: String, required: true }
+        - { name: status, type: String, enum: [active, inactive], required: false }
 
   # ── contract — an interface / port plus its DI token ──
   - id: "IF-<NAME>"
@@ -86,22 +96,25 @@ nodes:
   # ── surface — an externally reachable entry point (endpoint/webhook/cli/event) ──
   - id: "EP-<MODULE>-01"
     kind: surface
-    subtype: rest.get
+    subtype: rest.post
     status: planned
-    calls: ["SVC-<NAME>.list"]
-    rules: [RULE-PAG-01]
+    calls: ["SVC-<NAME>.create"]
+    receives: ["DTO-<NAME>-CREATE"]      # request payload shape (a dto data node)
+    returns: ["ENT-<NAME>"]               # response shape — often the entity itself
     spec:
-      route: "GET /<resource>"
+      route: "POST /<resource>"
       auth: "role, or omit when it equals the conventions default"
-      request: { query: "?page,limit,search" }
-      response: { status: 200, shape: "Paginated<NameDto>" }
-      errors: ["{ code: 401, when: unauthenticated }"]
+      request: { body: "DTO-<NAME>-CREATE" }
+      response: { status: 201, shape: "ENT-<NAME>" }
+      errors: ["{ code: 401, when: unauthenticated }", "{ code: 422, when: validation failed }"]
 
   # ── ui — something rendered for a human (page/component/layout/theme) ──
+  #    REQUIRED: `app` (which repo it ships in) — or `apps: [..]` if shared across frontends.
   - id: "PAGE-<NAME>"
     kind: ui
     subtype: page
     status: planned
+    app: customer-portal              # which app/repo this page lives in (profile.apps key)
     calls: ["EP-<MODULE>-01"]
     spec:
       route: "/app/<resource>"

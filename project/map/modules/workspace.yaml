@@ -37,11 +37,8 @@ nodes:
       methods: [getProgress, updateProgress], deps: [ENT-ONBOARDING], history: [change-006] }
 
   # data
-  - { id: ENT-WORKSPACE, kind: data, subtype: collection, collection: workspaces, workspace_scoped: false, status: implemented, history: [change-008] }
-  - { id: ENT-WS-MEMBERSHIP, kind: data, subtype: collection, collection: workspacememberships, workspace_scoped: false, status: implemented, history: [change-008] }
-  - { id: ENT-WS-BRANDING, kind: data, subtype: collection, collection: workspacebrandings, workspace_scoped: false, status: implemented }
-  - { id: ENT-WS-INVITATION, kind: data, subtype: collection, collection: workspaceinvitations, workspace_scoped: false, status: implemented, history: [change-007] }
-  - { id: ENT-ONBOARDING, kind: data, subtype: collection, collection: onboardingprogress, workspace_scoped: false, status: implemented, history: [change-006] }
+  # Entities → project/map/data/platform/ (ENT-WORKSPACE, ENT-WS-MEMBERSHIP, ENT-WS-BRANDING,
+  #   ENT-WS-INVITATION, ENT-ONBOARDING; used by the services above via deps)
 
   # surfaces
   - { id: EP-WS-01, kind: surface, subtype: rest.post, route: /api/v1/workspaces, auth: authenticated, status: implemented, calls: [SVC-WS.createWorkspace] }

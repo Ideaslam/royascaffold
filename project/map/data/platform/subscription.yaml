@@ -1,0 +1,25 @@
+# Entity ENT-SUBSCRIPTION — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-SUBSCRIPTION].
+id: ENT-SUBSCRIPTION
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: usersubscriptions
+workspace_scoped: false
+status: implemented
+history:
+  - change-004
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: planId, type: ObjectId, ref: ENT-PLAN, required: true, index: true}
+    - {name: status, type: String, enum: [active, pending, cancelled, expired], required: true}
+    - {name: startedAt, type: Date, required: false}
+    - {name: currentPeriodEnd, type: Date, required: false}
+    - {name: createdAt, type: Date}
+  relations: one ENT-WORKSPACE -> one active ENT-SUBSCRIPTION; many ENT-SUBSCRIPTION -> one ENT-PLAN
+  indexes:
+    - '{ workspaceId }'
+  enums:
+    status: [active, pending, cancelled, expired]

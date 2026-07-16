@@ -46,9 +46,11 @@ tell you exactly where you stopped. No re-discovery — state is entirely on dis
 > summary. **Do not mutate the map** until the human approves.
 
 ## Phase 3 — Merge (the git-commit of the plan)
-1. **Apply each delta into the map.** `add/remove/set` → the target node in `map/modules/<m>.yaml`;
-   `creates: true` → add the node; `move/rename/reboundary` → relocate. Append the change id to the
-   node's `history[]`. Set `status: implemented`.
+1. **Apply each delta into the map.** `add/remove/set` → the target node in `map/modules/<m>.yaml`
+   (or `map/data/<domain>/<entity>.yaml` for an entity, `map/architecture/` for domains/boundaries);
+   `creates: true` → add the node (a new entity becomes a new file under `map/data/<domain>/`);
+   `move/rename/reboundary` → relocate. Append the change id to the node's `history[]`. Set
+   `status: implemented`.
 2. **Close the change.** `change.yaml.status: implemented`, deltas `implemented`, move the folder to
    `changes/_archive/`.
 3. **Regenerate + verify.** `npm run index && npm run verify`. The board shows the new truth; the

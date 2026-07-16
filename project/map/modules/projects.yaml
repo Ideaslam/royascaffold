@@ -17,7 +17,7 @@ nodes:
       methods: [create, list, getById, update, delete], deps: [ENT-PROJECT, SVC-AUDIT],
       rules: [RULE-WS-SCOPE-01, RULE-GLOBAL-010], history: [change-013] }
 
-  - { id: ENT-PROJECT, kind: data, subtype: collection, collection_pattern: "ws_{workspaceSlug}_projects", workspace_scoped: true, status: implemented, history: [change-013] }
+  # Entities → project/map/data/reporting-engine/ (ENT-PROJECT; used by the services below via deps)
 
   - { id: EP-PROJ-01, kind: surface, subtype: rest.post, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.create] }
   - { id: EP-PROJ-02, kind: surface, subtype: rest.get, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.list], rules: [RULE-PAG-01] }

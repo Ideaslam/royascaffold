@@ -1,0 +1,23 @@
+# Entity ENT-DATASOURCE — owned by DOM-DATA. Referenced by logic via deps: [ENT-DATASOURCE].
+id: ENT-DATASOURCE
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: datasources
+workspace_scoped: true
+status: implemented
+history:
+  - change-059
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: connectionId, type: ObjectId, ref: ENT-CONNECTION, required: true, index: true}
+    - {name: name, type: String, required: true}
+    - {name: type, type: String, required: true}
+    - {name: config, type: JSON, required: false}
+    - {name: createdAt, type: Date}
+  relations: one ENT-CONNECTION -> many ENT-DATASOURCE; one ENT-DATASOURCE -> many ENT-DATASET
+  indexes:
+    - '{ workspaceId, connectionId }'

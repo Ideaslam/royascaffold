@@ -32,8 +32,7 @@ nodes:
   - { id: SVC-SUB-ROLL, kind: logic, subtype: worker, status: implemented,
       methods: [process], deps: [ENT-SUBSCRIPTION, Q-SUB-ROLLOVER], rules: [RULE-GLOBAL-004], history: [change-004] }
 
-  - { id: ENT-SUBSCRIPTION, kind: data, subtype: collection, collection: usersubscriptions, workspace_scoped: false, status: implemented, history: [change-004] }
-  - { id: ENT-PLAN, kind: data, subtype: collection, collection: subscriptionplans, workspace_scoped: false, status: implemented }
+  # Entities → project/map/data/platform/ (ENT-SUBSCRIPTION, ENT-PLAN; used by the services below via deps)
 
   # surfaces
   - { id: EP-SUB-01, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/plans, auth: authenticated, status: implemented, calls: [SVC-SUB.listPlans] }

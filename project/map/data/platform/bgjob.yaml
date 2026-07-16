@@ -1,0 +1,28 @@
+# Entity ENT-BGJOB — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-BGJOB].
+id: ENT-BGJOB
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: backgroundjobs
+workspace_scoped: false
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: jobType, type: String, enum: [csv_analysis, dashboard_generation, schema_discovery, data_sync, pdf_export], required: true}
+    - {name: relatedEntityType, type: String, required: false, constraints: CSVFile | Dashboard | Dataset | ...}
+    - {name: relatedEntityId, type: ObjectId, required: false}
+    - {name: status, type: String, enum: [queued, processing, completed, failed], required: true}
+    - {name: progress, type: Number, required: false, constraints: 0-100}
+    - {name: startedAt, type: Date, required: false}
+    - {name: completedAt, type: Date, required: false}
+    - {name: result, type: JSON, required: false}
+    - {name: error, type: String, required: false}
+    - {name: retryCount, type: Number, required: false}
+    - {name: createdBy, type: ObjectId, ref: ENT-USER, required: false}
+  relations: polymorphic — tracks async work over CSVFile/Dashboard/Dataset
+  indexes:
+    - '{ status }'
+    - '{ relatedEntityType, relatedEntityId }'
+  enums:
+    status: [queued, processing, completed, failed]

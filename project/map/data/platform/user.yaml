@@ -1,0 +1,30 @@
+# Entity ENT-USER — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-USER].
+id: ENT-USER
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: users
+workspace_scoped: false
+status: implemented
+rules:
+  - RULE-GLOBAL-009
+history:
+  - change-001
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: email, type: String, required: true, index: unique}
+    - {name: passwordHash, type: String, required: true, constraints: hashed; never returned in a DTO}
+    - {name: name, type: String, required: true}
+    - {name: role, type: String, enum: [admin, editor, viewer], required: true}
+    - {name: status, type: String, enum: [active, inactive, suspended], required: true}
+    - {name: emailVerifiedAt, type: Date, required: false}
+    - {name: lastLoginAt, type: Date, required: false}
+    - {name: createdAt, type: Date}
+    - {name: updatedAt, type: Date}
+  relations: one ENT-USER -> many ENT-PROJECT (as owner); belongs to many ENT-WORKSPACE via ENT-WS-MEMBERSHIP
+  indexes:
+    - '{ email } unique'
+  enums:
+    role: [admin, editor, viewer]
+    status: [active, inactive, suspended]

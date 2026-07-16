@@ -23,7 +23,7 @@ nodes:
       deps: [ENT-PAYMENT, SVC-AUDIT, SVC-EXT-PAY, SVC-USR, Q-SUB-ACTIVATION],
       rules: [RULE-SUB-001, RULE-GLOBAL-010], history: [change-003] }
 
-  - { id: ENT-PAYMENT, kind: data, subtype: collection, collection: payments, workspace_scoped: false, status: implemented, history: [change-002] }
+  # Entities → project/map/data/platform/ (ENT-PAYMENT; used by the services below via deps)
 
   - { id: EP-PAY-01, kind: surface, subtype: rest.get, route: /api/v1/payments, auth: "role:admin", status: implemented, calls: [SVC-PAY.list], rules: [RULE-PAG-01] }
   - { id: EP-PAY-02, kind: surface, subtype: rest.get, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.getById] }

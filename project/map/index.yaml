@@ -1,14 +1,14 @@
-generated_at: '2026-07-16T14:19:08.081Z'
-source_hash: sha256:67bac72038957c4d07a4c7bfed40003157eafb5e9f3ad61755d1cbd75682412b
+generated_at: '2026-07-16T15:01:48.135Z'
+source_hash: sha256:e7da919dd948dc6fd8663c2e29a0b68ab73c6b044393c867170c847e41cc4e29
 totals:
   module: 26
   feature: 44
   logic: 66
   surface: 197
   ui: 53
-  data: 38
   contract: 6
   integration: 20
+  data: 38
   boundary: 2
   domain: 4
   flow: 10
@@ -38,11 +38,6 @@ status_rollup:
     partial: 0
     planned: 0
     deferred: 0
-  data:
-    implemented: 38
-    partial: 0
-    planned: 0
-    deferred: 0
   contract:
     implemented: 6
     partial: 0
@@ -51,6 +46,11 @@ status_rollup:
   integration:
     implemented: 19
     partial: 1
+    planned: 0
+    deferred: 0
+  data:
+    implemented: 38
+    partial: 0
     planned: 0
     deferred: 0
   boundary:
@@ -215,20 +215,6 @@ graph:
     rules:
       - RULE-ARCH-006
     kind: logic
-    status: implemented
-    module: ai-logs
-    source: map/modules/ai-logs.yaml
-  ENT-AILOG:
-    used_by:
-      - SVC-AILOG
-    kind: data
-    status: implemented
-    module: ai-logs
-    source: map/modules/ai-logs.yaml
-  ENT-AI-PRICING:
-    used_by:
-      - SVC-AILOG-PRICE
-    kind: data
     status: implemented
     module: ai-logs
     source: map/modules/ai-logs.yaml
@@ -406,13 +392,6 @@ graph:
     status: implemented
     module: analytics-store
     source: map/modules/analytics-store.yaml
-  ENT-OLAP-BENCH:
-    used_by:
-      - SVC-OLAP-BENCH
-    kind: data
-    status: implemented
-    module: analytics-store
-    source: map/modules/analytics-store.yaml
   EP-AS-01:
     calls:
       - SVC-OLAP-BENCH.runBenchmark
@@ -475,13 +454,6 @@ graph:
     rules:
       - RULE-GLOBAL-010
     kind: logic
-    status: implemented
-    module: audit
-    source: map/modules/audit.yaml
-  ENT-AUDITLOG:
-    used_by:
-      - SVC-AUDIT
-    kind: data
     status: implemented
     module: audit
     source: map/modules/audit.yaml
@@ -737,13 +709,6 @@ graph:
     status: implemented
     module: background-jobs
     source: map/modules/background-jobs.yaml
-  ENT-BGJOB:
-    used_by:
-      - SVC-BGJOBS
-    kind: data
-    status: implemented
-    module: background-jobs
-    source: map/modules/background-jobs.yaml
   MOD-COLOR-TEMPLATES:
     kind: module
     status: implemented
@@ -769,14 +734,6 @@ graph:
       - ENT-COLOR-TPL
       - ENT-WS-BRANDING
     kind: logic
-    status: implemented
-    module: color-templates
-    source: map/modules/color-templates.yaml
-  ENT-COLOR-TPL:
-    used_by:
-      - SVC-COLTPL
-      - SVC-WS-BRAND
-    kind: data
     status: implemented
     module: color-templates
     source: map/modules/color-templates.yaml
@@ -1213,57 +1170,6 @@ graph:
     rules:
       - RULE-ARCH-006
     kind: logic
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-DASHBOARD:
-    used_by:
-      - SVC-ADMIN
-      - SVC-DASH
-      - SVC-EXPORT
-      - SVC-SHARE
-      - SVC-SUB-LIM
-    kind: data
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-CHARTWIDGET:
-    used_by:
-      - SVC-DASH
-      - SVC-EXPORT
-      - SVC-SHARE
-    kind: data
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-CHARTCACHE:
-    used_by:
-      - SVC-DASH
-      - SVC-SHARE
-    kind: data
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-DASH-DATASOURCE:
-    used_by:
-      - SVC-DASH
-    kind: data
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-WIDGETDEF:
-    used_by:
-      - SVC-DASH
-      - SVC-DASH-SEED
-      - SVC-TPL
-    kind: data
-    status: implemented
-    module: dashboards
-    source: map/modules/dashboards.yaml
-  ENT-FILTERVALUEMETA:
-    used_by:
-      - SVC-DASH-FILTER
-    kind: data
     status: implemented
     module: dashboards
     source: map/modules/dashboards.yaml
@@ -1747,83 +1653,6 @@ graph:
     deps:
       - ENT-SYNCRUN
     kind: logic
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-CSVFILE:
-    used_by:
-      - SVC-AI-CSV
-      - SVC-DATA
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-COLUMNMETA:
-    used_by:
-      - SVC-AI-CSV
-      - SVC-DATA
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-CSVDATA:
-    used_by:
-      - SVC-DATA
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-CONNECTION:
-    used_by:
-      - SVC-DATA-CONN
-      - SVC-DATA-SOURCE
-      - SVC-DATA-DS
-      - SVC-DATA-SYNC
-    rules:
-      - RULE-GLOBAL-009
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-DATASOURCE:
-    used_by:
-      - SVC-DATA-CONN
-      - SVC-DATA-SOURCE
-      - SVC-DATA-DS
-      - SVC-DATA-SYNC
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-DATASET:
-    used_by:
-      - SVC-DATA-SOURCE
-      - SVC-DATA-DS
-      - SVC-DATA-SYNC
-      - SVC-DATA-SCHED
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-SYNCRUN:
-    used_by:
-      - SVC-DATA-SYNC
-      - SVC-ADMIN-SYNC-HEALTH
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-DSTYPE-META:
-    used_by:
-      - SVC-DSTYPE
-    kind: data
-    status: implemented
-    module: data
-    source: map/modules/data.yaml
-  ENT-WEBHOOK-ROUTE:
-    used_by:
-      - SVC-DATA-WHROUTE
-    kind: data
     status: implemented
     module: data
     source: map/modules/data.yaml
@@ -2689,13 +2518,6 @@ graph:
     status: implemented
     module: notifications
     source: map/modules/notifications.yaml
-  ENT-NOTIFICATION:
-    used_by:
-      - SVC-NOTIF
-    kind: data
-    status: implemented
-    module: notifications
-    source: map/modules/notifications.yaml
   EP-NOTIF-01:
     calls:
       - SVC-NOTIF.listNotifications
@@ -2805,14 +2627,6 @@ graph:
       - RULE-SUB-001
       - RULE-GLOBAL-010
     kind: logic
-    status: implemented
-    module: payments
-    source: map/modules/payments.yaml
-  ENT-PAYMENT:
-    used_by:
-      - SVC-PAY
-      - SVC-PAY-CHKOUT
-    kind: data
     status: implemented
     module: payments
     source: map/modules/payments.yaml
@@ -2959,13 +2773,6 @@ graph:
     status: partial
     module: pipelines
     source: map/modules/pipelines.yaml
-  ENT-PIPELINE-RUN:
-    used_by:
-      - SVC-PIPE-RUN-REPO
-    kind: data
-    status: implemented
-    module: pipelines
-    source: map/modules/pipelines.yaml
   MOD-PROJECTS:
     kind: module
     status: implemented
@@ -2995,14 +2802,6 @@ graph:
       - RULE-WS-SCOPE-01
       - RULE-GLOBAL-010
     kind: logic
-    status: implemented
-    module: projects
-    source: map/modules/projects.yaml
-  ENT-PROJECT:
-    used_by:
-      - SVC-ADMIN
-      - SVC-PROJ
-    kind: data
     status: implemented
     module: projects
     source: map/modules/projects.yaml
@@ -3093,13 +2892,6 @@ graph:
     status: implemented
     module: settings
     source: map/modules/settings.yaml
-  ENT-SETTINGS:
-    used_by:
-      - SVC-SET
-    kind: data
-    status: implemented
-    module: settings
-    source: map/modules/settings.yaml
   EP-SET-01:
     calls:
       - SVC-SET.getSettings
@@ -3162,13 +2954,6 @@ graph:
       - RULE-SHARE-002
       - RULE-GLOBAL-010
     kind: logic
-    status: implemented
-    module: sharing
-    source: map/modules/sharing.yaml
-  ENT-SHARELINK:
-    used_by:
-      - SVC-SHARE
-    kind: data
     status: implemented
     module: sharing
     source: map/modules/sharing.yaml
@@ -3315,23 +3100,6 @@ graph:
     rules:
       - RULE-GLOBAL-004
     kind: logic
-    status: implemented
-    module: subscriptions
-    source: map/modules/subscriptions.yaml
-  ENT-SUBSCRIPTION:
-    used_by:
-      - SVC-ADMIN
-      - SVC-SUB
-      - SVC-SUB-LIM
-      - SVC-SUB-ROLL
-    kind: data
-    status: implemented
-    module: subscriptions
-    source: map/modules/subscriptions.yaml
-  ENT-PLAN:
-    used_by:
-      - SVC-SUB
-    kind: data
     status: implemented
     module: subscriptions
     source: map/modules/subscriptions.yaml
@@ -3617,27 +3385,6 @@ graph:
     status: implemented
     module: templates
     source: map/modules/templates.yaml
-  ENT-TPL-INDUSTRY:
-    used_by:
-      - SVC-TPL
-    kind: data
-    status: implemented
-    module: templates
-    source: map/modules/templates.yaml
-  ENT-TPL-FIELD:
-    used_by:
-      - SVC-TPL
-    kind: data
-    status: implemented
-    module: templates
-    source: map/modules/templates.yaml
-  ENT-DASH-TEMPLATE:
-    used_by:
-      - SVC-TPL
-    kind: data
-    status: implemented
-    module: templates
-    source: map/modules/templates.yaml
   EP-TPL-01:
     calls:
       - SVC-TPL.listIndustries
@@ -3820,21 +3567,6 @@ graph:
       - SVC-USR
       - PAGE-ADMIN-USERS
     kind: feature
-    status: implemented
-    module: users
-    source: map/modules/users.yaml
-  ENT-USER:
-    used_by:
-      - SVC-ADMIN
-      - SVC-AUTH
-      - SVC-AUTH-EMAIL
-      - SVC-AUTH-JWT
-      - SVC-SUB
-      - SVC-USR
-      - SVC-WS
-    rules:
-      - RULE-GLOBAL-009
-    kind: data
     status: implemented
     module: users
     source: map/modules/users.yaml
@@ -4103,49 +3835,6 @@ graph:
     status: implemented
     module: workspace
     source: map/modules/workspace.yaml
-  ENT-WORKSPACE:
-    used_by:
-      - SVC-AI-DASH
-      - SVC-WS
-    kind: data
-    status: implemented
-    module: workspace
-    source: map/modules/workspace.yaml
-  ENT-WS-MEMBERSHIP:
-    used_by:
-      - SVC-AUTH-JWT
-      - SVC-WS
-      - SVC-WS-MEMBER
-      - SVC-WS-INVITE
-    kind: data
-    status: implemented
-    module: workspace
-    source: map/modules/workspace.yaml
-  ENT-WS-BRANDING:
-    used_by:
-      - SVC-COLTPL
-      - SVC-WS
-      - SVC-WS-BRAND
-    kind: data
-    status: implemented
-    module: workspace
-    source: map/modules/workspace.yaml
-  ENT-WS-INVITATION:
-    used_by:
-      - SVC-WS
-      - SVC-WS-INVITE
-    kind: data
-    status: implemented
-    module: workspace
-    source: map/modules/workspace.yaml
-  ENT-ONBOARDING:
-    used_by:
-      - SVC-WS
-      - SVC-WS-ONBOARD
-    kind: data
-    status: implemented
-    module: workspace
-    source: map/modules/workspace.yaml
   EP-WS-01:
     calls:
       - SVC-WS.createWorkspace
@@ -4369,6 +4058,279 @@ graph:
     status: implemented
     module: workspace
     source: map/modules/workspace.yaml
+  ENT-COLUMNMETA:
+    used_by:
+      - SVC-AI-CSV
+      - SVC-DATA
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/columnmeta.yaml
+  ENT-CONNECTION:
+    used_by:
+      - SVC-DATA-CONN
+      - SVC-DATA-SOURCE
+      - SVC-DATA-DS
+      - SVC-DATA-SYNC
+    rules:
+      - RULE-GLOBAL-009
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/connection.yaml
+  ENT-CSVDATA:
+    used_by:
+      - SVC-DATA
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/csvdata.yaml
+  ENT-CSVFILE:
+    used_by:
+      - SVC-AI-CSV
+      - SVC-DATA
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/csvfile.yaml
+  ENT-DATASET:
+    used_by:
+      - SVC-DATA-SOURCE
+      - SVC-DATA-DS
+      - SVC-DATA-SYNC
+      - SVC-DATA-SCHED
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/dataset.yaml
+  ENT-DATASOURCE:
+    used_by:
+      - SVC-DATA-CONN
+      - SVC-DATA-SOURCE
+      - SVC-DATA-DS
+      - SVC-DATA-SYNC
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/datasource.yaml
+  ENT-DSTYPE-META:
+    used_by:
+      - SVC-DSTYPE
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/dstype-meta.yaml
+  ENT-OLAP-BENCH:
+    used_by:
+      - SVC-OLAP-BENCH
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/olap-bench.yaml
+  ENT-PIPELINE-RUN:
+    used_by:
+      - SVC-PIPE-RUN-REPO
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/pipeline-run.yaml
+  ENT-SYNCRUN:
+    used_by:
+      - SVC-DATA-SYNC
+      - SVC-ADMIN-SYNC-HEALTH
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/syncrun.yaml
+  ENT-WEBHOOK-ROUTE:
+    used_by:
+      - SVC-DATA-WHROUTE
+    kind: data
+    status: implemented
+    source: map/data/data-source-engine/webhook-route.yaml
+  ENT-AI-PRICING:
+    used_by:
+      - SVC-AILOG-PRICE
+    kind: data
+    status: implemented
+    source: map/data/platform/ai-pricing.yaml
+  ENT-AILOG:
+    used_by:
+      - SVC-AILOG
+    kind: data
+    status: implemented
+    source: map/data/platform/ailog.yaml
+  ENT-AUDITLOG:
+    used_by:
+      - SVC-AUDIT
+    kind: data
+    status: implemented
+    source: map/data/platform/auditlog.yaml
+  ENT-BGJOB:
+    used_by:
+      - SVC-BGJOBS
+    kind: data
+    status: implemented
+    source: map/data/platform/bgjob.yaml
+  ENT-NOTIFICATION:
+    used_by:
+      - SVC-NOTIF
+    kind: data
+    status: implemented
+    source: map/data/platform/notification.yaml
+  ENT-ONBOARDING:
+    used_by:
+      - SVC-WS
+      - SVC-WS-ONBOARD
+    kind: data
+    status: implemented
+    source: map/data/platform/onboarding.yaml
+  ENT-PAYMENT:
+    used_by:
+      - SVC-PAY
+      - SVC-PAY-CHKOUT
+    kind: data
+    status: implemented
+    source: map/data/platform/payment.yaml
+  ENT-PLAN:
+    used_by:
+      - SVC-SUB
+    kind: data
+    status: implemented
+    source: map/data/platform/plan.yaml
+  ENT-SETTINGS:
+    used_by:
+      - SVC-SET
+    kind: data
+    status: implemented
+    source: map/data/platform/settings.yaml
+  ENT-SUBSCRIPTION:
+    used_by:
+      - SVC-ADMIN
+      - SVC-SUB
+      - SVC-SUB-LIM
+      - SVC-SUB-ROLL
+    kind: data
+    status: implemented
+    source: map/data/platform/subscription.yaml
+  ENT-USER:
+    used_by:
+      - SVC-ADMIN
+      - SVC-AUTH
+      - SVC-AUTH-EMAIL
+      - SVC-AUTH-JWT
+      - SVC-SUB
+      - SVC-USR
+      - SVC-WS
+    rules:
+      - RULE-GLOBAL-009
+    kind: data
+    status: implemented
+    source: map/data/platform/user.yaml
+  ENT-WORKSPACE:
+    used_by:
+      - SVC-AI-DASH
+      - SVC-WS
+    kind: data
+    status: implemented
+    source: map/data/platform/workspace.yaml
+  ENT-WS-BRANDING:
+    used_by:
+      - SVC-COLTPL
+      - SVC-WS
+      - SVC-WS-BRAND
+    kind: data
+    status: implemented
+    source: map/data/platform/ws-branding.yaml
+  ENT-WS-INVITATION:
+    used_by:
+      - SVC-WS
+      - SVC-WS-INVITE
+    kind: data
+    status: implemented
+    source: map/data/platform/ws-invitation.yaml
+  ENT-WS-MEMBERSHIP:
+    used_by:
+      - SVC-AUTH-JWT
+      - SVC-WS
+      - SVC-WS-MEMBER
+      - SVC-WS-INVITE
+    kind: data
+    status: implemented
+    source: map/data/platform/ws-membership.yaml
+  ENT-CHARTCACHE:
+    used_by:
+      - SVC-DASH
+      - SVC-SHARE
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/chartcache.yaml
+  ENT-CHARTWIDGET:
+    used_by:
+      - SVC-DASH
+      - SVC-EXPORT
+      - SVC-SHARE
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/chartwidget.yaml
+  ENT-COLOR-TPL:
+    used_by:
+      - SVC-COLTPL
+      - SVC-WS-BRAND
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/color-tpl.yaml
+  ENT-DASH-DATASOURCE:
+    used_by:
+      - SVC-DASH
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/dash-datasource.yaml
+  ENT-DASH-TEMPLATE:
+    used_by:
+      - SVC-TPL
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/dash-template.yaml
+  ENT-DASHBOARD:
+    used_by:
+      - SVC-ADMIN
+      - SVC-DASH
+      - SVC-EXPORT
+      - SVC-SHARE
+      - SVC-SUB-LIM
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/dashboard.yaml
+  ENT-FILTERVALUEMETA:
+    used_by:
+      - SVC-DASH-FILTER
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/filtervaluemeta.yaml
+  ENT-PROJECT:
+    used_by:
+      - SVC-ADMIN
+      - SVC-PROJ
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/project.yaml
+  ENT-SHARELINK:
+    used_by:
+      - SVC-SHARE
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/sharelink.yaml
+  ENT-TPL-FIELD:
+    used_by:
+      - SVC-TPL
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/tpl-field.yaml
+  ENT-TPL-INDUSTRY:
+    used_by:
+      - SVC-TPL
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/tpl-industry.yaml
+  ENT-WIDGETDEF:
+    used_by:
+      - SVC-DASH
+      - SVC-DASH-SEED
+      - SVC-TPL
+    kind: data
+    status: implemented
+    source: map/data/reporting-engine/widgetdef.yaml
   SVC-GUARD-JWT:
     rules:
       - RULE-AUTH-003

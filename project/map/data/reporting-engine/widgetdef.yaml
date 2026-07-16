@@ -1,0 +1,20 @@
+# Entity ENT-WIDGETDEF — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-WIDGETDEF].
+id: ENT-WIDGETDEF
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: widgetdefinitions
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: key, type: String, required: true, index: unique, constraints: widget type key}
+    - {name: name, type: String, required: true}
+    - {name: chartType, type: String, required: true}
+    - {name: configSchema, type: JSON, required: false, constraints: allowed config shape}
+    - {name: active, type: Boolean, required: true}
+  relations: catalog of widget definitions the generator + templates reference
+  indexes:
+    - '{ key } unique'

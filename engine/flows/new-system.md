@@ -6,8 +6,10 @@ lifecycle (`change.md`). `>> GATE` marks each point where a human must approve b
 
 ## Phase 1 — Discover (planner)
 Interview the human in ONE grouped batch using the reusable question blocks in
-**`engine/discovery.yaml` → `new_system`** (product · jobs · apps · domains · data · integrations ·
-rules · constraints — each block says which file it fills). Ask only what changes a decision;
+**`engine/discovery.yaml` → `new_system`** (product · jobs · apps/repos · domains · data · integrations ·
+rules · constraints — each block says which file it fills). Capture the **apps/repositories** the
+system ships as (e.g. backend API, customer portal, admin panel, landing) — these become
+`profile.apps` and every node is later assigned to one or more. Ask only what changes a decision;
 **default the rest** and flag it (`# assumed:` in `profile.yaml`).
 
 > **GATE 1 — scope approved.** Reflect the product understanding back to the human before writing anything.
@@ -16,13 +18,16 @@ rules · constraints — each block says which file it fills). Ask only what cha
 1. `roya init <projectDir>` (or `npm run init`) → `profile.yaml`, `description.md`, an empty `map/`
    and a valid empty `index.yaml`. `verify` is PASS immediately (0 real nodes).
 2. Fill `description.md` (Product Story, jobs, shape, constraints) and `profile.yaml`
-   (`product`, `apps`, `subtypes`, `id_prefixes`, `conventions`, integrations) from Phase 1. Leave
-   `code_roots: []`. `roya init` writes a minimal starter; for the richer prompts use
+   (`product`, `apps` + `default_app`, `subtypes`, `id_prefixes`, `conventions`, integrations) from
+   Phase 1. Leave `code_roots: []`. `roya init` writes a minimal starter; for the richer prompts use
    **`engine/templates/profile.yaml`** and **`engine/templates/description.md`** as the fill-in guide.
 
 ## Phase 3 — Design the architecture (as `planned`)
 In `map/architecture/` declare `DOM-` domains (`owns[]` + `contracts[]`) and `BND-` boundaries —
-copy **`engine/templates/map/architecture/domains.yaml`** and **`boundaries.yaml`**. In `map/rules.yaml`
+copy **`engine/templates/map/architecture/domains.yaml`** and **`boundaries.yaml`**. Design the
+**data model** here too: one entity per file at `map/data/<domain>/<entity>.yaml` (copy
+**`engine/templates/entity.yaml`**), each with its owning `domain` and a full `spec.fields` +
+`relations` — this is the shared vocabulary the modules' logic will `deps` onto. In `map/rules.yaml`
 (**`engine/templates/map/rules.yaml`**) adopt the generic rules from `engine/rules/catalog.yaml`, then
 add project rules. Declare any queues/migrations in `map/operational.yaml`
 (**`engine/templates/map/operational.yaml`**). Pick or author the `engine/archetypes/` you will build

@@ -1,0 +1,18 @@
+# Entity ENT-AI-PRICING — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-AI-PRICING].
+id: ENT-AI-PRICING
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: aimodelpricing
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: modelId, type: String, required: true, index: unique}
+    - {name: inputPer1k, type: Number, required: true, constraints: cost per 1k input tokens}
+    - {name: outputPer1k, type: Number, required: true}
+  relations: referenced by ENT-AILOG.model for cost computation
+  indexes:
+    - '{ modelId } unique'

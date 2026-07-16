@@ -1,0 +1,21 @@
+# Entity ENT-ONBOARDING — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-ONBOARDING].
+id: ENT-ONBOARDING
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: onboardingprogress
+workspace_scoped: false
+status: implemented
+history:
+  - change-006
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: unique}
+    - {name: steps, type: JSON, required: false, constraints: per-step completion flags}
+    - {name: completed, type: Boolean, required: true}
+    - {name: updatedAt, type: Date}
+  relations: one ENT-WORKSPACE -> one ENT-ONBOARDING
+  indexes:
+    - '{ workspaceId } unique'

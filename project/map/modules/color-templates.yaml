@@ -16,7 +16,7 @@ nodes:
       methods: [create, findAll, findById, update, delete, toggleActive],
       deps: [ENT-COLOR-TPL, ENT-WS-BRANDING] }
 
-  - { id: ENT-COLOR-TPL, kind: data, subtype: collection, collection: colortemplates, workspace_scoped: false, status: implemented }
+  # Entities → project/map/data/reporting-engine/ (ENT-COLOR-TPL; used by the services below via deps)
 
   - { id: EP-CTPL-01, kind: surface, subtype: rest.get, route: /api/v1/color-templates, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findAll] }
   - { id: EP-CTPL-02, kind: surface, subtype: rest.get, route: /api/v1/color-templates/:id, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findById] }

@@ -1,0 +1,25 @@
+# Entity ENT-COLUMNMETA — owned by DOM-DATA. Referenced by logic via deps: [ENT-COLUMNMETA].
+id: ENT-COLUMNMETA
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: columnmetadata
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: fileId, type: ObjectId, ref: ENT-CSVFILE, required: true, index: true}
+    - {name: columnName, type: String, required: true, constraints: as in the CSV header}
+    - {name: aiDescription, type: String, required: false}
+    - {name: userDescription, type: String, required: false}
+    - {name: dataType, type: String, enum: [string, number, date, boolean, category], required: true}
+    - {name: sampleValues, type: 'String[]', required: false}
+    - {name: uniqueCount, type: Number, required: false}
+    - {name: nullCount, type: Number, required: false}
+    - {name: status, type: String, enum: [analyzing, ready, confirmed], required: true}
+  relations: many ENT-COLUMNMETA -> one ENT-CSVFILE
+  indexes:
+    - '{ fileId }'
+  enums:
+    dataType: [string, number, date, boolean, category]
+    status: [analyzing, ready, confirmed]

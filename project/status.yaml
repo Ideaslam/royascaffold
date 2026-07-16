@@ -1,13 +1,13 @@
-generated_at: '2026-07-16T14:19:08.081Z'
+generated_at: '2026-07-16T15:01:48.135Z'
 totals:
   module: 26
   feature: 44
   logic: 66
   surface: 197
   ui: 53
-  data: 38
   contract: 6
   integration: 20
+  data: 38
   boundary: 2
   domain: 4
   flow: 10
@@ -37,11 +37,6 @@ status_rollup:
     partial: 0
     planned: 0
     deferred: 0
-  data:
-    implemented: 38
-    partial: 0
-    planned: 0
-    deferred: 0
   contract:
     implemented: 6
     partial: 0
@@ -50,6 +45,11 @@ status_rollup:
   integration:
     implemented: 19
     partial: 1
+    planned: 0
+    deferred: 0
+  data:
+    implemented: 38
+    partial: 0
     planned: 0
     deferred: 0
   boundary:

@@ -1,0 +1,24 @@
+# Entity ENT-PROJECT — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-PROJECT].
+id: ENT-PROJECT
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection_pattern: ws_{workspaceSlug}_projects
+workspace_scoped: true
+status: implemented
+history:
+  - change-013
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: name, type: String, required: true}
+    - {name: description, type: String, required: false}
+    - {name: ownerId, type: ObjectId, ref: ENT-USER, required: true, index: true}
+    - {name: status, type: String, enum: [active, archived], required: true}
+    - {name: createdAt, type: Date}
+    - {name: updatedAt, type: Date}
+  relations: one ENT-USER -> many ENT-PROJECT; one ENT-PROJECT -> many ENT-DASHBOARD
+  indexes:
+    - '{ ownerId }'
+  enums:
+    status: [active, archived]

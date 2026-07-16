@@ -16,7 +16,7 @@ nodes:
       methods: [notify, listNotifications, markAsRead, markAllAsRead, countUnread],
       deps: [ENT-NOTIFICATION, SVC-EXT-MAIL], rules: [RULE-NOTIF-001], history: [change-029] }
 
-  - { id: ENT-NOTIFICATION, kind: data, subtype: collection, collection: notifications, workspace_scoped: false, status: implemented }
+  # Entities → project/map/data/platform/ (ENT-NOTIFICATION; used by the services below via deps)
 
   - { id: EP-NOTIF-01, kind: surface, subtype: rest.get, route: /api/v1/notifications, auth: authenticated, status: implemented, calls: [SVC-NOTIF.listNotifications], rules: [RULE-PAG-01] }
   - { id: EP-NOTIF-02, kind: surface, subtype: rest.get, route: /api/v1/notifications/unread-count, auth: authenticated, status: implemented, calls: [SVC-NOTIF.countUnread] }

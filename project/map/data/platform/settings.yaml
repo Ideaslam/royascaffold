@@ -1,0 +1,18 @@
+# Entity ENT-SETTINGS — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-SETTINGS].
+id: ENT-SETTINGS
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: systemsettings
+workspace_scoped: false
+status: implemented
+reason_note: single global singleton document
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK; single singleton doc}
+    - {name: key, type: String, required: false, index: unique}
+    - {name: value, type: JSON, required: false, constraints: system-wide configuration blob}
+    - {name: updatedAt, type: Date}
+    - {name: updatedBy, type: ObjectId, ref: ENT-USER, required: false}
+  relations: singleton — exactly one document exists

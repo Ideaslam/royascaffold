@@ -1,0 +1,23 @@
+# Entity ENT-DASH-TEMPLATE — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-DASH-TEMPLATE].
+id: ENT-DASH-TEMPLATE
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: dashboard_templates
+workspace_scoped: false
+status: implemented
+history:
+  - change-049
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: industryId, type: ObjectId, ref: ENT-TPL-INDUSTRY, required: true, index: true}
+    - {name: nameEn, type: String, required: true}
+    - {name: nameAr, type: String, required: false}
+    - {name: requiredFields, type: 'String[]', required: false, constraints: canonical field keys the template needs}
+    - {name: widgetBlueprint, type: JSON, required: true, constraints: chart types + dialect-neutral QuerySpec on canonical fields}
+    - {name: active, type: Boolean, required: true}
+  relations: many ENT-DASH-TEMPLATE -> one ENT-TPL-INDUSTRY; instantiated into ENT-DASHBOARD
+  indexes:
+    - '{ industryId }'

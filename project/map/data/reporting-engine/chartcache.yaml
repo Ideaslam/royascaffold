@@ -1,0 +1,23 @@
+# Entity ENT-CHARTCACHE — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-CHARTCACHE].
+id: ENT-CHARTCACHE
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: chartdatacache
+workspace_scoped: true
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: widgetId, type: ObjectId, ref: ENT-CHARTWIDGET, required: true, index: true}
+    - {name: queryHash, type: String, required: true, index: true, constraints: identifies a cache hit}
+    - {name: result, type: JSON, required: true, constraints: pre-calculated aggregated rows}
+    - {name: status, type: String, enum: [valid, stale, calculating], required: true}
+    - {name: calculatedAt, type: Date}
+    - {name: expiresAt, type: Date, required: false}
+  relations: one ENT-CHARTWIDGET -> many ENT-CHARTCACHE
+  indexes:
+    - '{ widgetId, queryHash }'
+  enums:
+    status: [valid, stale, calculating]

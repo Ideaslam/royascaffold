@@ -1,0 +1,29 @@
+# Entity ENT-CONNECTION — owned by DOM-DATA. Referenced by logic via deps: [ENT-CONNECTION].
+id: ENT-CONNECTION
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: connections
+workspace_scoped: true
+status: implemented
+rules:
+  - RULE-GLOBAL-009
+history:
+  - change-015
+  - change-059
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: type, type: String, required: true, ref: ENT-DSTYPE-META, constraints: data-source type key}
+    - {name: name, type: String, required: true}
+    - {name: credentials, type: JSON, required: false, constraints: encrypted at rest; never returned}
+    - {name: status, type: String, enum: [active, error, disconnected], required: true}
+    - {name: lastError, type: String, required: false}
+    - {name: createdAt, type: Date}
+  relations: one ENT-CONNECTION -> many ENT-DATASOURCE
+  indexes:
+    - '{ workspaceId }'
+  enums:
+    status: [active, error, disconnected]

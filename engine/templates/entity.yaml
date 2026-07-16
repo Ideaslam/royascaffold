@@ -1,0 +1,31 @@
+# TEMPLATE — one ENTITY (a persisted shape). Copy to project/map/data/<domain>/<entity>.yaml.
+# One entity per file. Entities are DOMAIN-owned (not module-owned) and shared across modules:
+# a module uses an entity through its logic `deps: [ENT-<NAME>]`, never by redefining it here.
+# The viewer's Data Model view groups these by `domain`; module pages derive "Entities used"
+# from logic deps. Placeholders are quoted so this stays valid YAML — drop the quotes when filling.
+#
+# spec.fields IS the schema. Each field: name, type, required?, ref (relation to another ENT id),
+# index? (true | unique | text), enum?, constraints? (free text: PK, encrypted, etc.).
+
+id: "ENT-<NAME>"                 # kind:data id; ENT- prefix
+kind: data
+subtype: collection             # collection | entity | table (match profile.stack.subtypes.data)
+domain: "DOM-<DOMAIN>"          # the domain that OWNS this entity (drives boundary checks)
+status: planned                 # planned | partial | implemented (+ reason_note if partial/legacy)
+# apps: [backend]               # optional — entities default to profile.default_app; override only if shared elsewhere
+collection: "<collection>"      # or: collection_pattern: "ws_{slug}_<name>" for dynamic collections
+workspace_scoped: false         # true if it lives under a per-workspace collection
+rules: []                       # enforceable RULE- ids that apply (e.g. [RULE-GLOBAL-009])
+history: []                     # change ids that touched it (e.g. [change-001])
+
+spec:
+  # source: inferred            # add ONLY when fields are guessed (no code/doc) — flags "validate me"
+  fields:
+    - { name: _id, type: ObjectId, required: true, constraints: PK }
+    - { name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true }  # ref = relation
+    - { name: "<field>", type: String, required: true }
+    - { name: status, type: String, enum: [active, inactive], required: true }
+    - { name: createdAt, type: Date }
+  relations: "one ENT-WORKSPACE -> many ENT-<NAME>; belongs to <other entity>"
+  indexes: ["{ workspaceId }", "{ <field> } unique"]
+  enums: { status: [active, inactive] }

@@ -1,0 +1,25 @@
+# Entity ENT-AILOG — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-AILOG].
+id: ENT-AILOG
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: ailogs
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: false, index: true}
+    - {name: model, type: String, required: true, ref: ENT-AI-PRICING, constraints: model id}
+    - {name: purpose, type: String, enum: [column_analysis, dashboard_generation], required: true}
+    - {name: promptTokens, type: Number, required: false}
+    - {name: completionTokens, type: Number, required: false}
+    - {name: cost, type: Number, required: false, constraints: computed from ENT-AI-PRICING}
+    - {name: createdAt, type: Date, index: true}
+  relations: each call references a model in ENT-AI-PRICING
+  indexes:
+    - '{ createdAt }'
+    - '{ workspaceId }'
+  enums:
+    purpose: [column_analysis, dashboard_generation]

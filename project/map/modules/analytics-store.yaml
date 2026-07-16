@@ -30,7 +30,7 @@ nodes:
       deps: [SVC-OLAP-ENGINE], rules: [RULE-GLOBAL-006] }
   - { id: SVC-OLAP-BENCH, kind: logic, subtype: service, status: implemented,
       methods: [runBenchmark, getResult], deps: [SVC-OLAP-STORE, ENT-OLAP-BENCH] }
-  - { id: ENT-OLAP-BENCH, kind: data, subtype: collection, collection: olap_benchmark_runs, workspace_scoped: false, status: implemented }
+  # Entities → project/map/data/data-source-engine/ (ENT-OLAP-BENCH; used by the services below via deps)
 
   # admin benchmark surfaces
   - { id: EP-AS-01, kind: surface, subtype: rest.post, route: /api/v1/admin/olap/benchmark, auth: "role:admin",

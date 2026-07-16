@@ -1,0 +1,28 @@
+# Entity ENT-PAYMENT — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-PAYMENT].
+id: ENT-PAYMENT
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: payments
+workspace_scoped: false
+status: implemented
+history:
+  - change-002
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: subscriptionId, type: ObjectId, ref: ENT-SUBSCRIPTION, required: false}
+    - {name: amount, type: Number, required: true}
+    - {name: currency, type: String, required: true}
+    - {name: method, type: String, enum: [manual, payup], required: true}
+    - {name: status, type: String, enum: [pending, paid, failed, refunded], required: true}
+    - {name: providerRef, type: String, required: false, constraints: PayUp transaction id}
+    - {name: createdAt, type: Date}
+  relations: many ENT-PAYMENT -> one ENT-WORKSPACE; optionally -> one ENT-SUBSCRIPTION
+  indexes:
+    - '{ workspaceId }'
+  enums:
+    method: [manual, payup]
+    status: [pending, paid, failed, refunded]

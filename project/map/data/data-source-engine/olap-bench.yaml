@@ -1,0 +1,20 @@
+# Entity ENT-OLAP-BENCH — owned by DOM-DATA. Referenced by logic via deps: [ENT-OLAP-BENCH].
+id: ENT-OLAP-BENCH
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: olap_benchmark_runs
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: engine, type: String, enum: [clickhouse, bigquery], required: true}
+    - {name: operation, type: String, required: true}
+    - {name: durationMs, type: Number, required: true}
+    - {name: rows, type: Number, required: false}
+    - {name: createdAt, type: Date}
+  relations: operational metrics for the OLAP engines
+  enums:
+    engine: [clickhouse, bigquery]

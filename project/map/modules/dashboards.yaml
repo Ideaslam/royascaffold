@@ -68,12 +68,8 @@ nodes:
   - { id: SVC-DASH-PIPELINE-REG, kind: logic, subtype: service, status: implemented,
       methods: [onModuleInit], deps: [SVC-PIPE-TYPE-REG], rules: [RULE-ARCH-006], history: [change-064] }
 
-  - { id: ENT-DASHBOARD, kind: data, subtype: collection, collection: dashboards, workspace_scoped: true, status: implemented }
-  - { id: ENT-CHARTWIDGET, kind: data, subtype: collection, collection: chartwidgets, workspace_scoped: true, status: implemented }
-  - { id: ENT-CHARTCACHE, kind: data, subtype: collection, collection: chartdatacache, workspace_scoped: true, status: implemented }
-  - { id: ENT-DASH-DATASOURCE, kind: data, subtype: collection, collection: dashboarddatasources, workspace_scoped: true, status: implemented }
-  - { id: ENT-WIDGETDEF, kind: data, subtype: collection, collection: widgetdefinitions, workspace_scoped: false, status: implemented }
-  - { id: ENT-FILTERVALUEMETA, kind: data, subtype: collection, collection: filtervaluemeta, workspace_scoped: true, status: implemented, history: [change-021] }
+  # Entities → project/map/data/reporting-engine/ (ENT-DASHBOARD, ENT-CHARTWIDGET, ENT-CHARTCACHE,
+  #   ENT-DASH-DATASOURCE, ENT-WIDGETDEF, ENT-FILTERVALUEMETA; used by the services above via deps)
 
   # surfaces
   - { id: EP-DASH-01, kind: surface, subtype: rest.post, route: /api/v1/dashboards, auth: authenticated, status: implemented, calls: [SVC-DASH.createDashboard], rules: [RULE-GLOBAL-004, RULE-GLOBAL-007], history: [change-015] }

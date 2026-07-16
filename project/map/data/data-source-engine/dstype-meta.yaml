@@ -1,0 +1,21 @@
+# Entity ENT-DSTYPE-META — owned by DOM-DATA. Referenced by logic via deps: [ENT-DSTYPE-META].
+id: ENT-DSTYPE-META
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: datasourcetypemeta
+workspace_scoped: false
+status: implemented
+history:
+  - change-048
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: type, type: String, required: true, index: unique, constraints: 'e.g. shopify, google_sheets, sql_server'}
+    - {name: label, type: String, required: true}
+    - {name: capabilities, type: JSON, required: false}
+    - {name: active, type: Boolean, required: true}
+  relations: catalog referenced by ENT-CONNECTION.type
+  indexes:
+    - '{ type } unique'

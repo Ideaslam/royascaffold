@@ -16,8 +16,7 @@ nodes:
   - { id: SVC-SET, kind: logic, subtype: service, status: implemented,
       methods: [getSettings, updateSettings], deps: [ENT-SETTINGS, SVC-AUDIT], rules: [RULE-GLOBAL-010] }
 
-  - { id: ENT-SETTINGS, kind: data, subtype: collection, collection: systemsettings, workspace_scoped: false, status: implemented,
-      reason_note: "single global singleton document" }
+  # Entities → project/map/data/platform/ (ENT-SETTINGS; used by the services below via deps)
 
   - { id: EP-SET-01, kind: surface, subtype: rest.get, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.getSettings] }
   - { id: EP-SET-02, kind: surface, subtype: rest.patch, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.updateSettings] }

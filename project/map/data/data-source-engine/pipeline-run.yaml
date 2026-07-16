@@ -1,0 +1,27 @@
+# Entity ENT-PIPELINE-RUN — owned by DOM-DATA. Referenced by logic via deps: [ENT-PIPELINE-RUN].
+id: ENT-PIPELINE-RUN
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: pipeline_runs
+workspace_scoped: true
+status: implemented
+history:
+  - change-019
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: pipelineType, type: String, enum: [ingest, dashboard], required: true}
+    - {name: datasetId, type: ObjectId, ref: ENT-DATASET, required: false}
+    - {name: status, type: String, enum: [running, completed, failed], required: true}
+    - {name: steps, type: JSON, required: false, constraints: per-step status/timing}
+    - {name: startedAt, type: Date}
+    - {name: completedAt, type: Date, required: false}
+  relations: persisted via the kernel's PIPELINE_RUN_STORE seam (IF-PIPELINE-RUN-STORE)
+  indexes:
+    - '{ workspaceId }'
+  enums:
+    pipelineType: [ingest, dashboard]
+    status: [running, completed, failed]

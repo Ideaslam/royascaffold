@@ -64,6 +64,21 @@ export function verify(projectDir) {
   }
   report.checks.specs = specOk ? 'COMPLETE' : 'INCOMPLETE';
 
+  // --- 2b. App / repository assignment: explicit keys must exist; UI must be placed somewhere ---
+  const appKeys = new Set((model.profile.apps || []).map((a) => a.key));
+  let appsOk = true;
+  for (const [id, n] of model.nodes) {
+    const explicit = Array.isArray(n.apps) ? n.apps : (n.apps || n.app ? [].concat(n.apps || n.app) : null);
+    if (explicit) {
+      for (const key of explicit) {
+        if (!appKeys.has(key)) { err(`APP_UNKNOWN ${id} -> '${key}' (not a profile.apps key)`); appsOk = false; }
+      }
+    } else if (n.kind === 'ui') {
+      warn(`APP_UNASSIGNED ${id} is a ui node with no app/apps (can't tell which repo it ships in)`);
+    }
+  }
+  report.checks.apps = appsOk ? 'OK' : 'BAD';
+
   // --- 3. Link consistency (edges resolve; method links exist on target) ---
   let linkOk = true;
   for (const [id, n] of model.nodes) {

@@ -1,0 +1,22 @@
+# Entity ENT-FILTERVALUEMETA — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-FILTERVALUEMETA].
+id: ENT-FILTERVALUEMETA
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: filtervaluemeta
+workspace_scoped: true
+status: implemented
+history:
+  - change-021
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: datasetId, type: ObjectId, ref: ENT-DATASET, required: true, index: true}
+    - {name: column, type: String, required: true}
+    - {name: distinctValues, type: 'String[]', required: false, constraints: cached filter options}
+    - {name: updatedAt, type: Date}
+  relations: one ENT-DATASET -> many ENT-FILTERVALUEMETA (per filterable column)
+  indexes:
+    - '{ datasetId, column }'

@@ -78,19 +78,9 @@ nodes:
   - { id: SVC-ADMIN-SYNC-HEALTH, kind: logic, subtype: service, status: implemented,
       methods: [getHealth], deps: [ENT-SYNCRUN], history: [change-029] }
 
-  # ── Data (entities / collections; dynamic collections use collection_pattern) ─────────────────
-  - { id: ENT-CSVFILE, kind: data, subtype: collection, collection: csvfiles, workspace_scoped: false, status: implemented }
-  - { id: ENT-COLUMNMETA, kind: data, subtype: collection, collection: columnmetadata, status: implemented }
-  - { id: ENT-CSVDATA, kind: data, subtype: collection, collection_pattern: "csvdata_{fileId}", legacy: true, status: implemented,
-      reason_note: "dynamic per-file row collection" }
-  - { id: ENT-CONNECTION, kind: data, subtype: collection, collection: connections, workspace_scoped: true, status: implemented,
-      rules: [RULE-GLOBAL-009], history: [change-015, change-059] }
-  - { id: ENT-DATASOURCE, kind: data, subtype: collection, collection: datasources, workspace_scoped: true, status: implemented, history: [change-059] }
-  - { id: ENT-DATASET, kind: data, subtype: collection, collection: datasets, workspace_scoped: true, status: implemented,
-      reason_note: "analyticsTable = ds_{workspaceSlug}_{datasetId}", history: [change-015, change-055] }
-  - { id: ENT-SYNCRUN, kind: data, subtype: collection, collection: syncruns, workspace_scoped: true, status: implemented, history: [change-018, change-029] }
-  - { id: ENT-DSTYPE-META, kind: data, subtype: collection, collection: datasourcetypemeta, workspace_scoped: false, status: implemented, history: [change-048] }
-  - { id: ENT-WEBHOOK-ROUTE, kind: data, subtype: collection, collection: webhook_routes, workspace_scoped: false, status: implemented, history: [change-043] }
+  # Entities → project/map/data/data-source-engine/ (ENT-CSVFILE, ENT-COLUMNMETA, ENT-CSVDATA,
+  #   ENT-CONNECTION, ENT-DATASOURCE, ENT-DATASET, ENT-SYNCRUN, ENT-DSTYPE-META, ENT-WEBHOOK-ROUTE;
+  #   used by the services above via deps)
 
   # ── Surfaces (endpoints) — one line each; calls resolve to service methods ────────────────────
   # Legacy CSV

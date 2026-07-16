@@ -1,0 +1,23 @@
+# Entity ENT-CSVFILE — owned by DOM-DATA. Referenced by logic via deps: [ENT-CSVFILE].
+id: ENT-CSVFILE
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: csvfiles
+workspace_scoped: false
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: originalFilename, type: String, required: true}
+    - {name: fileSize, type: Number, required: true}
+    - {name: uploadedBy, type: ObjectId, ref: ENT-USER, required: true}
+    - {name: storagePath, type: String, required: false, constraints: raw file backup (R2)}
+    - {name: dataCollectionName, type: String, required: false, constraints: where rows live (ENT-CSVDATA)}
+    - {name: rowCount, type: Number, required: false}
+    - {name: columnCount, type: Number, required: false}
+    - {name: status, type: String, enum: [uploading, analyzing, ready, error], required: true}
+    - {name: createdAt, type: Date}
+  relations: one ENT-CSVFILE -> many ENT-COLUMNMETA; one ENT-CSVFILE -> one ENT-CSVDATA collection
+  enums:
+    status: [uploading, analyzing, ready, error]

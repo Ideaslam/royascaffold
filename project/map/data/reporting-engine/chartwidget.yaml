@@ -1,0 +1,28 @@
+# Entity ENT-CHARTWIDGET — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-CHARTWIDGET].
+id: ENT-CHARTWIDGET
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: chartwidgets
+workspace_scoped: true
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: dashboardId, type: ObjectId, ref: ENT-DASHBOARD, required: true, index: true}
+    - {name: type, type: String, enum: [bar, line, pie, table, kpi, area], required: true}
+    - {name: title, type: String, required: true}
+    - {name: position, type: JSON, required: false, constraints: '{ x, y }'}
+    - {name: size, type: JSON, required: false, constraints: '{ w, h }'}
+    - {name: datasetId, type: ObjectId, ref: ENT-DATASET, required: false}
+    - {name: querySpec, type: JSON, required: false, constraints: dialect-neutral query definition}
+    - {name: aggregation, type: JSON, required: false, constraints: sum/count/avg/min/max + group by}
+    - {name: filters, type: JSON, required: false}
+    - {name: config, type: JSON, required: false, constraints: colors/axes/legend}
+    - {name: createdAt, type: Date}
+  relations: one ENT-DASHBOARD -> many ENT-CHARTWIDGET; one ENT-CHARTWIDGET -> many ENT-CHARTCACHE
+  indexes:
+    - '{ dashboardId }'
+  enums:
+    type: [bar, line, pie, table, kpi, area]

@@ -33,8 +33,15 @@ id_prefixes:
   FEAT: feature
   MOD: module
 
+# Apps / repositories. Every implementation node belongs to one or more of these via `app`/`apps`.
+# `side` (backend|frontend|static) + `label` drive the viewer's Apps tree. List every repo the
+# system ships as — a UI page names its `app`; a shared asset lists many; server nodes default below.
 apps:
-  - { key: "<app-key>", type: "<web|api|mobile|web-static>", repo: "<repo>", framework: "<framework>" }
+  - { key: "<app-key>", label: "<Display Name>", side: "<backend|frontend|static>", type: "<web|api|mobile|web-static>", repo: "<repo>", framework: "<framework>" }
+
+# Which app hosts server-side nodes (surface/logic/data/contract/integration/flow) unless a node
+# overrides with its own `apps: [...]`. UI nodes always carry their own `app`/`apps`.
+default_app: "<app-key of the api/backend repo>"
 
 # Set once code exists so map<->code drift + size-budget checks activate.
 code_roots: []

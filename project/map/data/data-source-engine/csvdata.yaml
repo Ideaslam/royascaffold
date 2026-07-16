@@ -1,0 +1,16 @@
+# Entity ENT-CSVDATA — owned by DOM-DATA. Referenced by logic via deps: [ENT-CSVDATA].
+id: ENT-CSVDATA
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection_pattern: csvdata_{fileId}
+legacy: true
+status: implemented
+reason_note: dynamic per-file row collection
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: rowNumber, type: Number, required: true, constraints: original position in the CSV}
+    - {name: <dynamic>, type: Mixed, required: false, constraints: one field per CSV column (schema is per-file)}
+  relations: each ENT-CSVFILE owns its own csvdata_{fileId} collection of rows
+  notes: legacy path — new ingestion loads rows into the OLAP store, not here

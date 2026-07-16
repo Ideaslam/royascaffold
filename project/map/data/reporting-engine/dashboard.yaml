@@ -1,0 +1,26 @@
+# Entity ENT-DASHBOARD — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-DASHBOARD].
+id: ENT-DASHBOARD
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: dashboards
+workspace_scoped: true
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: projectId, type: ObjectId, ref: ENT-PROJECT, required: true, index: true}
+    - {name: name, type: String, required: true}
+    - {name: purpose, type: String, required: false, constraints: used by AI for generation}
+    - {name: status, type: String, enum: [generating, ready, error], required: true}
+    - {name: layout, type: JSON, required: false, constraints: grid layout structure}
+    - {name: createdBy, type: ObjectId, ref: ENT-USER, required: true}
+    - {name: generationMeta, type: JSON, required: false, constraints: AI model + timestamp}
+    - {name: createdAt, type: Date}
+    - {name: updatedAt, type: Date}
+  relations: one ENT-PROJECT -> many ENT-DASHBOARD; one ENT-DASHBOARD -> many ENT-CHARTWIDGET; many-to-many ENT-DASHBOARD <-> data via ENT-DASH-DATASOURCE
+  indexes:
+    - '{ workspaceId, projectId }'
+  enums:
+    status: [generating, ready, error]

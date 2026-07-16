@@ -1,0 +1,24 @@
+# Entity ENT-WORKSPACE — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-WORKSPACE].
+id: ENT-WORKSPACE
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: workspaces
+workspace_scoped: false
+status: implemented
+history:
+  - change-008
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: name, type: String, required: true}
+    - {name: slug, type: String, required: true, index: unique, constraints: 'used in ws_{slug}_* collections'}
+    - {name: ownerId, type: ObjectId, ref: ENT-USER, required: true}
+    - {name: status, type: String, enum: [active, suspended], required: true}
+    - {name: createdAt, type: Date}
+  relations: one ENT-WORKSPACE -> many ENT-WS-MEMBERSHIP; -> one ENT-WS-BRANDING; -> one ENT-SUBSCRIPTION; owns all ws_{slug}_* data
+  indexes:
+    - '{ slug } unique'
+  enums:
+    status: [active, suspended]

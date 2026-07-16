@@ -1,0 +1,21 @@
+# Entity ENT-WEBHOOK-ROUTE — owned by DOM-DATA. Referenced by logic via deps: [ENT-WEBHOOK-ROUTE].
+id: ENT-WEBHOOK-ROUTE
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: webhook_routes
+workspace_scoped: false
+status: implemented
+history:
+  - change-043
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: store, type: String, required: true, index: true, constraints: external store identifier}
+    - {name: connectionId, type: ObjectId, ref: ENT-CONNECTION, required: true}
+    - {name: provider, type: String, required: true}
+    - {name: createdAt, type: Date}
+  relations: maps an inbound provider webhook (by store) to its ENT-CONNECTION
+  indexes:
+    - '{ store }'

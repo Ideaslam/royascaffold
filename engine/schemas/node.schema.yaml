@@ -12,6 +12,9 @@ node:
     reason:   { type: string, doc: "required when status is partial or deferred" }
     intentional_drift: { type: boolean, doc: "documented-but-not-coded on purpose; verify won't flag" }
     module:   { type: string }
+    app:      { type: string, doc: "the app/repository this node ships in (a profile.apps key). Shorthand for a single-app node (mainly ui)." }
+    apps:     { type: string[], doc: "app/repository keys when a node ships in MANY repos (e.g. a shared theme). Server-side kinds default to profile.default_app; features/modules span the union of members — never set apps on them." }
+    domain:   { type: string, doc: "for entities (kind:data): the OWNING domain. Entities are not module-owned; they live one-per-file in map/data/<domain>/ and are shared across modules via logic deps." }
     location: { type: string, doc: "optional pointer; the @map annotation is the real link" }
     history:  { type: string[], doc: "change ids that touched this node" }
     rules:    { type: string[], doc: "rule ids this node must obey" }
@@ -21,6 +24,8 @@ node:
     deps:       { doc: "repositories/other services depended on" }
     implements: { doc: "contract ids this logic satisfies" }
     renders:    { doc: "ui children a page/layout renders" }
+    receives:   { doc: "request DTO node id(s) a surface consumes as its body/query payload" }
+    returns:    { doc: "response DTO node id(s) a surface produces" }
     owns:       { doc: "modules a domain owns" }
     contracts:  { doc: "public node ids a domain exposes" }
 
@@ -28,19 +33,24 @@ node:
 # REQUIRED on any node/delta that is `planned` (or `creates: true`) and buildable
 # (surface/logic/data/ui/feature). Optional once `implemented` — code is the truth via @map.
 # A spec documents ONLY what deviates from profile.conventions, plus intent code can't express.
+# The data model is FIRST-CLASS: entities (subtype entity/collection) carry `spec.fields` with type +
+# `ref` (relation to another entity id) — that is the queryable schema. DTOs (subtype dto) are their own
+# `data` nodes that also carry `spec.fields`; a surface links to them via the `receives`/`returns` edges,
+# so every part that sends/receives data names the exact shape.
 spec_by_kind:
-  data:    { fields: "[{name, type, constraints, ref}]", relations: "text", indexes: "[text]", enums: "{name: [values]}" }
-  surface: { route: "METHOD /path", auth: "deviation from conventions or role", request: "{params, query, body(DTO shape)}", response: "{status, shape(DTO)}", errors: "[{code, when}]" }
+  data:    { fields: "[{name, type, required, ref, index, constraints, enum}]", relations: "text (e.g. 'one Workspace -> many X')", indexes: "[text]", enums: "{name: [values]}" }
+  surface: { route: "METHOD /path", auth: "deviation from conventions or role", request: "{params, query, body -> DTO id via receives}", response: "{status, shape -> DTO id via returns}", errors: "[{code, when}]" }
+  dto:     { fields: "[{name, type, required, ref, enum}]", of: "the surface(s)/entity this shape maps to", notes: "text" }
   logic:   { methods: "[{sig, does, side_effects}]", deps: "[ids]" }
   ui:      { route: "/path", components: "[names]", wires: "[EP-id -> purpose]", guard: "name", states: "deviation from conventions.ui.states", notes: "text" }
   feature: { narrative: "the detailed explanation — what it does and why", rules: "[RULE ids or text]", acceptance: "[testable outcomes]", edge_cases: "[invalid input / not-found / concurrency / external failure / rollback]" }
 
 per_kind:
-  surface:     { extra: [route, auth, calls, spec], doc: "endpoint/handler/screen/section" }
+  surface:     { extra: [route, auth, calls, receives, returns, spec], doc: "endpoint/handler/screen/section; receives=request DTO, returns=response DTO" }
   ui:          { extra: [route, calls, renders, i18n, rtl, theme, spec], doc: "page/component/layout/theme; calls = endpoint ids" }
   logic:       { extra: [implements, deps, methods, spec], doc: "methods = public method names only (light); spec carries behavior when planned" }
   contract:    { extra: [di_token, methods, implemented_by], doc: "interface/port" }
-  data:        { extra: [collection, collection_pattern, workspace_scoped, legacy, spec], doc: "entity/collection; spec carries fields when planned" }
+  data:        { extra: [domain, collection, collection_pattern, workspace_scoped, legacy, spec], doc: "entity/collection/dto. ENTITIES live one-per-file in map/data/<domain>/ and carry `domain` (not `module`); DTOs stay in their module bundle. spec.fields carries the schema (name,type,ref); ref is the relation to another entity." }
   integration: { extra: [provider, env, secrets], doc: "external adapter" }
   flow:        { extra: [subtype, worker, owner, order, overrides], doc: "queue/worker/cron/pipeline" }
   rule:        { see: rule.schema.yaml }

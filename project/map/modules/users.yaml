@@ -15,8 +15,7 @@ features:
   - { id: FEAT-USER-ADMIN, name: Admin User Management, visibility: admin-panel, uses: [EP-USR-03, EP-USR-05, SVC-USR, PAGE-ADMIN-USERS], doc: { short: "Admins manage all user accounts.", description: "Admin listing, creation, update, and suspension/reactivation of users from the admin panel.", rules: ["Restricted to role:admin"] } }
 
 nodes:
-  - { id: ENT-USER, kind: data, subtype: collection, collection: users, workspace_scoped: false, status: implemented,
-      rules: [RULE-GLOBAL-009], history: [change-001] }
+  # Entities → project/map/data/platform/ (ENT-USER; used by the services below via deps)
 
   - { id: SVC-USR, kind: logic, subtype: service, status: implemented,
       methods: [updateProfile, changePassword, listUsers, getUserById, createUser, updateUser, deleteUser,

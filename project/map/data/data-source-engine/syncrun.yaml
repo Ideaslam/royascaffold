@@ -1,0 +1,27 @@
+# Entity ENT-SYNCRUN — owned by DOM-DATA. Referenced by logic via deps: [ENT-SYNCRUN].
+id: ENT-SYNCRUN
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: syncruns
+workspace_scoped: true
+status: implemented
+history:
+  - change-018
+  - change-029
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: datasetId, type: ObjectId, ref: ENT-DATASET, required: true, index: true}
+    - {name: status, type: String, enum: [queued, running, completed, failed], required: true}
+    - {name: rowsProcessed, type: Number, required: false}
+    - {name: startedAt, type: Date, required: false}
+    - {name: completedAt, type: Date, required: false}
+    - {name: error, type: String, required: false}
+  relations: one ENT-DATASET -> many ENT-SYNCRUN
+  indexes:
+    - '{ datasetId }'
+  enums:
+    status: [queued, running, completed, failed]

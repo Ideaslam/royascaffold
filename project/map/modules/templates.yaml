@@ -25,9 +25,7 @@ nodes:
   - { id: SVC-TPL-SEED, kind: logic, subtype: service, status: implemented,
       methods: [seed], deps: [SVC-TPL], rules: [RULE-ARCH-006], history: [change-049] }
 
-  - { id: ENT-TPL-INDUSTRY, kind: data, subtype: collection, collection: template_industries, workspace_scoped: false, status: implemented, history: [change-049] }
-  - { id: ENT-TPL-FIELD, kind: data, subtype: collection, collection: template_industry_fields, workspace_scoped: false, status: implemented, history: [change-049] }
-  - { id: ENT-DASH-TEMPLATE, kind: data, subtype: collection, collection: dashboard_templates, workspace_scoped: false, status: implemented, history: [change-049] }
+  # Entities → project/map/data/reporting-engine/ (ENT-TPL-INDUSTRY, ENT-TPL-FIELD, ENT-DASH-TEMPLATE; used by the services below via deps)
 
   # customer browse
   - { id: EP-TPL-01, kind: surface, subtype: rest.get, route: /api/v1/templates/industries, auth: authenticated, status: implemented, calls: [SVC-TPL.listIndustries], history: [change-049] }

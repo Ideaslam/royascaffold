@@ -1,0 +1,16 @@
+# Entity ENT-COLOR-TPL — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-COLOR-TPL].
+id: ENT-COLOR-TPL
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: colortemplates
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: name, type: String, required: true}
+    - {name: colors, type: 'String[]', required: true, constraints: ordered palette of hex values}
+    - {name: active, type: Boolean, required: true}
+  relations: referenced by ENT-WS-BRANDING.colorTemplateId

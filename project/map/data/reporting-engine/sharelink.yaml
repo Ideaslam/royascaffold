@@ -1,0 +1,27 @@
+# Entity ENT-SHARELINK — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-SHARELINK].
+id: ENT-SHARELINK
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: sharelinks
+workspace_scoped: true
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: dashboardId, type: ObjectId, ref: ENT-DASHBOARD, required: true, index: true}
+    - {name: token, type: String, required: true, index: unique, constraints: 'URL-safe, unguessable'}
+    - {name: permission, type: String, enum: [view-only, edit], required: true}
+    - {name: createdBy, type: ObjectId, ref: ENT-USER, required: true}
+    - {name: expiresAt, type: Date, required: false}
+    - {name: accessCount, type: Number, required: false}
+    - {name: lastAccessedAt, type: Date, required: false}
+    - {name: status, type: String, enum: [active, revoked], required: true}
+  relations: one ENT-DASHBOARD -> many ENT-SHARELINK
+  indexes:
+    - '{ token } unique'
+    - '{ dashboardId }'
+  enums:
+    permission: [view-only, edit]
+    status: [active, revoked]

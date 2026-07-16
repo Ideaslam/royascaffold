@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { generateIndex } from '../verify/index.mjs';
 import { verify } from '../verify/verify.mjs';
-import { overview, moduleView, featureView, nodeView, graphStub, kindsInfo } from './model.mjs';
+import { overview, moduleView, featureView, nodeView, graphStub, kindsInfo, dataModel, appView } from './model.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, 'public');
@@ -48,6 +48,14 @@ app.post('/api/verify', (_req, res) => {
   generateIndex(projectDir);
   const report = verify(projectDir);
   res.json({ ok: true, report, overview: overview(projectDir) });
+});
+
+app.get('/api/data-model', (_req, res) => {
+  res.json(dataModel(projectDir));
+});
+
+app.get('/api/app/:key', (req, res) => {
+  sendOr404(res, appView(projectDir, req.params.key));
 });
 
 app.get('/api/graph', (_req, res) => {

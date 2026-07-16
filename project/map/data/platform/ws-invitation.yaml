@@ -1,0 +1,27 @@
+# Entity ENT-WS-INVITATION — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-WS-INVITATION].
+id: ENT-WS-INVITATION
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: workspaceinvitations
+workspace_scoped: false
+status: implemented
+history:
+  - change-007
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: email, type: String, required: true}
+    - {name: role, type: String, enum: [admin, member, viewer], required: true}
+    - {name: token, type: String, required: true, index: unique, constraints: accept-link token}
+    - {name: status, type: String, enum: [pending, accepted, revoked, expired], required: true}
+    - {name: expiresAt, type: Date, required: false}
+    - {name: createdAt, type: Date}
+  relations: one ENT-WORKSPACE -> many ENT-WS-INVITATION
+  indexes:
+    - '{ token } unique'
+    - '{ workspaceId }'
+  enums:
+    status: [pending, accepted, revoked, expired]

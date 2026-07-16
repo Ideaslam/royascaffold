@@ -1,0 +1,19 @@
+# Entity ENT-DASH-DATASOURCE — owned by DOM-REPORTING. Referenced by logic via deps: [ENT-DASH-DATASOURCE].
+id: ENT-DASH-DATASOURCE
+kind: data
+subtype: collection
+domain: DOM-REPORTING
+collection: dashboarddatasources
+workspace_scoped: true
+status: implemented
+spec:
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: dashboardId, type: ObjectId, ref: ENT-DASHBOARD, required: true, index: true}
+    - {name: datasetId, type: ObjectId, ref: ENT-DATASET, required: true, index: true}
+    - {name: isPrimary, type: Boolean, required: false, constraints: the main data source}
+    - {name: addedAt, type: Date}
+  relations: 'join table: many-to-many ENT-DASHBOARD <-> ENT-DATASET'
+  indexes:
+    - '{ dashboardId }'
+    - '{ datasetId }'

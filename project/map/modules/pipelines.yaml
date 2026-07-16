@@ -38,4 +38,4 @@ nodes:
       deps: [SVC-PIPE-STEP-REG, SVC-OLAP-STORE, SVC-EXT-AI],
       rules: [RULE-TPL-002, RULE-TPL-003, RULE-GLOBAL-002], history: [change-049] }
 
-  - { id: ENT-PIPELINE-RUN, kind: data, subtype: collection, collection: pipeline_runs, workspace_scoped: true, status: implemented, history: [change-019] }
+  # Entities → project/map/data/data-source-engine/ (ENT-PIPELINE-RUN; used by the services below via deps)

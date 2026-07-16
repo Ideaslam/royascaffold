@@ -1,0 +1,29 @@
+# Entity ENT-DATASET — owned by DOM-DATA. Referenced by logic via deps: [ENT-DATASET].
+id: ENT-DATASET
+kind: data
+subtype: collection
+domain: DOM-DATA
+collection: datasets
+workspace_scoped: true
+status: implemented
+reason_note: analyticsTable = ds_{workspaceSlug}_{datasetId}
+history:
+  - change-015
+  - change-055
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: workspaceId, type: ObjectId, ref: ENT-WORKSPACE, required: true, index: true}
+    - {name: dataSourceId, type: ObjectId, ref: ENT-DATASOURCE, required: true, index: true}
+    - {name: name, type: String, required: true}
+    - {name: analyticsTable, type: String, required: false, constraints: 'ds_{workspaceSlug}_{datasetId} in the OLAP store'}
+    - {name: schema, type: JSON, required: false, constraints: confirmed column schema}
+    - {name: syncStatus, type: String, enum: [pending, syncing, ready, error], required: true}
+    - {name: lastSyncedAt, type: Date, required: false}
+    - {name: createdAt, type: Date}
+  relations: one ENT-DATASOURCE -> many ENT-DATASET; one ENT-DATASET -> many ENT-SYNCRUN; referenced by ENT-CHARTWIDGET
+  indexes:
+    - '{ workspaceId, dataSourceId }'
+  enums:
+    syncStatus: [pending, syncing, ready, error]

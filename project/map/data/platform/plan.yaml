@@ -1,0 +1,20 @@
+# Entity ENT-PLAN — owned by DOM-PLATFORM. Referenced by logic via deps: [ENT-PLAN].
+id: ENT-PLAN
+kind: data
+subtype: collection
+domain: DOM-PLATFORM
+collection: subscriptionplans
+workspace_scoped: false
+status: implemented
+spec:
+  source: inferred
+  fields:
+    - {name: _id, type: ObjectId, required: true, constraints: PK}
+    - {name: name, type: String, required: true}
+    - {name: price, type: Number, required: true}
+    - {name: interval, type: String, enum: [monthly, yearly], required: true}
+    - {name: quotas, type: JSON, required: false, constraints: seat + resource limits enforced by SVC-SUB-LIM}
+    - {name: active, type: Boolean, required: true}
+  relations: one ENT-PLAN -> many ENT-SUBSCRIPTION
+  enums:
+    interval: [monthly, yearly]

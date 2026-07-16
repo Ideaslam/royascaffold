@@ -8,9 +8,9 @@ new_system:
   blocks:
     - { id: product,      ask: "name · one-line promise · who uses it",                 fills: "profile.product + description intro" }
     - { id: jobs,         ask: "top 3–7 user outcomes",                                  fills: "description Primary jobs + FEAT- seeds" }
-    - { id: apps,         ask: "web / mobile / api / cli + framework each",              fills: "profile.apps + subtypes" }
+    - { id: apps,         ask: "each app/repo (backend api · web portals · admin · landing · mobile) + framework; which is the default backend", fills: "profile.apps + default_app + subtypes" }
     - { id: domains,      ask: "the major areas of the system",                          fills: "DOM- nodes" }
-    - { id: data,         ask: "the main entities/collections + their key fields",       fills: "ENT- nodes (+ spec.fields)" }
+    - { id: data,         ask: "the main entities/collections + their key fields + owning domain", fills: "ENT- nodes in map/data/<domain>/ (+ spec.fields)" }
     - { id: integrations, ask: "external services + their secrets",                      fills: "profile.integrations + integration nodes" }
     - { id: rules,        ask: "auth model · tenancy · perf targets · pagination · audit", fills: "map/rules.yaml + profile.conventions" }
     - { id: constraints,  ask: "compliance · regions · budgets · non-negotiables",       fills: "rules or description" }
@@ -21,8 +21,8 @@ change:
   blocks:
     - { id: core,       mandatory: true,  ask: "type & owner · intent (one sentence) · out-of-scope · priority",        fills: "change.yaml" }
     - { id: behavior,   mandatory: true,  ask: "the main path, step by step — exactly what happens",                    fills: "delta spec + plan steps" }
-    - { id: data,       skip_when: [modify-page, modify-endpoint-io-only, refactor], ask: "new/changed entities, fields, collections, providers, async jobs", fills: "data-kind deltas (spec.fields)" }
-    - { id: interface,  skip_when: [refactor], ask: "endpoints (route/auth/request/response) and pages (components/wiring/states) touched", fills: "surface + ui deltas (spec)" }
+    - { id: data,       skip_when: [modify-page, modify-endpoint-io-only, refactor], ask: "new/changed entities (+ owning domain), fields, collections, providers, async jobs", fills: "entity files in map/data/<domain>/ + data-kind deltas (spec.fields)" }
+    - { id: interface,  skip_when: [refactor], ask: "endpoints (route/auth/request/response) and pages (which app/repo · components/wiring/states) touched", fills: "surface + ui deltas (spec; ui carries app)" }
     - { id: security,   skip_when: [auth-unchanged-and-no-new-endpoints], ask: "who may trigger · ownership checks · sensitive data · audit", fills: "node.rules + spec.auth" }
     - { id: edge_cases, skip_when: [pure-ui-no-backend], ask: "invalid input · not-found · concurrency · external failure · rollback", fills: "spec.edge_cases" }
     - { id: acceptance, mandatory: true,  ask: "the testable outcomes that mean done",                                   fills: "change.acceptance + step.accept" }

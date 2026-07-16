@@ -19,8 +19,7 @@ nodes:
   - { id: SVC-AILOG-SEED, kind: logic, subtype: service, status: implemented,
       methods: [onModuleInit], deps: [SVC-AILOG-PRICE], rules: [RULE-ARCH-006] }
 
-  - { id: ENT-AILOG, kind: data, subtype: collection, collection: ailogs, workspace_scoped: false, status: implemented }
-  - { id: ENT-AI-PRICING, kind: data, subtype: collection, collection: aimodelpricing, workspace_scoped: false, status: implemented }
+  # Entities → project/map/data/platform/ (ENT-AILOG, ENT-AI-PRICING; used by the services below via deps)
 
   - { id: EP-AILOG-01, kind: surface, subtype: rest.get, route: /api/v1/ai-logs, auth: "role:admin", status: implemented, calls: [SVC-AILOG.findPaginated], rules: [RULE-PAG-01] }
   - { id: EP-AILOG-02, kind: surface, subtype: rest.get, route: /api/v1/ai-logs/cost-summary, auth: "role:admin", status: implemented, calls: [SVC-AILOG.costSummary] }

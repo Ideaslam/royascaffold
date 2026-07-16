@@ -10,7 +10,7 @@ subtypes:
   ui: [page, component, layout, theme, tokens, i18n]
   logic: [service, worker, cron, guard, registry, repository]
   contract: [interface]
-  data: [entity, collection]
+  data: [entity, collection, dto]     # dto = request/response payload shape (carries fields; linked from surfaces)
   integration: [oauth, sdk]
   flow: [queue, worker, cron, pipeline, migration]
 
@@ -22,6 +22,7 @@ id_prefixes:
   SVC: logic
   IF: contract
   ENT: data
+  DTO: data
   Q: flow
   MIG: flow
   RULE: rule
@@ -30,11 +31,18 @@ id_prefixes:
   FEAT: feature
   MOD: module
 
+# Apps / repositories. Every implementation node belongs to one or more of these (its `app` or
+# `apps: [...]`). Server-side nodes (surface/logic/data/contract/integration/flow) default to
+# `default_app` below; UI nodes carry their own `app`/`apps`; features & modules span the union of
+# their members. `side` + `label` are for the viewer's app tree.
 apps:
-  - { key: customer-portal, type: web, repo: roya-ai-dynamo-frontend, framework: Angular 21, ui: PrimeNG 21 }
-  - { key: admin-panel, type: web, repo: roya-ai-dynamo-frontend-admin, framework: Angular 21, ui: PrimeNG 21 }
-  - { key: backend, type: api, repo: roya-ai-dynamo-api, framework: NestJS }
-  - { key: landing-site, type: web-static, repo: roya-dynamo-landing, framework: HTML+Tailwind }
+  - { key: customer-portal, label: "Customer Portal", side: frontend, type: web, repo: roya-ai-dynamo-frontend, framework: Angular 21, ui: PrimeNG 21 }
+  - { key: admin-panel, label: "Admin Panel", side: frontend, type: web, repo: roya-ai-dynamo-frontend-admin, framework: Angular 21, ui: PrimeNG 21 }
+  - { key: backend, label: "API", side: backend, type: api, repo: roya-ai-dynamo-api, framework: NestJS }
+  - { key: landing-site, label: "Landing", side: frontend, type: web-static, repo: roya-dynamo-landing, framework: HTML+Tailwind }
+
+# Server-side nodes belong here unless a node overrides with its own `app`/`apps`.
+default_app: backend
 
 # Verify uses these to run map<->code drift and the size budget. Absent here (code lives in other
 # repos), so verify reports drift + size as SKIPPED — honest, not a failure.

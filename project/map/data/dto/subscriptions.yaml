@@ -1,0 +1,469 @@
+# DTOs for module `subscriptions` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: subscriptions
+nodes:
+  - id: DTO-SUB-01-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-01
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-SUB-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-02
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-SUB-03-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-03
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-04-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-04
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-04-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-04
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-05-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-05
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-06-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-06
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-SUB-07-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-07
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-SUB-08-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-08
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-09-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-09
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-09-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-09
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-10-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-10
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-10-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-10
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-11-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-11
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-11-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-11
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-12-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-12
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-12-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-12
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-13-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-13
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-13-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-13
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-14-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-14
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-14-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-14
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-15-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-15
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-15-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-15
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-16-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-16
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-16-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-16
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-17-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-17
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-17-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-17
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-18-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-18
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-18-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-18
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-19-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-19
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-19-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-19
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-SUB-20-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-20
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-SUB-21-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-SUB-21
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-SUB-21-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-SUB-21
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

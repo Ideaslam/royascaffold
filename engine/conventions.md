@@ -98,8 +98,8 @@ read and write the same entity. So each entity is its **own file** at `map/data/
 and carries a **`domain`** (its owner, which drives boundary checks) instead of a `module`. A module
 "uses" an entity through its logic **`deps: [ENT-...]`**; the viewer derives each module's *Entities
 used* list from those deps, and the *Data Model* view groups all entities by domain. DTOs
-(subtype `dto`) are endpoint-specific and stay in their module bundle, linked from a surface via
-`receives`/`returns`. Copy `engine/templates/entity.yaml` to add a new entity.
+(subtype `dto`) are endpoint-specific and live in `map/data/dto/<module>.yaml`, linked from a
+surface via `receives`/`returns`. Copy `engine/templates/entity.yaml` / `dto.yaml` to add new ones.
 
 ## ID governance
 

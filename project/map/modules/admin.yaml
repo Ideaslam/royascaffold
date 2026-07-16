@@ -17,11 +17,10 @@ nodes:
   - { id: SVC-ADMIN, kind: logic, subtype: service, status: implemented,
       methods: [getOverviewStats], deps: [SVC-AILOG, ENT-SUBSCRIPTION, ENT-USER, ENT-PROJECT, ENT-DASHBOARD], history: [change-010] }
 
-  - { id: EP-ADMIN-01, kind: surface, subtype: rest.get, route: /api/v1/admin/overview/stats, auth: "role:admin", status: implemented, calls: [SVC-ADMIN.getOverviewStats], history: [change-010] }
-  - { id: EP-ADMIN-02, kind: surface, subtype: rest.get, route: /api/v1/admin/workspaces, auth: "role:admin", status: implemented, calls: [SVC-WS.adminListWorkspaces], rules: [RULE-PAG-01], history: [change-010] }
-  - { id: EP-ADMIN-03, kind: surface, subtype: rest.patch, route: /api/v1/admin/workspaces/:id/status, auth: "role:admin", status: implemented, calls: [SVC-WS.adminUpdateStatus], history: [change-010] }
-  - { id: EP-ADMIN-04, kind: surface, subtype: rest.delete, route: /api/v1/admin/workspaces/:id, auth: "role:admin", status: implemented, calls: [SVC-WS.deleteWorkspace], history: [change-010] }
-
+  - { id: EP-ADMIN-01, kind: surface, subtype: rest.get, route: /api/v1/admin/overview/stats, auth: "role:admin", status: implemented, calls: [SVC-ADMIN.getOverviewStats], history: [change-010], returns: [DTO-ADMIN-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-ADMIN-01-RES } } }
+  - { id: EP-ADMIN-02, kind: surface, subtype: rest.get, route: /api/v1/admin/workspaces, auth: "role:admin", status: implemented, calls: [SVC-WS.adminListWorkspaces], rules: [RULE-PAG-01], history: [change-010], returns: [DTO-ADMIN-02-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-ADMIN-02-RES } } }
+  - { id: EP-ADMIN-03, kind: surface, subtype: rest.patch, route: /api/v1/admin/workspaces/:id/status, auth: "role:admin", status: implemented, calls: [SVC-WS.adminUpdateStatus], history: [change-010], receives: [DTO-ADMIN-03-REQ], returns: [DTO-ADMIN-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-ADMIN-03-REQ }, response: { status: 200, body: DTO-ADMIN-03-RES } } }
+  - { id: EP-ADMIN-04, kind: surface, subtype: rest.delete, route: /api/v1/admin/workspaces/:id, auth: "role:admin", status: implemented, calls: [SVC-WS.deleteWorkspace], history: [change-010], returns: [DTO-ADMIN-04-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-ADMIN-04-RES } } }
   - { id: PAGE-ADMIN-OVERVIEW, kind: ui, subtype: page, app: admin-panel, route: /admin, status: implemented,
       calls: [EP-ADMIN-01], renders: [CMP-STAT-CARD], theme: THEME-ROYA, states: [loading, error, ready], history: [change-010, change-017] }
   - { id: PAGE-ADMIN-WORKSPACES, kind: ui, subtype: page, app: admin-panel, route: /admin/workspaces, status: implemented,

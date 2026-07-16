@@ -1,0 +1,94 @@
+# DTOs for module `notifications` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: notifications
+nodes:
+  - id: DTO-NOTIF-01-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-NOTIF-01
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-NOTIF-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-NOTIF-02
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-NOTIF-03-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-NOTIF-03
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-NOTIF-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-NOTIF-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-NOTIF-04-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-NOTIF-04
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-NOTIF-04-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-NOTIF-04
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

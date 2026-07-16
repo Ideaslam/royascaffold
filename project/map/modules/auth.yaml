@@ -26,19 +26,135 @@ nodes:
   - { id: SVC-AUTH-JWT, kind: logic, subtype: guard, status: implemented,
       methods: [validate], deps: [ENT-USER, ENT-WS-MEMBERSHIP], rules: [RULE-AUTH-003] }
 
-  # surfaces
-  - { id: EP-AUTH-01, kind: surface, subtype: rest.post, route: /api/v1/auth/register, auth: public, status: implemented, calls: [SVC-AUTH.register], rules: [RULE-AUTH-001], history: [change-056] }
-  - { id: EP-AUTH-02, kind: surface, subtype: rest.post, route: /api/v1/auth/login, auth: public, status: implemented, calls: [SVC-AUTH.login], rules: [RULE-AUTH-001] }
-  - { id: EP-AUTH-03, kind: surface, subtype: rest.post, route: /api/v1/auth/oauth/callback, auth: public, status: partial,
-      reason: "OAuth callback handler is a stub — not wired to SVC-AUTH.oauthLogin", intentional_drift: true,
-      calls: [SVC-EXT-OAUTH], rules: [RULE-AUTH-OAUTH-01] }
-  - { id: EP-AUTH-04, kind: surface, subtype: rest.post, route: /api/v1/auth/refresh, auth: public, status: implemented, calls: [SVC-AUTH.refresh] }
-  - { id: EP-AUTH-05, kind: surface, subtype: rest.post, route: /api/v1/auth/forgot-password, auth: public, status: implemented, calls: [SVC-AUTH.forgotPassword] }
-  - { id: EP-AUTH-06, kind: surface, subtype: rest.post, route: /api/v1/auth/reset-password, auth: public, status: implemented, calls: [SVC-AUTH.resetPassword] }
-  - { id: EP-AUTH-07, kind: surface, subtype: rest.post, route: /api/v1/auth/logout, auth: authenticated, status: implemented, calls: [SVC-AUTH.logout] }
-  - { id: EP-AUTH-08, kind: surface, subtype: rest.get, route: /api/v1/auth/me, auth: authenticated, status: implemented, calls: [SVC-AUTH.getProfile] }
-  - { id: EP-AUTH-09, kind: surface, subtype: rest.post, route: /api/v1/auth/verify-email, auth: public, status: implemented, calls: [SVC-AUTH.verifyEmail], rules: [RULE-AUTH-VERIFY-01], history: [change-056] }
-  - { id: EP-AUTH-10, kind: surface, subtype: rest.post, route: /api/v1/auth/resend-verification, auth: authenticated, status: implemented, calls: [SVC-AUTH.resendVerificationEmail], rules: [RULE-AUTH-VERIFY-01], history: [change-056] }
+  # surfaces — receives/returns point at DTOs in map/data/dto/auth.yaml
+  - id: EP-AUTH-01
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/register
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.register]
+    receives: [DTO-AUTH-REGISTER]
+    returns: [DTO-AUTH-TOKEN]
+    rules: [RULE-AUTH-001]
+    history: [change-056]
+    spec:
+      request: { body: DTO-AUTH-REGISTER }
+      response: { status: 201, body: DTO-AUTH-TOKEN }
+      errors: [{ code: 422, when: validation failed }, { code: 409, when: email already registered }]
+  - id: EP-AUTH-02
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/login
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.login]
+    receives: [DTO-AUTH-LOGIN]
+    returns: [DTO-AUTH-TOKEN]
+    rules: [RULE-AUTH-001]
+    spec:
+      request: { body: DTO-AUTH-LOGIN }
+      response: { status: 200, body: DTO-AUTH-TOKEN }
+      errors: [{ code: 401, when: invalid credentials }, { code: 403, when: email not verified }]
+  - id: EP-AUTH-03
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/oauth/callback
+    auth: public
+    status: partial
+    reason: "OAuth callback handler is a stub — not wired to SVC-AUTH.oauthLogin"
+    intentional_drift: true
+    calls: [SVC-EXT-OAUTH]
+    receives: [DTO-AUTH-OAUTH]
+    returns: [DTO-AUTH-TOKEN]
+    rules: [RULE-AUTH-OAUTH-01]
+    spec:
+      request: { body: DTO-AUTH-OAUTH }
+      response: { status: 200, body: DTO-AUTH-TOKEN }
+  - id: EP-AUTH-04
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/refresh
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.refresh]
+    receives: [DTO-AUTH-REFRESH]
+    returns: [DTO-AUTH-TOKEN]
+    spec:
+      request: { body: DTO-AUTH-REFRESH }
+      response: { status: 200, body: DTO-AUTH-TOKEN }
+      errors: [{ code: 401, when: refresh token invalid or expired }]
+  - id: EP-AUTH-05
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/forgot-password
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.forgotPassword]
+    receives: [DTO-AUTH-FORGOT]
+    returns: [DTO-AUTH-OK]
+    spec:
+      request: { body: DTO-AUTH-FORGOT }
+      response: { status: 200, body: DTO-AUTH-OK }
+  - id: EP-AUTH-06
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/reset-password
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.resetPassword]
+    receives: [DTO-AUTH-RESET]
+    returns: [DTO-AUTH-OK]
+    spec:
+      request: { body: DTO-AUTH-RESET }
+      response: { status: 200, body: DTO-AUTH-OK }
+      errors: [{ code: 400, when: token invalid or expired }]
+  - id: EP-AUTH-07
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/logout
+    auth: authenticated
+    status: implemented
+    calls: [SVC-AUTH.logout]
+    returns: [DTO-AUTH-OK]
+    spec:
+      response: { status: 200, body: DTO-AUTH-OK }
+  - id: EP-AUTH-08
+    kind: surface
+    subtype: rest.get
+    route: /api/v1/auth/me
+    auth: authenticated
+    status: implemented
+    calls: [SVC-AUTH.getProfile]
+    returns: [DTO-AUTH-PROFILE]
+    spec:
+      response: { status: 200, body: DTO-AUTH-PROFILE }
+  - id: EP-AUTH-09
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/verify-email
+    auth: public
+    status: implemented
+    calls: [SVC-AUTH.verifyEmail]
+    receives: [DTO-AUTH-VERIFY]
+    returns: [DTO-AUTH-OK]
+    rules: [RULE-AUTH-VERIFY-01]
+    history: [change-056]
+    spec:
+      request: { body: DTO-AUTH-VERIFY }
+      response: { status: 200, body: DTO-AUTH-OK }
+  - id: EP-AUTH-10
+    kind: surface
+    subtype: rest.post
+    route: /api/v1/auth/resend-verification
+    auth: authenticated
+    status: implemented
+    calls: [SVC-AUTH.resendVerificationEmail]
+    returns: [DTO-AUTH-OK]
+    rules: [RULE-AUTH-VERIFY-01]
+    history: [change-056]
+    spec:
+      response: { status: 200, body: DTO-AUTH-OK }
 
   # frontend (auth pages)
   - { id: PAGE-LOGIN, kind: ui, subtype: page, app: customer-portal, route: /auth/login, status: implemented,

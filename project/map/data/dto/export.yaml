@@ -1,0 +1,54 @@
+# DTOs for module `export` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: export
+nodes:
+  - id: DTO-EXPORT-01-REQ
+    kind: data
+    subtype: dto
+    status: partial
+    reason: "paired with EP-EXPORT-01 stub — PDF worker not implemented"
+    spec:
+      source: inferred
+      of: request body of EP-EXPORT-01
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-EXPORT-01-RES
+    kind: data
+    subtype: dto
+    status: partial
+    reason: "paired with EP-EXPORT-01 stub — PDF worker not implemented"
+    spec:
+      source: inferred
+      of: response body of EP-EXPORT-01
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-EXPORT-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-EXPORT-02
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-EXPORT-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-EXPORT-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

@@ -1,5 +1,5 @@
-generated_at: '2026-07-16T15:18:58.389Z'
-source_hash: sha256:e7da919dd948dc6fd8663c2e29a0b68ab73c6b044393c867170c847e41cc4e29
+generated_at: '2026-07-16T15:32:23.863Z'
+source_hash: sha256:eaa3138d1f0a9e66b4f3b9780ba038ac1531a9161b9fbe42894b09bd68b7346a
 totals:
   module: 26
   feature: 44
@@ -8,7 +8,7 @@ totals:
   ui: 53
   contract: 6
   integration: 20
-  data: 38
+  data: 313
   boundary: 2
   domain: 4
   flow: 10
@@ -49,8 +49,8 @@ status_rollup:
     planned: 0
     deferred: 0
   data:
-    implemented: 38
-    partial: 0
+    implemented: 310
+    partial: 3
     planned: 0
     deferred: 0
   boundary:
@@ -4138,6 +4138,1938 @@ graph:
     kind: data
     status: implemented
     source: map/data/data-source-engine/webhook-route.yaml
+  DTO-ADMIN-01-RES:
+    used_by:
+      - EP-ADMIN-01
+    kind: data
+    status: implemented
+    module: admin
+    source: map/data/dto/admin.yaml
+  DTO-ADMIN-02-RES:
+    used_by:
+      - EP-ADMIN-02
+    kind: data
+    status: implemented
+    module: admin
+    source: map/data/dto/admin.yaml
+  DTO-ADMIN-03-REQ:
+    used_by:
+      - EP-ADMIN-03
+    kind: data
+    status: implemented
+    module: admin
+    source: map/data/dto/admin.yaml
+  DTO-ADMIN-03-RES:
+    used_by:
+      - EP-ADMIN-03
+    kind: data
+    status: implemented
+    module: admin
+    source: map/data/dto/admin.yaml
+  DTO-ADMIN-04-RES:
+    used_by:
+      - EP-ADMIN-04
+    kind: data
+    status: implemented
+    module: admin
+    source: map/data/dto/admin.yaml
+  DTO-AILOG-01-RES:
+    used_by:
+      - EP-AILOG-01
+    kind: data
+    status: implemented
+    module: ai-logs
+    source: map/data/dto/ai-logs.yaml
+  DTO-AILOG-02-RES:
+    used_by:
+      - EP-AILOG-02
+    kind: data
+    status: implemented
+    module: ai-logs
+    source: map/data/dto/ai-logs.yaml
+  DTO-AILOG-03-RES:
+    used_by:
+      - EP-AILOG-03
+    kind: data
+    status: implemented
+    module: ai-logs
+    source: map/data/dto/ai-logs.yaml
+  DTO-AS-01-REQ:
+    used_by:
+      - EP-AS-01
+    kind: data
+    status: implemented
+    module: analytics-store
+    source: map/data/dto/analytics-store.yaml
+  DTO-AS-01-RES:
+    used_by:
+      - EP-AS-01
+    kind: data
+    status: implemented
+    module: analytics-store
+    source: map/data/dto/analytics-store.yaml
+  DTO-AS-02-RES:
+    used_by:
+      - EP-AS-02
+    kind: data
+    status: implemented
+    module: analytics-store
+    source: map/data/dto/analytics-store.yaml
+  DTO-AUDIT-01-RES:
+    used_by:
+      - EP-AUDIT-01
+    kind: data
+    status: implemented
+    module: audit
+    source: map/data/dto/audit.yaml
+  DTO-AUTH-REGISTER:
+    used_by:
+      - EP-AUTH-01
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-LOGIN:
+    used_by:
+      - EP-AUTH-02
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-OAUTH:
+    used_by:
+      - EP-AUTH-03
+    kind: data
+    status: partial
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-REFRESH:
+    used_by:
+      - EP-AUTH-04
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-FORGOT:
+    used_by:
+      - EP-AUTH-05
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-RESET:
+    used_by:
+      - EP-AUTH-06
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-VERIFY:
+    used_by:
+      - EP-AUTH-09
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-TOKEN:
+    used_by:
+      - EP-AUTH-01
+      - EP-AUTH-02
+      - EP-AUTH-03
+      - EP-AUTH-04
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-PROFILE:
+    used_by:
+      - EP-AUTH-08
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-AUTH-OK:
+    used_by:
+      - EP-AUTH-05
+      - EP-AUTH-06
+      - EP-AUTH-07
+      - EP-AUTH-09
+      - EP-AUTH-10
+    kind: data
+    status: implemented
+    module: auth
+    source: map/data/dto/auth.yaml
+  DTO-CTPL-01-RES:
+    used_by:
+      - EP-CTPL-01
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-02-RES:
+    used_by:
+      - EP-CTPL-02
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-03-REQ:
+    used_by:
+      - EP-CTPL-03
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-03-RES:
+    used_by:
+      - EP-CTPL-03
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-04-REQ:
+    used_by:
+      - EP-CTPL-04
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-04-RES:
+    used_by:
+      - EP-CTPL-04
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-CTPL-05-RES:
+    used_by:
+      - EP-CTPL-05
+    kind: data
+    status: implemented
+    module: color-templates
+    source: map/data/dto/color-templates.yaml
+  DTO-DASH-01-REQ:
+    used_by:
+      - EP-DASH-01
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-01-RES:
+    used_by:
+      - EP-DASH-01
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-02-RES:
+    used_by:
+      - EP-DASH-02
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-03-RES:
+    used_by:
+      - EP-DASH-03
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-04-RES:
+    used_by:
+      - EP-DASH-04
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-05-REQ:
+    used_by:
+      - EP-DASH-05
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-05-RES:
+    used_by:
+      - EP-DASH-05
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-06-RES:
+    used_by:
+      - EP-DASH-06
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-07-REQ:
+    used_by:
+      - EP-DASH-07
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-07-RES:
+    used_by:
+      - EP-DASH-07
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-08-RES:
+    used_by:
+      - EP-DASH-08
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-09-REQ:
+    used_by:
+      - EP-DASH-09
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-09-RES:
+    used_by:
+      - EP-DASH-09
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-10-REQ:
+    used_by:
+      - EP-DASH-10
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-10-RES:
+    used_by:
+      - EP-DASH-10
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-11-REQ:
+    used_by:
+      - EP-DASH-11
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-11-RES:
+    used_by:
+      - EP-DASH-11
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-12-RES:
+    used_by:
+      - EP-DASH-12
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-13-REQ:
+    used_by:
+      - EP-DASH-13
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-13-RES:
+    used_by:
+      - EP-DASH-13
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-14-RES:
+    used_by:
+      - EP-DASH-14
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-15-RES:
+    used_by:
+      - EP-DASH-15
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-16-REQ:
+    used_by:
+      - EP-DASH-16
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DASH-16-RES:
+    used_by:
+      - EP-DASH-16
+    kind: data
+    status: implemented
+    module: dashboards
+    source: map/data/dto/dashboards.yaml
+  DTO-DATA-01-REQ:
+    used_by:
+      - EP-DATA-01
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-01-RES:
+    used_by:
+      - EP-DATA-01
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-02-REQ:
+    used_by:
+      - EP-DATA-02
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-02-RES:
+    used_by:
+      - EP-DATA-02
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-03-REQ:
+    used_by:
+      - EP-DATA-03
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-03-RES:
+    used_by:
+      - EP-DATA-03
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-04-RES:
+    used_by:
+      - EP-DATA-04
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-05-RES:
+    used_by:
+      - EP-DATA-05
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-06-REQ:
+    used_by:
+      - EP-DATA-06
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-06-RES:
+    used_by:
+      - EP-DATA-06
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-07-RES:
+    used_by:
+      - EP-DATA-07
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-08-REQ:
+    used_by:
+      - EP-DATA-08
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-08-RES:
+    used_by:
+      - EP-DATA-08
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-09-REQ:
+    used_by:
+      - EP-DATA-09
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-09-RES:
+    used_by:
+      - EP-DATA-09
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-10-RES:
+    used_by:
+      - EP-DATA-10
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-11-RES:
+    used_by:
+      - EP-DATA-11
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-12-REQ:
+    used_by:
+      - EP-DATA-12
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-12-RES:
+    used_by:
+      - EP-DATA-12
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-13-RES:
+    used_by:
+      - EP-DATA-13
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-14-REQ:
+    used_by:
+      - EP-DATA-14
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-14-RES:
+    used_by:
+      - EP-DATA-14
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-50-REQ:
+    used_by:
+      - EP-DATA-50
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-50-RES:
+    used_by:
+      - EP-DATA-50
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-51-REQ:
+    used_by:
+      - EP-DATA-51
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-51-RES:
+    used_by:
+      - EP-DATA-51
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-52-RES:
+    used_by:
+      - EP-DATA-52
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-53-RES:
+    used_by:
+      - EP-DATA-53
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-54-REQ:
+    used_by:
+      - EP-DATA-54
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-54-RES:
+    used_by:
+      - EP-DATA-54
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-55-RES:
+    used_by:
+      - EP-DATA-55
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-15-REQ:
+    used_by:
+      - EP-DATA-15
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-15-RES:
+    used_by:
+      - EP-DATA-15
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-56-RES:
+    used_by:
+      - EP-DATA-56
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-16-RES:
+    used_by:
+      - EP-DATA-16
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-17-RES:
+    used_by:
+      - EP-DATA-17
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-18-REQ:
+    used_by:
+      - EP-DATA-18
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-18-RES:
+    used_by:
+      - EP-DATA-18
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-19-RES:
+    used_by:
+      - EP-DATA-19
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-20-REQ:
+    used_by:
+      - EP-DATA-20
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-20-RES:
+    used_by:
+      - EP-DATA-20
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-21-RES:
+    used_by:
+      - EP-DATA-21
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-40-REQ:
+    used_by:
+      - EP-DATA-40
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-40-RES:
+    used_by:
+      - EP-DATA-40
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-48-REQ:
+    used_by:
+      - EP-DATA-48
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-48-RES:
+    used_by:
+      - EP-DATA-48
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-49-REQ:
+    used_by:
+      - EP-DATA-49
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-49-RES:
+    used_by:
+      - EP-DATA-49
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-22-REQ:
+    used_by:
+      - EP-DATA-22
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-22-RES:
+    used_by:
+      - EP-DATA-22
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-23-REQ:
+    used_by:
+      - EP-DATA-23
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-23-RES:
+    used_by:
+      - EP-DATA-23
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-24-RES:
+    used_by:
+      - EP-DATA-24
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-26-RES:
+    used_by:
+      - EP-DATA-26
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-29-RES:
+    used_by:
+      - EP-DATA-29
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-32-RES:
+    used_by:
+      - EP-DATA-32
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-35-RES:
+    used_by:
+      - EP-DATA-35
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-57-REQ:
+    used_by:
+      - EP-DATA-57
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-57-RES:
+    used_by:
+      - EP-DATA-57
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-58-REQ:
+    used_by:
+      - EP-DATA-58
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-58-RES:
+    used_by:
+      - EP-DATA-58
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-37-REQ:
+    used_by:
+      - EP-DATA-37
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-37-RES:
+    used_by:
+      - EP-DATA-37
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-38-REQ:
+    used_by:
+      - EP-DATA-38
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-38-RES:
+    used_by:
+      - EP-DATA-38
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-39-REQ:
+    used_by:
+      - EP-DATA-39
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-39-RES:
+    used_by:
+      - EP-DATA-39
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-ADMIN-SH-1-RES:
+    used_by:
+      - EP-ADMIN-SH-1
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-41-RES:
+    used_by:
+      - EP-DATA-41
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-42-RES:
+    used_by:
+      - EP-DATA-42
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-43-RES:
+    used_by:
+      - EP-DATA-43
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-44-REQ:
+    used_by:
+      - EP-DATA-44
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-44-RES:
+    used_by:
+      - EP-DATA-44
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-45-RES:
+    used_by:
+      - EP-DATA-45
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-46-REQ:
+    used_by:
+      - EP-DATA-46
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-46-RES:
+    used_by:
+      - EP-DATA-46
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DATA-47-RES:
+    used_by:
+      - EP-DATA-47
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-01-RES:
+    used_by:
+      - EP-DSTYPE-01
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-02-RES:
+    used_by:
+      - EP-DSTYPE-02
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-03-REQ:
+    used_by:
+      - EP-DSTYPE-03
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-03-RES:
+    used_by:
+      - EP-DSTYPE-03
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-04-REQ:
+    used_by:
+      - EP-DSTYPE-04
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-DSTYPE-04-RES:
+    used_by:
+      - EP-DSTYPE-04
+    kind: data
+    status: implemented
+    module: data
+    source: map/data/dto/data.yaml
+  DTO-EXPORT-01-REQ:
+    used_by:
+      - EP-EXPORT-01
+    kind: data
+    status: partial
+    module: export
+    source: map/data/dto/export.yaml
+  DTO-EXPORT-01-RES:
+    used_by:
+      - EP-EXPORT-01
+    kind: data
+    status: partial
+    module: export
+    source: map/data/dto/export.yaml
+  DTO-EXPORT-02-RES:
+    used_by:
+      - EP-EXPORT-02
+    kind: data
+    status: implemented
+    module: export
+    source: map/data/dto/export.yaml
+  DTO-EXPORT-03-RES:
+    used_by:
+      - EP-EXPORT-03
+    kind: data
+    status: implemented
+    module: export
+    source: map/data/dto/export.yaml
+  DTO-NOTIF-01-RES:
+    used_by:
+      - EP-NOTIF-01
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-NOTIF-02-RES:
+    used_by:
+      - EP-NOTIF-02
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-NOTIF-03-REQ:
+    used_by:
+      - EP-NOTIF-03
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-NOTIF-03-RES:
+    used_by:
+      - EP-NOTIF-03
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-NOTIF-04-REQ:
+    used_by:
+      - EP-NOTIF-04
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-NOTIF-04-RES:
+    used_by:
+      - EP-NOTIF-04
+    kind: data
+    status: implemented
+    module: notifications
+    source: map/data/dto/notifications.yaml
+  DTO-PAY-01-RES:
+    used_by:
+      - EP-PAY-01
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-02-RES:
+    used_by:
+      - EP-PAY-02
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-03-REQ:
+    used_by:
+      - EP-PAY-03
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-03-RES:
+    used_by:
+      - EP-PAY-03
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-04-REQ:
+    used_by:
+      - EP-PAY-04
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-04-RES:
+    used_by:
+      - EP-PAY-04
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-05-RES:
+    used_by:
+      - EP-PAY-05
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-06-RES:
+    used_by:
+      - EP-PAY-06
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PAY-07-RES:
+    used_by:
+      - EP-PAY-07
+    kind: data
+    status: implemented
+    module: payments
+    source: map/data/dto/payments.yaml
+  DTO-PROJ-01-REQ:
+    used_by:
+      - EP-PROJ-01
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-01-RES:
+    used_by:
+      - EP-PROJ-01
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-02-RES:
+    used_by:
+      - EP-PROJ-02
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-03-RES:
+    used_by:
+      - EP-PROJ-03
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-04-REQ:
+    used_by:
+      - EP-PROJ-04
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-04-RES:
+    used_by:
+      - EP-PROJ-04
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-PROJ-05-RES:
+    used_by:
+      - EP-PROJ-05
+    kind: data
+    status: implemented
+    module: projects
+    source: map/data/dto/projects.yaml
+  DTO-SET-01-RES:
+    used_by:
+      - EP-SET-01
+    kind: data
+    status: implemented
+    module: settings
+    source: map/data/dto/settings.yaml
+  DTO-SET-02-REQ:
+    used_by:
+      - EP-SET-02
+    kind: data
+    status: implemented
+    module: settings
+    source: map/data/dto/settings.yaml
+  DTO-SET-02-RES:
+    used_by:
+      - EP-SET-02
+    kind: data
+    status: implemented
+    module: settings
+    source: map/data/dto/settings.yaml
+  DTO-SHARE-01-REQ:
+    used_by:
+      - EP-SHARE-01
+    kind: data
+    status: implemented
+    module: sharing
+    source: map/data/dto/sharing.yaml
+  DTO-SHARE-01-RES:
+    used_by:
+      - EP-SHARE-01
+    kind: data
+    status: implemented
+    module: sharing
+    source: map/data/dto/sharing.yaml
+  DTO-SHARE-02-RES:
+    used_by:
+      - EP-SHARE-02
+    kind: data
+    status: implemented
+    module: sharing
+    source: map/data/dto/sharing.yaml
+  DTO-SHARE-03-RES:
+    used_by:
+      - EP-SHARE-03
+    kind: data
+    status: implemented
+    module: sharing
+    source: map/data/dto/sharing.yaml
+  DTO-SHARE-04-RES:
+    used_by:
+      - EP-SHARE-04
+    kind: data
+    status: implemented
+    module: sharing
+    source: map/data/dto/sharing.yaml
+  DTO-SUB-01-RES:
+    used_by:
+      - EP-SUB-01
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-02-RES:
+    used_by:
+      - EP-SUB-02
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-03-REQ:
+    used_by:
+      - EP-SUB-03
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-03-RES:
+    used_by:
+      - EP-SUB-03
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-04-REQ:
+    used_by:
+      - EP-SUB-04
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-04-RES:
+    used_by:
+      - EP-SUB-04
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-05-RES:
+    used_by:
+      - EP-SUB-05
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-06-RES:
+    used_by:
+      - EP-SUB-06
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-07-RES:
+    used_by:
+      - EP-SUB-07
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-08-RES:
+    used_by:
+      - EP-SUB-08
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-09-REQ:
+    used_by:
+      - EP-SUB-09
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-09-RES:
+    used_by:
+      - EP-SUB-09
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-10-REQ:
+    used_by:
+      - EP-SUB-10
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-10-RES:
+    used_by:
+      - EP-SUB-10
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-11-REQ:
+    used_by:
+      - EP-SUB-11
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-11-RES:
+    used_by:
+      - EP-SUB-11
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-12-REQ:
+    used_by:
+      - EP-SUB-12
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-12-RES:
+    used_by:
+      - EP-SUB-12
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-13-REQ:
+    used_by:
+      - EP-SUB-13
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-13-RES:
+    used_by:
+      - EP-SUB-13
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-14-REQ:
+    used_by:
+      - EP-SUB-14
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-14-RES:
+    used_by:
+      - EP-SUB-14
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-15-REQ:
+    used_by:
+      - EP-SUB-15
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-15-RES:
+    used_by:
+      - EP-SUB-15
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-16-REQ:
+    used_by:
+      - EP-SUB-16
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-16-RES:
+    used_by:
+      - EP-SUB-16
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-17-REQ:
+    used_by:
+      - EP-SUB-17
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-17-RES:
+    used_by:
+      - EP-SUB-17
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-18-REQ:
+    used_by:
+      - EP-SUB-18
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-18-RES:
+    used_by:
+      - EP-SUB-18
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-19-REQ:
+    used_by:
+      - EP-SUB-19
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-19-RES:
+    used_by:
+      - EP-SUB-19
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-20-RES:
+    used_by:
+      - EP-SUB-20
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-21-REQ:
+    used_by:
+      - EP-SUB-21
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-SUB-21-RES:
+    used_by:
+      - EP-SUB-21
+    kind: data
+    status: implemented
+    module: subscriptions
+    source: map/data/dto/subscriptions.yaml
+  DTO-TPL-01-RES:
+    used_by:
+      - EP-TPL-01
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-02-RES:
+    used_by:
+      - EP-TPL-02
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-03-RES:
+    used_by:
+      - EP-TPL-03
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-04-RES:
+    used_by:
+      - EP-TPL-04
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-10-RES:
+    used_by:
+      - EP-TPL-10
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-11-REQ:
+    used_by:
+      - EP-TPL-11
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-11-RES:
+    used_by:
+      - EP-TPL-11
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-12-REQ:
+    used_by:
+      - EP-TPL-12
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-12-RES:
+    used_by:
+      - EP-TPL-12
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-13-REQ:
+    used_by:
+      - EP-TPL-13
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-13-RES:
+    used_by:
+      - EP-TPL-13
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-14-RES:
+    used_by:
+      - EP-TPL-14
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-15-RES:
+    used_by:
+      - EP-TPL-15
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-16-REQ:
+    used_by:
+      - EP-TPL-16
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-16-RES:
+    used_by:
+      - EP-TPL-16
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-17-REQ:
+    used_by:
+      - EP-TPL-17
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-17-RES:
+    used_by:
+      - EP-TPL-17
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-18-RES:
+    used_by:
+      - EP-TPL-18
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-19-RES:
+    used_by:
+      - EP-TPL-19
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-20-RES:
+    used_by:
+      - EP-TPL-20
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-21-REQ:
+    used_by:
+      - EP-TPL-21
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-21-RES:
+    used_by:
+      - EP-TPL-21
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-22-REQ:
+    used_by:
+      - EP-TPL-22
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-22-RES:
+    used_by:
+      - EP-TPL-22
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-TPL-23-RES:
+    used_by:
+      - EP-TPL-23
+    kind: data
+    status: implemented
+    module: templates
+    source: map/data/dto/templates.yaml
+  DTO-USR-01-REQ:
+    used_by:
+      - EP-USR-01
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-01-RES:
+    used_by:
+      - EP-USR-01
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-02-REQ:
+    used_by:
+      - EP-USR-02
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-02-RES:
+    used_by:
+      - EP-USR-02
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-03-RES:
+    used_by:
+      - EP-USR-03
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-04-RES:
+    used_by:
+      - EP-USR-04
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-05-REQ:
+    used_by:
+      - EP-USR-05
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-05-RES:
+    used_by:
+      - EP-USR-05
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-06-REQ:
+    used_by:
+      - EP-USR-06
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-06-RES:
+    used_by:
+      - EP-USR-06
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-07-RES:
+    used_by:
+      - EP-USR-07
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-08-REQ:
+    used_by:
+      - EP-USR-08
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-08-RES:
+    used_by:
+      - EP-USR-08
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-09-REQ:
+    used_by:
+      - EP-USR-09
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-USR-09-RES:
+    used_by:
+      - EP-USR-09
+    kind: data
+    status: implemented
+    module: users
+    source: map/data/dto/users.yaml
+  DTO-WS-01-REQ:
+    used_by:
+      - EP-WS-01
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-01-RES:
+    used_by:
+      - EP-WS-01
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-02-RES:
+    used_by:
+      - EP-WS-02
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-03-RES:
+    used_by:
+      - EP-WS-03
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-04-RES:
+    used_by:
+      - EP-WS-04
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-05-REQ:
+    used_by:
+      - EP-WS-05
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-05-RES:
+    used_by:
+      - EP-WS-05
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-06-RES:
+    used_by:
+      - EP-WS-06
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-07-REQ:
+    used_by:
+      - EP-WS-07
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-07-RES:
+    used_by:
+      - EP-WS-07
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-08-RES:
+    used_by:
+      - EP-WS-08
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-09-RES:
+    used_by:
+      - EP-WS-09
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-10-REQ:
+    used_by:
+      - EP-WS-10
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-10-RES:
+    used_by:
+      - EP-WS-10
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-11-REQ:
+    used_by:
+      - EP-WS-11
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-11-RES:
+    used_by:
+      - EP-WS-11
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-12-RES:
+    used_by:
+      - EP-WS-12
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-13-REQ:
+    used_by:
+      - EP-WS-13
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-13-RES:
+    used_by:
+      - EP-WS-13
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-14-RES:
+    used_by:
+      - EP-WS-14
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-15-RES:
+    used_by:
+      - EP-WS-15
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-16-RES:
+    used_by:
+      - EP-WS-16
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-17-REQ:
+    used_by:
+      - EP-WS-17
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-17-RES:
+    used_by:
+      - EP-WS-17
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-18-RES:
+    used_by:
+      - EP-WS-18
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-19-REQ:
+    used_by:
+      - EP-WS-19
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-19-RES:
+    used_by:
+      - EP-WS-19
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-20-RES:
+    used_by:
+      - EP-WS-20
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-21-REQ:
+    used_by:
+      - EP-WS-21
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
+  DTO-WS-21-RES:
+    used_by:
+      - EP-WS-21
+    kind: data
+    status: implemented
+    module: workspace
+    source: map/data/dto/workspace.yaml
   ENT-AI-PRICING:
     used_by:
       - SVC-AILOG-PRICE

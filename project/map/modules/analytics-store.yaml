@@ -34,9 +34,12 @@ nodes:
 
   # admin benchmark surfaces
   - { id: EP-AS-01, kind: surface, subtype: rest.post, route: /api/v1/admin/olap/benchmark, auth: "role:admin",
-      status: implemented, calls: [SVC-OLAP-BENCH.runBenchmark], rules: [RULE-GLOBAL-004] }
+      status: implemented, calls: [SVC-OLAP-BENCH.runBenchmark], rules: [RULE-GLOBAL-004],
+      receives: [DTO-AS-01-REQ], returns: [DTO-AS-01-RES],
+      spec: { request: { body: DTO-AS-01-REQ }, response: { status: 201, body: DTO-AS-01-RES } } }
   - { id: EP-AS-02, kind: surface, subtype: rest.get, route: /api/v1/admin/olap/benchmark/:id, auth: "role:admin",
-      status: implemented, calls: [SVC-OLAP-BENCH.getResult] }
+      status: implemented, calls: [SVC-OLAP-BENCH.getResult], returns: [DTO-AS-02-RES],
+      spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-AS-02-RES } } }
 
   - { id: PAGE-ADMIN-ANALYTICS-STORE, kind: ui, subtype: page, app: admin-panel, route: /admin/analytics-store, status: implemented,
       calls: [EP-AS-01, EP-AS-02], theme: THEME-ROYA, states: [loading, empty, error, ready] }

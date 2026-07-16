@@ -1,0 +1,58 @@
+# DTOs for module `ai-logs` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: ai-logs
+nodes:
+  - id: DTO-AILOG-01-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-AILOG-01
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-AILOG-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-AILOG-02
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-AILOG-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-AILOG-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

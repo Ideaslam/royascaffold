@@ -19,12 +19,11 @@ nodes:
 
   # Entities → project/map/data/reporting-engine/ (ENT-PROJECT; used by the services below via deps)
 
-  - { id: EP-PROJ-01, kind: surface, subtype: rest.post, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.create] }
-  - { id: EP-PROJ-02, kind: surface, subtype: rest.get, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.list], rules: [RULE-PAG-01] }
-  - { id: EP-PROJ-03, kind: surface, subtype: rest.get, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.getById] }
-  - { id: EP-PROJ-04, kind: surface, subtype: rest.put, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.update] }
-  - { id: EP-PROJ-05, kind: surface, subtype: rest.delete, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.delete] }
-
+  - { id: EP-PROJ-01, kind: surface, subtype: rest.post, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.create], receives: [DTO-PROJ-01-REQ], returns: [DTO-PROJ-01-RES], spec: { request: { body: DTO-PROJ-01-REQ }, response: { status: 201, body: DTO-PROJ-01-RES } } }
+  - { id: EP-PROJ-02, kind: surface, subtype: rest.get, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.list], rules: [RULE-PAG-01], returns: [DTO-PROJ-02-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-PROJ-02-RES } } }
+  - { id: EP-PROJ-03, kind: surface, subtype: rest.get, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.getById], returns: [DTO-PROJ-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-PROJ-03-RES } } }
+  - { id: EP-PROJ-04, kind: surface, subtype: rest.put, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.update], receives: [DTO-PROJ-04-REQ], returns: [DTO-PROJ-04-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-PROJ-04-REQ }, response: { status: 200, body: DTO-PROJ-04-RES } } }
+  - { id: EP-PROJ-05, kind: surface, subtype: rest.delete, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.delete], returns: [DTO-PROJ-05-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-PROJ-05-RES } } }
   - { id: PAGE-PROJECTS, kind: ui, subtype: page, app: customer-portal, route: /app/projects, status: implemented,
       calls: [EP-PROJ-02, EP-PROJ-01], renders: [CMP-PROJECT-CARD], theme: THEME-ROYA, i18n: true, rtl: true,
       states: [loading, empty, error, ready], history: [change-034] }

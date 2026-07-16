@@ -20,11 +20,10 @@ nodes:
 
   # Entities → project/map/data/reporting-engine/ (ENT-SHARELINK; used by the services below via deps)
 
-  - { id: EP-SHARE-01, kind: surface, subtype: rest.post, route: /api/v1/dashboards/:id/share, auth: authenticated, status: implemented, calls: [SVC-SHARE.createShareLink], rules: [RULE-SHARE-001] }
-  - { id: EP-SHARE-02, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/share, auth: authenticated, status: implemented, calls: [SVC-SHARE.listShareLinks] }
-  - { id: EP-SHARE-03, kind: surface, subtype: rest.delete, route: /api/v1/dashboards/:id/share/:shareLinkId, auth: authenticated, status: implemented, calls: [SVC-SHARE.revokeShareLink] }
-  - { id: EP-SHARE-04, kind: surface, subtype: rest.get, route: /api/v1/shared/:token, auth: public, status: implemented, calls: [SVC-SHARE.resolveSharedDashboard], rules: [RULE-SHARE-002] }
-
+  - { id: EP-SHARE-01, kind: surface, subtype: rest.post, route: /api/v1/dashboards/:id/share, auth: authenticated, status: implemented, calls: [SVC-SHARE.createShareLink], rules: [RULE-SHARE-001], receives: [DTO-SHARE-01-REQ], returns: [DTO-SHARE-01-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-SHARE-01-REQ }, response: { status: 201, body: DTO-SHARE-01-RES } } }
+  - { id: EP-SHARE-02, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/share, auth: authenticated, status: implemented, calls: [SVC-SHARE.listShareLinks], returns: [DTO-SHARE-02-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-SHARE-02-RES } } }
+  - { id: EP-SHARE-03, kind: surface, subtype: rest.delete, route: /api/v1/dashboards/:id/share/:shareLinkId, auth: authenticated, status: implemented, calls: [SVC-SHARE.revokeShareLink], returns: [DTO-SHARE-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }, { name: shareLinkId, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-SHARE-03-RES } } }
+  - { id: EP-SHARE-04, kind: surface, subtype: rest.get, route: /api/v1/shared/:token, auth: public, status: implemented, calls: [SVC-SHARE.resolveSharedDashboard], rules: [RULE-SHARE-002], returns: [DTO-SHARE-04-RES], spec: { request: { params: [{ name: token, in: path, type: string, required: true }] }, response: { status: 200, body: DTO-SHARE-04-RES } } }
   - { id: PAGE-SHARED, kind: ui, subtype: page, app: customer-portal, route: /shared/:token, status: implemented,
       calls: [EP-SHARE-04, EP-DASH-08, EP-DASH-14], renders: [CMP-WIDGET-GRID], theme: THEME-ROYA, i18n: true, rtl: true,
       states: [loading, empty, error, ready, expired, revoked], history: [change-023, change-051] }

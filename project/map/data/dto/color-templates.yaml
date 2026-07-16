@@ -1,0 +1,97 @@
+# DTOs for module `color-templates` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: color-templates
+nodes:
+  - id: DTO-CTPL-01-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-CTPL-01
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-CTPL-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-CTPL-02
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-CTPL-03-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-CTPL-03
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-CTPL-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-CTPL-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-CTPL-04-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-CTPL-04
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-CTPL-04-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-CTPL-04
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-CTPL-05-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-CTPL-05
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

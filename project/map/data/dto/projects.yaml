@@ -1,0 +1,97 @@
+# DTOs for module `projects` — request/response payload shapes (inferred stubs).
+# Refine fields against code; surfaces link via receives:/returns:.
+module: projects
+nodes:
+  - id: DTO-PROJ-01-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-PROJ-01
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-PROJ-01-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-PROJ-01
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-PROJ-02-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-PROJ-02
+      fields:
+        - name: data
+          type: array
+          required: true
+          constraints: items — confirm entity/DTO in code
+        - name: total
+          type: number
+          required: true
+        - name: page
+          type: number
+          required: false
+        - name: limit
+          type: number
+          required: false
+  - id: DTO-PROJ-03-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-PROJ-03
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-PROJ-04-REQ
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: request body of EP-PROJ-04
+      fields:
+        - name: _fields
+          type: object
+          required: false
+          constraints: validate against code DTO
+  - id: DTO-PROJ-04-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-PROJ-04
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity
+  - id: DTO-PROJ-05-RES
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      source: inferred
+      of: response body of EP-PROJ-05
+      fields:
+        - name: _shape
+          type: object
+          required: false
+          constraints: validate against code response / entity

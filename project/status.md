@@ -13,7 +13,7 @@
 | ui | 53 | 0 | 0 | 0 | 53 |
 | contract | 6 | 0 | 0 | 0 | 6 |
 | integration | 19 | 1 | 0 | 0 | 20 |
-| data | 38 | 0 | 0 | 0 | 38 |
+| data | 310 | 3 | 0 | 0 | 313 |
 | boundary | 2 | 0 | 0 | 0 | 2 |
 | domain | 4 | 0 | 0 | 0 | 4 |
 | flow | 8 | 2 | 0 | 0 | 10 |
@@ -36,5 +36,8 @@
 | EP-EXPORT-01 | surface | partial | Job queued but no PDF worker implemented — export never completes |
 | SVC-EXT-OAUTH | integration | partial | OAuth login callback is a stub; no integration adapter wired (see auth OAuth login) |
 | SVC-PIPE-STEPS-TPL | logic | partial | Template instantiation pipeline documented (change-049); not yet in code |
+| DTO-AUTH-OAUTH | data | partial | OAuth callback is a stub |
+| DTO-EXPORT-01-REQ | data | partial | paired with EP-EXPORT-01 stub — PDF worker not implemented |
+| DTO-EXPORT-01-RES | data | partial | paired with EP-EXPORT-01 stub — PDF worker not implemented |
 | Q-PDF-EXPORT | flow | partial | Queue declared; worker/processor not yet implemented |
 | Q-CACHE-RECALC | flow | partial | Cache recalculation queue defined; no worker attached yet |

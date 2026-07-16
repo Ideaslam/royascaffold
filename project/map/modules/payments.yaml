@@ -25,13 +25,12 @@ nodes:
 
   # Entities → project/map/data/platform/ (ENT-PAYMENT; used by the services below via deps)
 
-  - { id: EP-PAY-01, kind: surface, subtype: rest.get, route: /api/v1/payments, auth: "role:admin", status: implemented, calls: [SVC-PAY.list], rules: [RULE-PAG-01] }
-  - { id: EP-PAY-02, kind: surface, subtype: rest.get, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.getById] }
-  - { id: EP-PAY-03, kind: surface, subtype: rest.post, route: /api/v1/payments, auth: "role:admin", status: implemented, calls: [SVC-PAY.create] }
-  - { id: EP-PAY-04, kind: surface, subtype: rest.patch, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.update] }
-  - { id: EP-PAY-05, kind: surface, subtype: rest.delete, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.delete] }
-  - { id: EP-PAY-06, kind: surface, subtype: rest.get, route: /api/v1/payments/payup/confirm, auth: public, status: implemented, calls: [SVC-PAY-CHKOUT.confirm], rules: [RULE-SUB-001], history: [change-003] }
-  - { id: EP-PAY-07, kind: surface, subtype: rest.get, route: /api/v1/payments/payup/cancel, auth: public, status: implemented, calls: [SVC-PAY-CHKOUT.cancel], history: [change-003] }
-
+  - { id: EP-PAY-01, kind: surface, subtype: rest.get, route: /api/v1/payments, auth: "role:admin", status: implemented, calls: [SVC-PAY.list], rules: [RULE-PAG-01], returns: [DTO-PAY-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-PAY-01-RES } } }
+  - { id: EP-PAY-02, kind: surface, subtype: rest.get, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.getById], returns: [DTO-PAY-02-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-PAY-02-RES } } }
+  - { id: EP-PAY-03, kind: surface, subtype: rest.post, route: /api/v1/payments, auth: "role:admin", status: implemented, calls: [SVC-PAY.create], receives: [DTO-PAY-03-REQ], returns: [DTO-PAY-03-RES], spec: { request: { body: DTO-PAY-03-REQ }, response: { status: 201, body: DTO-PAY-03-RES } } }
+  - { id: EP-PAY-04, kind: surface, subtype: rest.patch, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.update], receives: [DTO-PAY-04-REQ], returns: [DTO-PAY-04-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-PAY-04-REQ }, response: { status: 200, body: DTO-PAY-04-RES } } }
+  - { id: EP-PAY-05, kind: surface, subtype: rest.delete, route: /api/v1/payments/:id, auth: "role:admin", status: implemented, calls: [SVC-PAY.delete], returns: [DTO-PAY-05-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-PAY-05-RES } } }
+  - { id: EP-PAY-06, kind: surface, subtype: rest.get, route: /api/v1/payments/payup/confirm, auth: public, status: implemented, calls: [SVC-PAY-CHKOUT.confirm], rules: [RULE-SUB-001], history: [change-003], returns: [DTO-PAY-06-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-PAY-06-RES } } }
+  - { id: EP-PAY-07, kind: surface, subtype: rest.get, route: /api/v1/payments/payup/cancel, auth: public, status: implemented, calls: [SVC-PAY-CHKOUT.cancel], history: [change-003], returns: [DTO-PAY-07-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-PAY-07-RES } } }
   - { id: PAGE-ADMIN-PAYMENTS, kind: ui, subtype: page, app: admin-panel, route: /admin/payments, status: implemented,
       calls: [EP-PAY-01, EP-PAY-03], theme: THEME-ROYA, states: [loading, empty, error, ready], history: [change-010] }

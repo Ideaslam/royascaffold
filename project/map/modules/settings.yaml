@@ -18,8 +18,7 @@ nodes:
 
   # Entities → project/map/data/platform/ (ENT-SETTINGS; used by the services below via deps)
 
-  - { id: EP-SET-01, kind: surface, subtype: rest.get, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.getSettings] }
-  - { id: EP-SET-02, kind: surface, subtype: rest.patch, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.updateSettings] }
-
+  - { id: EP-SET-01, kind: surface, subtype: rest.get, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.getSettings], returns: [DTO-SET-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-SET-01-RES } } }
+  - { id: EP-SET-02, kind: surface, subtype: rest.patch, route: /api/v1/settings, auth: "role:admin", status: implemented, calls: [SVC-SET.updateSettings], receives: [DTO-SET-02-REQ], returns: [DTO-SET-02-RES], spec: { request: { body: DTO-SET-02-REQ }, response: { status: 200, body: DTO-SET-02-RES } } }
   - { id: PAGE-ADMIN-SETTINGS, kind: ui, subtype: page, app: admin-panel, route: /admin/settings, status: implemented,
       calls: [EP-SET-01, EP-SET-02], theme: THEME-ROYA, states: [loading, error, ready] }

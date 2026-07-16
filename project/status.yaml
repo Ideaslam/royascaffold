@@ -1,4 +1,4 @@
-generated_at: '2026-07-16T15:18:58.389Z'
+generated_at: '2026-07-16T15:32:23.863Z'
 totals:
   module: 26
   feature: 44
@@ -7,7 +7,7 @@ totals:
   ui: 53
   contract: 6
   integration: 20
-  data: 38
+  data: 313
   boundary: 2
   domain: 4
   flow: 10
@@ -48,8 +48,8 @@ status_rollup:
     planned: 0
     deferred: 0
   data:
-    implemented: 38
-    partial: 0
+    implemented: 310
+    partial: 3
     planned: 0
     deferred: 0
   boundary:
@@ -124,6 +124,18 @@ attention:
     kind: logic
     status: partial
     reason: Template instantiation pipeline documented (change-049); not yet in code
+  - id: DTO-AUTH-OAUTH
+    kind: data
+    status: partial
+    reason: OAuth callback is a stub
+  - id: DTO-EXPORT-01-REQ
+    kind: data
+    status: partial
+    reason: paired with EP-EXPORT-01 stub — PDF worker not implemented
+  - id: DTO-EXPORT-01-RES
+    kind: data
+    status: partial
+    reason: paired with EP-EXPORT-01 stub — PDF worker not implemented
   - id: Q-PDF-EXPORT
     kind: flow
     status: partial

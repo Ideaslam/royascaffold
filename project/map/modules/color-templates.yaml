@@ -18,8 +18,8 @@ nodes:
 
   # Entities → project/map/data/reporting-engine/ (ENT-COLOR-TPL; used by the services below via deps)
 
-  - { id: EP-CTPL-01, kind: surface, subtype: rest.get, route: /api/v1/color-templates, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findAll] }
-  - { id: EP-CTPL-02, kind: surface, subtype: rest.get, route: /api/v1/color-templates/:id, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findById] }
-  - { id: EP-CTPL-03, kind: surface, subtype: rest.post, route: /api/v1/color-templates, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.create] }
-  - { id: EP-CTPL-04, kind: surface, subtype: rest.patch, route: /api/v1/color-templates/:id, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.update] }
-  - { id: EP-CTPL-05, kind: surface, subtype: rest.delete, route: /api/v1/color-templates/:id, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.delete] }
+  - { id: EP-CTPL-01, kind: surface, subtype: rest.get, route: /api/v1/color-templates, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findAll], returns: [DTO-CTPL-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-CTPL-01-RES } } }
+  - { id: EP-CTPL-02, kind: surface, subtype: rest.get, route: /api/v1/color-templates/:id, auth: authenticated, status: implemented, calls: [SVC-COLTPL.findById], returns: [DTO-CTPL-02-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-CTPL-02-RES } } }
+  - { id: EP-CTPL-03, kind: surface, subtype: rest.post, route: /api/v1/color-templates, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.create], receives: [DTO-CTPL-03-REQ], returns: [DTO-CTPL-03-RES], spec: { request: { body: DTO-CTPL-03-REQ }, response: { status: 201, body: DTO-CTPL-03-RES } } }
+  - { id: EP-CTPL-04, kind: surface, subtype: rest.patch, route: /api/v1/color-templates/:id, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.update], receives: [DTO-CTPL-04-REQ], returns: [DTO-CTPL-04-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-CTPL-04-REQ }, response: { status: 200, body: DTO-CTPL-04-RES } } }
+  - { id: EP-CTPL-05, kind: surface, subtype: rest.delete, route: /api/v1/color-templates/:id, auth: "role:admin", status: implemented, calls: [SVC-COLTPL.delete], returns: [DTO-CTPL-05-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-CTPL-05-RES } } }

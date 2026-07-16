@@ -20,6 +20,8 @@ nodes:
 
   - { id: EP-EXPORT-01, kind: surface, subtype: rest.post, route: /api/v1/dashboards/:id/export/pdf, auth: authenticated,
       status: partial, reason: "Job queued but no PDF worker implemented — export never completes",
-      intentional_drift: true, calls: [SVC-EXPORT.requestPdfExport], rules: [RULE-EXPORT-001] }
-  - { id: EP-EXPORT-02, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/export/excel, auth: authenticated, status: implemented, calls: [SVC-EXPORT.getExcelExport], rules: [RULE-EXPORT-002] }
-  - { id: EP-EXPORT-03, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/export/csv, auth: authenticated, status: implemented, calls: [SVC-EXPORT.getCsvExport] }
+      intentional_drift: true, calls: [SVC-EXPORT.requestPdfExport], rules: [RULE-EXPORT-001],
+      receives: [DTO-EXPORT-01-REQ], returns: [DTO-EXPORT-01-RES],
+      spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-EXPORT-01-REQ }, response: { status: 201, body: DTO-EXPORT-01-RES } } }
+  - { id: EP-EXPORT-02, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/export/excel, auth: authenticated, status: implemented, calls: [SVC-EXPORT.getExcelExport], rules: [RULE-EXPORT-002], returns: [DTO-EXPORT-02-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-EXPORT-02-RES } } }
+  - { id: EP-EXPORT-03, kind: surface, subtype: rest.get, route: /api/v1/dashboards/:id/export/csv, auth: authenticated, status: implemented, calls: [SVC-EXPORT.getCsvExport], returns: [DTO-EXPORT-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-EXPORT-03-RES } } }

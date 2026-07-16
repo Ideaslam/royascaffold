@@ -18,7 +18,6 @@ nodes:
 
   # Entities → project/map/data/platform/ (ENT-AUDITLOG; used by the services below via deps)
 
-  - { id: EP-AUDIT-01, kind: surface, subtype: rest.get, route: /api/v1/audit, auth: "role:admin", status: implemented, calls: [SVC-AUDIT.findPaginated], rules: [RULE-PAG-01] }
-
+  - { id: EP-AUDIT-01, kind: surface, subtype: rest.get, route: /api/v1/audit, auth: "role:admin", status: implemented, calls: [SVC-AUDIT.findPaginated], rules: [RULE-PAG-01], returns: [DTO-AUDIT-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-AUDIT-01-RES } } }
   - { id: PAGE-ADMIN-AUDIT, kind: ui, subtype: page, app: admin-panel, route: /admin/audit, status: implemented,
       calls: [EP-AUDIT-01], theme: THEME-ROYA, states: [loading, empty, error, ready] }

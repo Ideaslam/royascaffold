@@ -21,9 +21,8 @@ nodes:
 
   # Entities → project/map/data/platform/ (ENT-AILOG, ENT-AI-PRICING; used by the services below via deps)
 
-  - { id: EP-AILOG-01, kind: surface, subtype: rest.get, route: /api/v1/ai-logs, auth: "role:admin", status: implemented, calls: [SVC-AILOG.findPaginated], rules: [RULE-PAG-01] }
-  - { id: EP-AILOG-02, kind: surface, subtype: rest.get, route: /api/v1/ai-logs/cost-summary, auth: "role:admin", status: implemented, calls: [SVC-AILOG.costSummary] }
-  - { id: EP-AILOG-03, kind: surface, subtype: rest.get, route: /api/v1/ai-logs/:id, auth: "role:admin", status: implemented, calls: [SVC-AILOG.findById] }
-
+  - { id: EP-AILOG-01, kind: surface, subtype: rest.get, route: /api/v1/ai-logs, auth: "role:admin", status: implemented, calls: [SVC-AILOG.findPaginated], rules: [RULE-PAG-01], returns: [DTO-AILOG-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-AILOG-01-RES } } }
+  - { id: EP-AILOG-02, kind: surface, subtype: rest.get, route: /api/v1/ai-logs/cost-summary, auth: "role:admin", status: implemented, calls: [SVC-AILOG.costSummary], returns: [DTO-AILOG-02-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-AILOG-02-RES } } }
+  - { id: EP-AILOG-03, kind: surface, subtype: rest.get, route: /api/v1/ai-logs/:id, auth: "role:admin", status: implemented, calls: [SVC-AILOG.findById], returns: [DTO-AILOG-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-AILOG-03-RES } } }
   - { id: PAGE-ADMIN-AILOGS, kind: ui, subtype: page, app: admin-panel, route: /admin/ai-logs, status: implemented,
       calls: [EP-AILOG-01, EP-AILOG-02], theme: THEME-ROYA, states: [loading, empty, error, ready] }

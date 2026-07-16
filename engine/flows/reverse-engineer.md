@@ -17,6 +17,9 @@ Use this to onboard a project (or a module) that already has code but no v2 map.
    automatically. **Entities are separate:** create one file per entity at
    `map/data/<domain>/<entity>.yaml` from **`engine/templates/entity.yaml`** (with its owning `domain`),
    and reference it from services via `deps: [ENT-...]`. Never redefine an entity inside a module bundle.
+   **DTOs are separate too:** put request/response shapes in `map/data/dto/<module>.yaml` (template
+   **`engine/templates/dto.yaml`**) and link each surface with `receives:` (body) / `returns:` (response).
+   Path params + query stay inline on `spec.request`.
 3. **Set status honestly.** `implemented` for coded artifacts; `partial` (+ reason) for stubs or
    missing workers; `planned` (+ `intentional_drift: true`) for documented-but-not-coded.
 4. **Lift cross-cutting structure**, each from its template: `map/architecture/` domains + boundaries

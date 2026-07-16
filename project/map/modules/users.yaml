@@ -24,16 +24,15 @@ nodes:
       rules: [RULE-AUTH-001, RULE-GLOBAL-008, RULE-GLOBAL-009, RULE-GLOBAL-010], history: [change-001, change-004] }
 
   # surfaces
-  - { id: EP-USR-01, kind: surface, subtype: rest.patch, route: /api/v1/users/me, auth: authenticated, status: implemented, calls: [SVC-USR.updateProfile] }
-  - { id: EP-USR-02, kind: surface, subtype: rest.patch, route: /api/v1/users/me/password, auth: authenticated, status: implemented, calls: [SVC-USR.changePassword] }
-  - { id: EP-USR-03, kind: surface, subtype: rest.get, route: /api/v1/users, auth: "role:admin", status: implemented, calls: [SVC-USR.listUsers], rules: [RULE-PAG-01] }
-  - { id: EP-USR-04, kind: surface, subtype: rest.get, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.getUserById] }
-  - { id: EP-USR-05, kind: surface, subtype: rest.post, route: /api/v1/users, auth: "role:admin", status: implemented, calls: [SVC-USR.createUser] }
-  - { id: EP-USR-06, kind: surface, subtype: rest.put, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.updateUser] }
-  - { id: EP-USR-07, kind: surface, subtype: rest.delete, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.deleteUser], rules: [RULE-GLOBAL-008] }
-  - { id: EP-USR-08, kind: surface, subtype: rest.patch, route: /api/v1/users/:id/suspend, auth: "role:admin", status: implemented, calls: [SVC-USR.suspendUser], history: [change-004] }
-  - { id: EP-USR-09, kind: surface, subtype: rest.patch, route: /api/v1/users/:id/reactivate, auth: "role:admin", status: implemented, calls: [SVC-USR.reactivateUser], history: [change-004] }
-
+  - { id: EP-USR-01, kind: surface, subtype: rest.patch, route: /api/v1/users/me, auth: authenticated, status: implemented, calls: [SVC-USR.updateProfile], receives: [DTO-USR-01-REQ], returns: [DTO-USR-01-RES], spec: { request: { body: DTO-USR-01-REQ }, response: { status: 200, body: DTO-USR-01-RES } } }
+  - { id: EP-USR-02, kind: surface, subtype: rest.patch, route: /api/v1/users/me/password, auth: authenticated, status: implemented, calls: [SVC-USR.changePassword], receives: [DTO-USR-02-REQ], returns: [DTO-USR-02-RES], spec: { request: { body: DTO-USR-02-REQ }, response: { status: 200, body: DTO-USR-02-RES } } }
+  - { id: EP-USR-03, kind: surface, subtype: rest.get, route: /api/v1/users, auth: "role:admin", status: implemented, calls: [SVC-USR.listUsers], rules: [RULE-PAG-01], returns: [DTO-USR-03-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-USR-03-RES } } }
+  - { id: EP-USR-04, kind: surface, subtype: rest.get, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.getUserById], returns: [DTO-USR-04-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-USR-04-RES } } }
+  - { id: EP-USR-05, kind: surface, subtype: rest.post, route: /api/v1/users, auth: "role:admin", status: implemented, calls: [SVC-USR.createUser], receives: [DTO-USR-05-REQ], returns: [DTO-USR-05-RES], spec: { request: { body: DTO-USR-05-REQ }, response: { status: 201, body: DTO-USR-05-RES } } }
+  - { id: EP-USR-06, kind: surface, subtype: rest.put, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.updateUser], receives: [DTO-USR-06-REQ], returns: [DTO-USR-06-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-USR-06-REQ }, response: { status: 200, body: DTO-USR-06-RES } } }
+  - { id: EP-USR-07, kind: surface, subtype: rest.delete, route: /api/v1/users/:id, auth: "role:admin", status: implemented, calls: [SVC-USR.deleteUser], rules: [RULE-GLOBAL-008], returns: [DTO-USR-07-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }] }, response: { status: 200, body: DTO-USR-07-RES } } }
+  - { id: EP-USR-08, kind: surface, subtype: rest.patch, route: /api/v1/users/:id/suspend, auth: "role:admin", status: implemented, calls: [SVC-USR.suspendUser], history: [change-004], receives: [DTO-USR-08-REQ], returns: [DTO-USR-08-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-USR-08-REQ }, response: { status: 200, body: DTO-USR-08-RES } } }
+  - { id: EP-USR-09, kind: surface, subtype: rest.patch, route: /api/v1/users/:id/reactivate, auth: "role:admin", status: implemented, calls: [SVC-USR.reactivateUser], history: [change-004], receives: [DTO-USR-09-REQ], returns: [DTO-USR-09-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-USR-09-REQ }, response: { status: 200, body: DTO-USR-09-RES } } }
   # frontend
   - { id: PAGE-PROFILE, kind: ui, subtype: page, app: customer-portal, route: /app/profile, status: implemented,
       calls: [EP-AUTH-08, EP-USR-01, EP-USR-02], theme: THEME-ROYA, i18n: true, rtl: true, states: [loading, error, ready] }

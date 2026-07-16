@@ -18,10 +18,9 @@ nodes:
 
   # Entities → project/map/data/platform/ (ENT-NOTIFICATION; used by the services below via deps)
 
-  - { id: EP-NOTIF-01, kind: surface, subtype: rest.get, route: /api/v1/notifications, auth: authenticated, status: implemented, calls: [SVC-NOTIF.listNotifications], rules: [RULE-PAG-01] }
-  - { id: EP-NOTIF-02, kind: surface, subtype: rest.get, route: /api/v1/notifications/unread-count, auth: authenticated, status: implemented, calls: [SVC-NOTIF.countUnread] }
-  - { id: EP-NOTIF-03, kind: surface, subtype: rest.patch, route: /api/v1/notifications/:id/read, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAsRead] }
-  - { id: EP-NOTIF-04, kind: surface, subtype: rest.patch, route: /api/v1/notifications/read-all, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAllAsRead] }
-
+  - { id: EP-NOTIF-01, kind: surface, subtype: rest.get, route: /api/v1/notifications, auth: authenticated, status: implemented, calls: [SVC-NOTIF.listNotifications], rules: [RULE-PAG-01], returns: [DTO-NOTIF-01-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-NOTIF-01-RES } } }
+  - { id: EP-NOTIF-02, kind: surface, subtype: rest.get, route: /api/v1/notifications/unread-count, auth: authenticated, status: implemented, calls: [SVC-NOTIF.countUnread], returns: [DTO-NOTIF-02-RES], spec: { request: { query: [{ name: page, type: number, required: false }, { name: limit, type: number, required: false }] }, response: { status: 200, body: DTO-NOTIF-02-RES } } }
+  - { id: EP-NOTIF-03, kind: surface, subtype: rest.patch, route: /api/v1/notifications/:id/read, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAsRead], receives: [DTO-NOTIF-03-REQ], returns: [DTO-NOTIF-03-RES], spec: { request: { params: [{ name: id, in: path, type: ObjectId, required: true }], body: DTO-NOTIF-03-REQ }, response: { status: 200, body: DTO-NOTIF-03-RES } } }
+  - { id: EP-NOTIF-04, kind: surface, subtype: rest.patch, route: /api/v1/notifications/read-all, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAllAsRead], receives: [DTO-NOTIF-04-REQ], returns: [DTO-NOTIF-04-RES], spec: { request: { body: DTO-NOTIF-04-REQ }, response: { status: 200, body: DTO-NOTIF-04-RES } } }
   - { id: PAGE-NOTIFICATIONS, kind: ui, subtype: page, app: customer-portal, route: /app/notifications, status: implemented,
       calls: [EP-NOTIF-01, EP-NOTIF-02, EP-NOTIF-03, EP-NOTIF-04], theme: THEME-ROYA, i18n: true, rtl: true, states: [loading, empty, error, ready] }

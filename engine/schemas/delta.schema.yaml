@@ -9,6 +9,7 @@ delta:
     status:  { type: enum, values: [planned, in_progress, implemented, cancelled] }
     creates: { type: boolean, doc: "true when the target is a brand-new node not yet in the map" }
     reason:  { type: string }
+    spec:    { type: object, doc: "REQUIRED when creates:true — the full build spec for the new node (see node.schema spec_by_kind). This is what the coder builds from." }
     patch:   { type: object, doc: "the operations — see below" }
 
 patch_operations:

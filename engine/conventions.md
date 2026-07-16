@@ -48,19 +48,39 @@ reverse direction (`used_by`, `implemented_by`) automatically.
   cross-cutting ones (e.g. `RULE-PAG-01`, `IF-DATA-DS`).
 - IDs are **stable and unique** — never reused, never renumbered. `verify` fails on duplicates.
 
-## Lightness (the map is smaller than the code)
+## Descriptive completeness with zero duplication (the `spec`)
 
-**The map records only what the code cannot express.** It never re-describes what code already says.
+The blueprint must carry **everything a coder needs to build the artifact right the first time** —
+fields, request/response shapes, method behavior, UI states, edge cases, acceptance. That lives in
+each node's **`spec`** block (structured YAML, not prose). The catch that keeps it light: **detail is
+tied to status, and specs record only deviations.**
 
-| The map HOLDS | The map OMITS |
-|---------------|---------------|
-| identity + stable ID + kind | field lists, DTO/param shapes |
-| edges (calls/uses/deps) — the graph | method bodies / signatures |
-| status (+ reason) & history | implementation detail |
-| intent (module, feature, boundary) | anything `@map` can point to |
+**Spec-by-status — the one rule:**
 
-Enforced by: one node-bundle per module (never one file per method), `@map` annotations for detail,
-and a `map_size_budget` in the profile that `verify` checks against the annotated code.
+| Status | `spec` | Why |
+|--------|--------|-----|
+| `planned` | **REQUIRED, full** | no code exists yet — the spec IS the build contract; this is where a small coder gets 100% of what it needs |
+| `partial` | required for the unbuilt part | the rest is in code |
+| `implemented` | **optional** | code is the source of truth via `@map`; re-describing fields the code declares is the v1 drift trap — don't |
+| `deferred` | keep the intent | so it can be picked up later |
+
+**Deviation-only:** a `spec` documents a value **only when it differs** from `profile.conventions`
+(route prefix, success/error envelope, pagination, auth default, UI states…). Inherited defaults are
+never repeated. This is what keeps a complete blueprint from bloating.
+
+**Per-kind spec fields** (see `schemas/node.schema.yaml → spec_by_kind`):
+
+| kind | the spec carries |
+|------|------------------|
+| `data` | `fields[] {name,type,constraints,ref}` · relations · indexes · enums |
+| `surface` | `route` · `auth` (deviation) · `request {params,query,body}` · `response {status,shape}` · `errors[]` |
+| `logic` | `methods[] {sig, does, side_effects}` · deps |
+| `ui` | `route` · `components[]` · `wires[] (EP-id → purpose)` · `guard` · `states` (deviation) |
+| `feature` | `narrative` (the detailed explanation) · `rules` · `acceptance[]` · `edge_cases[]` |
+
+So the map is **light where code exists** (implemented → thin spine + `@map`) and **fully descriptive
+where it does not yet** (planned → complete spec). `verify` flags a planned/created artifact missing
+its spec (`SPEC_MISSING`); `map_size_budget` guards against *unstructured duplication*, not richness.
 
 ## Status vocabulary
 

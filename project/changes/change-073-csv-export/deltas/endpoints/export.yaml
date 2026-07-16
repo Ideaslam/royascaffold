@@ -3,11 +3,28 @@ change: change-073
 status: planned
 creates: true
 reason: "New CSV export endpoint"
+# Full build spec — everything the coder needs; only what deviates from profile.conventions.
+spec:
+  route: "GET /api/v1/data/datasets/:id/export"
+  auth: "authenticated + owner-or-workspace-member of the dataset"
+  request:
+    params: "id (dataset id)"
+    query: "?format=csv (default csv) · ?columns=col1,col2 (optional subset) · ?filter=<saved filter id>"
+  response:
+    status: 200
+    shape: "text/csv stream (Content-Disposition: attachment; filename=<dataset>.csv); NOT the success envelope — raw file body"
+  errors:
+    - "{ code: 404, when: dataset not found or not visible to caller }"
+    - "{ code: 413, when: row count exceeds tier export cap → suggest async export }"
+    - "{ code: 422, when: unknown column requested }"
+  notes: "streams rows to avoid loading the whole dataset in memory; respects the caller's column-level visibility"
 patch:
   set:
     kind: surface
     subtype: rest.get
     module: export
-    route: /api/v1/data/datasets/export
+    route: /api/v1/data/datasets/:id/export
     auth: authenticated
+    calls: [SVC-EXPORT.exportCsv]
+    rules: [RULE-EXPORT-001]
     status: implemented

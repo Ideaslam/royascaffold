@@ -42,8 +42,15 @@ State at review: `verify: PASS` · **466 nodes** · 26 module bundles · 44 rule
 - **E4** boundaries enforced — PASS · `map/architecture/boundaries.yaml` (enforce:true); verify proves cross-domain edges hit contracts only (boundaries: OK)
 - **E5** rules on new artifacts — PARTIAL · archetypes declare `requires.rules`, plan steps declare `rules[]`, and verify flags dangling rule refs; there is no automated per-node "archetype conformance" gate yet (the one place left to harden)
 
+## Descriptive completeness (the build spec)
+- **Spec layer** — nodes/deltas carry a `spec` (fields · request/response · method behavior · UI states ·
+  edge cases · feature narrative + acceptance). `planned`/`creates` artifacts REQUIRE it (a coder gets
+  100% of what it needs); `implemented` artifacts may omit it (code is the truth via `@map`). Specs
+  record only DEVIATIONS from `profile.conventions`. Proven: `verify.checks.specs` = COMPLETE, and a
+  creates-delta stripped of its spec flips it to INCOMPLETE + `SPEC_MISSING`.
+
 ## F. Lightness
-- **F1** map records only what code can't — PASS · nodes carry id/kind/edges/rules/status/history only; methods by name, no bodies/params
+- **F1** map records only what code can't — PASS · IMPLEMENTED nodes carry the light spine (id/kind/edges/rules/status); full detail lives in code via `@map`. PLANNED nodes carry a full `spec` because no code exists yet — so the blueprint is build-complete without duplicating code.
 - **F2** per-module bundles — PASS · 26 files in `map/modules/*.yaml`, never one file per method
 - **F3** size budget — PASS (mechanism proven) · fixture run tripped `SIZE_BUDGET … OVER` against `map_size_budget: 0.25`; auto-SKIPPED live until `code_roots` present
 - **F4** index-first loading — PASS · flows load only `index.yaml` + the relevant `plan.yaml`

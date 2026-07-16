@@ -1,0 +1,14 @@
+# TEMPLATE — one change. Copy the whole `change/` folder to project/changes/<id>/ and fill.
+# id: change-NNN (feature/refactor) or bug-NNN. Next free number — verify enforces uniqueness.
+
+id: change-NNN
+title: "short title"
+type: feature            # feature | bug | refactor
+owner: business          # business (feature) | support (bug) | dev
+status: planned          # planned | in_progress | implemented | cancelled
+rationale: "one line — the why"
+acceptance:
+  - "testable outcome"
+archetypes: ["archetype ids the work builds against"]
+assumptions:             # defaulted discovery answers a human can correct in place
+  - { q: "question", value: "assumed value", assumed: true }

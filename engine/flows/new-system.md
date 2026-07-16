@@ -5,17 +5,10 @@ The map is **born empty**: nothing is implemented yet, so `map/` starts empty an
 lifecycle (`change.md`). `>> GATE` marks each point where a human must approve before proceeding.
 
 ## Phase 1 — Discover (planner)
-Interview the human in ONE grouped batch:
-1. **Product** — name · one-line promise · who uses it.
-2. **Primary jobs** — the top 3–7 user outcomes.
-3. **Apps & stack** — web / mobile / api / cli + framework each.
-4. **Domains** — the major areas of the system.
-5. **Core data** — the main entities/collections.
-6. **Integrations** — external services + their secrets.
-7. **Cross-cutting rules** — auth model · tenancy · perf targets · pagination · audit.
-8. **Constraints** — compliance / regions / budgets / non-negotiables.
-
-Ask only what changes a decision; **default the rest** and flag it (`# assumed:` in `profile.yaml`).
+Interview the human in ONE grouped batch using the reusable question blocks in
+**`engine/discovery.yaml` → `new_system`** (product · jobs · apps · domains · data · integrations ·
+rules · constraints — each block says which file it fills). Ask only what changes a decision;
+**default the rest** and flag it (`# assumed:` in `profile.yaml`).
 
 > **GATE 1 — scope approved.** Reflect the product understanding back to the human before writing anything.
 
@@ -35,9 +28,13 @@ this is design, not code.
 
 ## Phase 4 — Plan the build as a change PROGRAM
 Slice v1 into ordered phases, one change folder each (`change-001-foundations`, `change-002-auth`,
-`change-003-<feature>` …). For each, run **Phase 1 of `change.md`**: `change.yaml` (+ archetypes),
-one delta per node with `creates: true`, and a `plan.yaml` of atomic steps. `verify` flags cross-plan
-conflicts so phases stay disjoint.
+`change-003-<feature>` …) — copy `engine/templates/change/` and, for modules, `templates/module-bundle.yaml`.
+For each, run **Phase 1 of `change.md`**: `change.yaml` (+ archetypes),
+one `creates: true` delta per node **carrying its full build `spec`** (fields, request/response,
+behavior, UI states, edge cases — deviations from `profile.conventions` only), and a `plan.yaml` of
+atomic steps. Because nothing is implemented yet, EVERY new node is `planned` and MUST have a spec —
+`verify` warns `SPEC_MISSING` otherwise. This is where the whole system's descriptive detail lives
+until code exists; at merge each spec folds onto its node in the map.
 
 > **GATE 3 — program approved.** Confirm the phase order before any code is written.
 

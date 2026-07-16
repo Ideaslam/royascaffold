@@ -10,6 +10,13 @@ must:
   - "call a `lite` list endpoint for pickers (not the heavy list)"
   - "handle loading / empty / error / ready states explicitly"
   - "use theme tokens (THEME-*) — no hardcoded colors; support i18n + rtl if profile enables it"
+# The build spec the planner must fill on the delta:
+spec_shape:
+  route: "/app/{{resource}}"
+  components: ["FilterBar", "DataTable", "Paginator", "<action dialogs>"]
+  wires: ["EP-<id> -> list rows", "EP-<id> -> row action"]
+  guard: "AuthGuard | AdminGuard | WorkspaceGuard"
+  states: "override only if it differs from conventions.ui.states"
 skeleton:
   stack: nest+angular
   file: "app/{{feature}}/pages/{{name}}/{{name}}.component.ts"

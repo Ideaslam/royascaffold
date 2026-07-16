@@ -40,7 +40,30 @@ apps:
 # repos), so verify reports drift + size as SKIPPED — honest, not a failure.
 code_roots:
   - ../roya-ai-dynamo-api/src
-map_size_budget: 0.25    # map/ must stay under 25% of the annotated code it describes
+map_size_budget: 0.6    # spec-carrying blueprint; guards against unstructured duplication, not richness
+
+# Inherited defaults. A node `spec` documents a value ONLY when it DEVIATES from these — so the
+# blueprint stays complete (build-ready) without repeating the same envelope/auth/states everywhere.
+conventions:
+  api:
+    route_prefix: /api/v1
+    auth_default: "JwtAuthGuard + RolesGuard (global)"
+    workspace_auth: "WorkspaceRoleGuard + @WorkspaceRoles() when workspace-scoped"
+    success_envelope: "{ success: true, data }"
+    error_envelope: "{ success: false, message, error?, statusCode }"
+    pagination: "?page=1&limit=20 -> { data[], total, page, limit }; cap limit 100"
+    validation: "class-validator DTOs + global ValidationPipe (whitelist, forbidNonWhitelisted)"
+    rate_limit: "auth 10/min/IP · data refresh per tier · else 100/min/user"
+  ui:
+    states: [loading, empty, error, success]   # every data-driven page handles all four
+    error_ux: "toast via shared toast service"
+    api_base: "environment.apiUrl (no direct third-party calls from the client)"
+    guards: [AuthGuard, GuestGuard, AdminGuard, WorkspaceGuard]
+  naming:
+    entity: "PascalCase singular"
+    collection: "lowercase plural"
+    dto: "PascalCase + Dto"
+    service: "PascalCase + Service"
 
 brand_tokens:
   roya-main: "#ff6043"

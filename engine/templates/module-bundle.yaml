@@ -1,0 +1,83 @@
+# TEMPLATE — one module bundle. Copy to project/map/modules/<module>.yaml and fill.
+# Rules: IMPLEMENTED nodes stay light (code is the truth via @map). PLANNED nodes carry a full
+# `spec` (see conventions.md → spec_by_kind). A spec records ONLY deviations from profile.conventions.
+# One bundle per module — never one file per method. Delete the kinds you don't use.
+# Placeholders are quoted so this file stays valid YAML; drop the quotes when you fill real values.
+
+module: "<module>"                 # lowercase; becomes MOD-<MODULE>
+owner: "DOM-<DOMAIN>"             # the domain that owns this module
+status: planned                   # planned | partial | implemented (+ reason if partial)
+
+features:
+  - id: "FEAT-<MODULE>-<NAME>"
+    name: "<Human name>"
+    visibility: both               # both | backend-only | frontend-only | admin-panel
+    uses: ["EP-...", "SVC-...", "PAGE-..."]
+    spec:                          # the detailed feature explanation (what + why)
+      narrative: "what this feature does and why it exists"
+      rules: ["RULE-..."]
+      acceptance: ["testable outcome 1", "testable outcome 2"]
+      edge_cases: ["invalid input", "not-found", "external failure"]
+
+nodes:
+  # ── data (entity/collection) ──
+  - id: "ENT-<NAME>"
+    kind: data
+    subtype: collection
+    status: planned
+    collection: "<collection>"
+    spec:
+      fields:
+        - { name: _id, type: ObjectId, constraints: PK }
+        - { name: "<field>", type: String, constraints: required }
+      relations: "one <Other> -> many <Name>"
+      indexes: ["{ <field> }"]
+
+  # ── contract (interface/port) ──
+  - id: "IF-<NAME>"
+    kind: contract
+    subtype: interface
+    status: planned
+    di_token: "<TOKEN>"
+    methods: [doThing]
+    implemented_by: ["SVC-<NAME>"]
+
+  # ── logic (service/worker) ──
+  - id: "SVC-<NAME>"
+    kind: logic
+    subtype: service
+    status: planned
+    implements: ["IF-<NAME>"]
+    deps: ["ENT-<NAME>"]
+    methods: [create, list, findOne]
+    spec:
+      methods:
+        - { sig: "create(dto): <Name>", does: "validate + persist", side_effects: none }
+        - { sig: "list(q): Paginated<Name>", does: "paginated query", side_effects: none }
+
+  # ── surface (endpoint/handler) ──
+  - id: "EP-<MODULE>-01"
+    kind: surface
+    subtype: rest.get
+    status: planned
+    calls: ["SVC-<NAME>.list"]
+    rules: [RULE-PAG-01]
+    spec:
+      route: "GET /<resource>"
+      auth: "role, or omit when it equals the conventions default"
+      request: { query: "?page,limit,search" }
+      response: { status: 200, shape: "Paginated<NameDto>" }
+      errors: ["{ code: 401, when: unauthenticated }"]
+
+  # ── ui (page/component) ──
+  - id: "PAGE-<NAME>"
+    kind: ui
+    subtype: page
+    status: planned
+    calls: ["EP-<MODULE>-01"]
+    spec:
+      route: "/app/<resource>"
+      components: [FilterBar, DataTable, Paginator]
+      wires: ["EP-<MODULE>-01 -> list rows"]
+      guard: AuthGuard
+      # states omitted -> inherits conventions.ui.states (loading/empty/error/success)

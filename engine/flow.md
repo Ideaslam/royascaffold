@@ -44,6 +44,19 @@ explicit human "go" before crossing:
 
 A gate is a stop, not a suggestion. Nothing past a gate happens without approval.
 
+## Authoring assets (what to reach for)
+
+Four non-overlapping helpers under `engine/`:
+
+| Asset | Answers | Where |
+|-------|---------|-------|
+| **schema** | "what MUST be true" (verify enforces it) | `schemas/*.yaml` |
+| **template** | "a blank file of this type, ready to fill" | `templates/` (module bundle + a whole `change/`) |
+| **archetype** | "the pattern for this recurring node" (rules + spec + code skeleton) | `archetypes/*.yaml` |
+| **discovery** | "what to ask the human", structured by target/type | `discovery.yaml` |
+
+Start a module from `templates/module-bundle.yaml`; start a change by copying `templates/change/`.
+
 ## The one rule that never bends
 
 `roya verify` must be **PASS** before a change is considered done. It checks index freshness,

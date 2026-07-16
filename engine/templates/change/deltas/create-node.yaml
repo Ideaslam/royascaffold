@@ -1,0 +1,23 @@
+# TEMPLATE — a delta that CREATES a new node. One file per node under deltas/.
+# creates:true REQUIRES a full `spec` — it is the build contract the coder fills (verify: SPEC_MISSING otherwise).
+# Only document what DEVIATES from profile.conventions. Placeholders quoted to stay valid YAML.
+
+target: "<NEW-ID>"
+change: change-NNN
+status: planned
+creates: true
+reason: "why this node is added"
+spec:                              # shape depends on kind — see conventions.md → spec_by_kind
+  route: "GET /<resource>"         # (surface example)
+  auth: "authenticated + owner"
+  request: { params: "id", query: "?format" }
+  response: { status: 200, shape: "<Dto>" }
+  errors: ["{ code: 404, when: not found }"]
+patch:                             # the node's stored fields once merged
+  set:
+    kind: surface
+    subtype: rest.get
+    module: "<module>"
+    calls: ["SVC-<NAME>.method"]
+    rules: ["RULE-..."]
+    status: implemented

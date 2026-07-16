@@ -1,0 +1,22 @@
+# TEMPLATE — a delta that PATCHES an existing node. One file per node under deltas/.
+# The map node is untouched until merge; this is the planned future. A `spec` here describes only
+# the delta (the change inherits the rest from the existing node + profile.conventions).
+
+target: "<EXISTING-ID>"
+change: change-NNN
+status: planned
+reason: "why"
+spec:
+  request: { query: "adds ?<param> — what it does" }
+  auth: "adds <guard> when applicable"
+  errors: ["{ code: 403, when: <condition> }"]
+patch:
+  # field-level ops on list/scalar fields
+  fields:
+    add:
+      - { name: "<field>", type: ObjectId, ref: "<Ref>", required: false, index: true }
+  set:
+    "<scalarField>": "<value>"
+  rules:
+    add: ["RULE-..."]
+  # structural ops (behavior-neutral): move | rename | reboundary | register

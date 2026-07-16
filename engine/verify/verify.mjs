@@ -33,7 +33,12 @@ export function verify(projectDir) {
     }
   }
 
-  // --- 2. Node validity: kind + status ---
+  // --- 2. Node validity: kind + status + build-spec completeness ---
+  // Descriptive completeness: a PLANNED buildable artifact must carry a full `spec` (there is no
+  // code to read yet), so a coder gets everything it needs the first time. Implemented artifacts
+  // delegate detail to code via @map, so a spec is optional there.
+  const BUILDABLE = ['surface', 'logic', 'data', 'ui', 'feature'];
+  let specOk = true;
   for (const [id, n] of model.nodes) {
     if (!KINDS.includes(n.kind)) err(`BAD_KIND ${id} has kind='${n.kind}' (not a universal kind)`);
     const s = n.status || 'implemented';
@@ -41,7 +46,23 @@ export function verify(projectDir) {
     if ((s === 'partial' || s === 'deferred') && !n.reason) {
       warn(`NO_REASON ${id} is '${s}' without a reason`);
     }
+    if (s === 'planned' && BUILDABLE.includes(n.kind) && !n.spec && !n.intentional_drift) {
+      warn(`SPEC_MISSING ${id} is planned but has no build \`spec\` (a coder can't build it without one)`);
+      specOk = false;
+    }
   }
+
+  // Planned NEW nodes are created by deltas — the spec must live on the creating delta.
+  for (const c of model.changes) {
+    if ((c.meta.status || 'planned') === 'implemented') continue;
+    for (const d of c.deltas) {
+      if (d.creates && (d.status || 'planned') !== 'cancelled' && !d.spec) {
+        warn(`SPEC_MISSING ${c.id}: delta creates ${d.target} without a \`spec\` (the build contract)`);
+        specOk = false;
+      }
+    }
+  }
+  report.checks.specs = specOk ? 'COMPLETE' : 'INCOMPLETE';
 
   // --- 3. Link consistency (edges resolve; method links exist on target) ---
   let linkOk = true;

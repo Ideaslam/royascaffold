@@ -7,6 +7,11 @@ requires:
 must:
   - "carry a workspace reference (workspaceId or a dynamic ws_{slug}_* collection)"
   - "every query filters by the workspace — never leak cross-workspace rows"
+# The build spec the planner must fill on the delta:
+spec_shape:
+  fields: ["{ name, type, constraints, ref }", "{ name: workspaceId, type: ObjectId, ref: Workspace, required: true, index: true }"]
+  relations: "one Workspace -> many {{Name}}"
+  indexes: ["{ workspaceId }", "compound uniqueness scoped to workspace where needed"]
 skeleton:
   stack: nest+angular
   file: "{{module}}/schemas/{{name}}.schema.ts"

@@ -1,0 +1,19 @@
+# TEMPLATE — the resumable plan for one change. Copy to project/changes/<id>/plan.yaml.
+# Ordered atomic steps a small coder executes one at a time. `current_step` survives a closed chat.
+
+change: change-NNN
+title: "short title"
+current_step: 1
+steps:
+  # map-only steps (planner) come first, then implement steps (coder), then the merge step.
+  - { id: 1, action: update_map,  target: "<ID>", status: planned }
+  - id: 2
+    action: implement
+    target: "<ID>"
+    archetype: "<archetype id>"
+    files: ["path/to/file.ts"]
+    rules: ["RULE-..."]
+    calls: ["<ID>.method"]
+    accept: "one-line check: what proves this step is done + @map present + verify PASS"
+    status: planned
+  - { id: 3, action: merge_deltas_to_map, status: planned }

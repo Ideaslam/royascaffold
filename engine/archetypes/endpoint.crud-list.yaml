@@ -11,6 +11,13 @@ must:
   - "accept ?page & ?limit; cap limit per RULE-PAG-01"
   - "return { items, page, limit, total }"
   - "delegate all work to the logic node named in `calls`"
+# The build spec the planner must fill on the delta (deviations from profile.conventions only):
+spec_shape:
+  route: "GET /{{resource}}"
+  auth: "role or 'authenticated' (omit if = conventions.api.auth_default)"
+  request: { query: "?page,limit,search,<filters> (list the real filters)" }
+  response: { status: 200, shape: "Paginated<{{ItemDto}}> — name the item DTO fields that deviate" }
+  errors: ["{ code: 401, when: unauthenticated }", "{ code: 403, when: wrong role }"]
 skeleton:
   stack: nest+angular
   file: "{{module}}/{{module}}.controller.ts"

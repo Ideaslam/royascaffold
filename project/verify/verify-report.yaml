@@ -1,6 +1,7 @@
 status: PASS
 checks:
   freshness: FRESH
+  specs: COMPLETE
   links: OK
   conflicts: FOUND
   boundaries: OK

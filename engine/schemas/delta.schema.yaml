@@ -1,0 +1,43 @@
+# A delta — a git-track patch against ONE map node. Lives in changes/<id>/deltas/**.yaml.
+# This is the "planned future": the map is untouched until the change is merged.
+
+delta:
+  required: [target, change, status]
+  fields:
+    target:  { type: string, doc: "the map node id this patches (or the id of a node to create)" }
+    change:  { type: string, doc: "owning change id" }
+    status:  { type: enum, values: [planned, in_progress, implemented, cancelled] }
+    creates: { type: boolean, doc: "true when the target is a brand-new node not yet in the map" }
+    reason:  { type: string }
+    patch:   { type: object, doc: "the operations — see below" }
+
+patch_operations:
+  # field-level
+  add:    { doc: "add items to a list field, e.g. fields.add / query.add" }
+  remove: { doc: "remove items from a list field" }
+  set:    { doc: "set/replace scalar fields" }
+  # structural (behavior-neutral refactors)
+  move:      { doc: "relocate a node to another module/domain — verify treats as relocation, not delete+add" }
+  rename:    { doc: "rename an id/symbol; history is preserved" }
+  reboundary:{ doc: "change a node's domain ownership" }
+  register:  { doc: "register an impl into a registry (extend-by-registration)" }
+
+examples:
+  add_field: |
+    # deltas/entities/user.entity.yaml
+    target: ENT-USER
+    change: change-072
+    status: planned
+    patch:
+      fields:
+        add:
+          - { name: workspaceId, type: ObjectId, ref: Workspace, required: false }
+  add_query_param: |
+    # deltas/endpoints/query-user-get.yaml
+    target: EP-USER-GET
+    change: change-072
+    status: planned
+    reason: "Scope user query to a workspace"
+    patch:
+      query:
+        add: [workspaceId]

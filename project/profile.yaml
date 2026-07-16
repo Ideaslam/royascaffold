@@ -1,0 +1,55 @@
+# System profile — the one home for concrete facts. The engine refers to these, never hardcodes them.
+product:
+  name: Roya AI Dynamo
+  summary: AI-powered SaaS that turns multi-source data into interactive dashboards automatically.
+  type: SaaS responsive web application
+
+# The stack subtype vocabulary — what the universal `kind`s mean for THIS system.
+subtypes:
+  surface: [rest.get, rest.post, rest.patch, rest.delete, webhook, oauth-callback]
+  ui: [page, component, layout, theme]
+  logic: [service, worker, cron, guard, registry]
+  contract: [interface]
+  data: [entity, collection]
+  integration: [oauth, sdk]
+  flow: [queue, worker, cron, pipeline, migration]
+
+# ID prefix -> kind alias table. Keeps IDs readable while the engine only cares about `kind`.
+id_prefixes:
+  EP: surface
+  PAGE: ui
+  CMP: ui
+  SVC: logic
+  IF: contract
+  ENT: data
+  Q: flow
+  MIG: flow
+  RULE: rule
+  BND: boundary
+  DOM: domain
+  FEAT: feature
+  MOD: module
+
+apps:
+  - { key: customer-portal, type: web, repo: roya-ai-dynamo-frontend, framework: Angular 21, ui: PrimeNG 21 }
+  - { key: admin-panel, type: web, repo: roya-ai-dynamo-frontend-admin, framework: Angular 21, ui: PrimeNG 21 }
+  - { key: backend, type: api, repo: roya-ai-dynamo-api, framework: NestJS }
+  - { key: landing-site, type: web-static, repo: roya-dynamo-landing, framework: HTML+Tailwind }
+
+# Verify uses these to run map<->code drift and the size budget. Absent here (code lives in other
+# repos), so verify reports drift + size as SKIPPED — honest, not a failure.
+code_roots:
+  - ../roya-ai-dynamo-api/src
+map_size_budget: 0.25    # map/ must stay under 25% of the annotated code it describes
+
+brand_tokens:
+  roya-main: "#ff6043"
+  roya-primary: "#5922ea"
+  roya-secondary: "#282828"
+
+integrations:
+  - { id: INT-AI, provider: Claude, purpose: analysis + dashboard generation, env: [AI_MODEL, AI_API_KEY] }
+  - { id: INT-MAIL, provider: MailJet, purpose: transactional email, env: [MAILJET_API_KEY, MAILJET_SECRET] }
+  - { id: INT-STORAGE, provider: Cloudflare R2, purpose: object storage, env: [R2_ACCESS_KEY, R2_SECRET_KEY, R2_BUCKET] }
+  - { id: INT-PAY, provider: PayUp, purpose: subscription billing, env: [PAYMENT_PROVIDER, PAYUP_PUBLIC_KEY, PAYUP_SECRET_KEY] }
+  - { id: INT-REDIS, provider: Redis, purpose: cache + BullMQ queues, env: [REDIS_URL] }

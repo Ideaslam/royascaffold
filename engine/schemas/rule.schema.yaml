@@ -1,0 +1,29 @@
+# A rule: referenced by ID from any node's `rules:`. Lives in project/map/rules.yaml.
+# Rules are data, not prose — so verify can prove a node references the rules it must obey.
+
+rule:
+  required: [id, scope, constraint]
+  fields:
+    id:          { type: string, doc: "RULE-<NAME> (e.g. RULE-PAG-01)" }
+    scope:       { type: enum, values: [global, module, architecture] }
+    module:      { type: string, doc: "required when scope=module" }
+    title:       { type: string }
+    constraint:  { type: string, doc: "the rule, in one line" }
+    applies_to:  { type: string[], doc: "kinds the rule governs, e.g. [surface, logic]" }
+    forbidden:   { type: string[], doc: "patterns that violate the rule" }
+    performance: { type: object, doc: "perf targets, e.g. { cached_ms: 200, uncached_ms: 2000 }" }
+    providers:   { type: string[] }
+    secrets:     { type: string[] }
+
+example: |
+  - id: RULE-PAG-01
+    scope: global
+    title: Pagination contract
+    applies_to: [surface]
+    constraint: "List endpoints paginate via ?page&limit; response { items, page, limit, total }; max limit 100"
+  - id: RULE-CRED-PATH-01
+    scope: module
+    module: data
+    title: Credential resolution path
+    applies_to: [logic]
+    constraint: "Resolve credentials dataset -> dataSource -> connection; never expose secrets or raw rows"

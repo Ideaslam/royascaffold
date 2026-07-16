@@ -1,0 +1,22 @@
+# Archetype: a list/table page. Structures the FRONTEND like the backend (your request).
+
+archetype: page.list-table
+kind: ui
+subtype: page
+requires:
+  edges: [calls]            # must call the list endpoint(s) it renders
+  states: [loading, empty, error, ready]
+must:
+  - "call a `lite` list endpoint for pickers (not the heavy list)"
+  - "handle loading / empty / error / ready states explicitly"
+  - "use theme tokens (THEME-*) — no hardcoded colors; support i18n + rtl if profile enables it"
+skeleton:
+  stack: nest+angular
+  file: "app/{{feature}}/pages/{{name}}/{{name}}.component.ts"
+  code: |
+    /** @map {{ID}} */
+    @Component({ selector: 'app-{{name}}', templateUrl: './{{name}}.component.html' })
+    export class {{Name}}Component {
+      readonly state = signal<'loading' | 'empty' | 'error' | 'ready'>('loading');
+      constructor(private readonly svc: {{FeService}}) {}   // svc calls {{CALLS}}
+    }

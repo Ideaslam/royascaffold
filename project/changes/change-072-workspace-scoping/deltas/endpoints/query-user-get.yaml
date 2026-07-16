@@ -1,0 +1,10 @@
+# Your exact example: map has query [ ... ]; the effective view adds workspaceId. Planned, not live.
+target: EP-USR-03
+change: change-072
+status: planned
+reason: "Filter the users query by workspace"
+patch:
+  query:
+    add: [workspaceId]
+  rules:
+    add: [RULE-WS-SCOPE-01]

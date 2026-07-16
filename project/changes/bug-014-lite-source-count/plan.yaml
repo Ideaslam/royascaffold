@@ -1,0 +1,7 @@
+change: bug-014
+title: Lite picker per-source count is off by one
+current_step: 1
+steps:
+  - { id: 1, action: implement, target: EP-DATA-56, calls: [SVC-DATA-DS.listLite],
+      accept: "sources[].count excludes unsynced; verify PASS", status: planned }
+  - { id: 2, action: merge_deltas_to_map, status: planned }

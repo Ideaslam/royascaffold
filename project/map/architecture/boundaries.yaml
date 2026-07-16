@@ -1,0 +1,21 @@
+# Import/architecture boundaries — lint-checked by `roya verify` (RULE-ARCH-001).
+# A cross-domain edge is legal only if it targets the destination domain's public contract.
+nodes:
+  - id: BND-REPORTING-DATA
+    kind: boundary
+    mode: contract-only
+    enforce: true
+    from: DOM-REPORTING
+    to: DOM-DATA
+    status: implemented
+    history: [change-063]
+    reason_note: "Reporting may import the Data Source contract only, never DatasetRepository/internals"
+
+  - id: BND-APP-CORE
+    kind: boundary
+    mode: contract-only
+    enforce: true
+    from: DOM-DATA
+    to: DOM-ENGINE-CORE
+    status: implemented
+    reason_note: "Engines use the kernel via its seams; no upward import from kernel into apps"

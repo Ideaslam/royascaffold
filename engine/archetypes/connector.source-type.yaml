@@ -1,0 +1,27 @@
+# Archetype: a new data-source connector. THE "extend by registration, not modification" pattern.
+# Adding a source = implement the interface + ONE registry entry. No kernel edit.
+
+archetype: connector.source-type
+kind: integration
+requires:
+  implements: [IF-CONNECTOR]     # must satisfy the connector contract
+  register: CONNECTOR-REGISTRY   # must self-register (verify checks the register op)
+must:
+  - "implement every method of IF-CONNECTOR (testConnection, listEntities, discoverSchema, extract)"
+  - "register in CONNECTOR-REGISTRY via one entry — never edit the kernel or a switch statement"
+  - "wrap the external SDK; isolate credentials; no direct SDK calls from services"
+skeleton:
+  stack: nest+angular
+  file: "data/connectors/{{name}}.connector.ts"
+  code: |
+    /** @map {{ID}} */
+    @Injectable()
+    export class {{Name}}Connector implements ConnectorInterface {
+      readonly sourceType = '{{sourceType}}';
+      async testConnection(creds: {{Creds}}): Promise<TestResult> { /* wrap SDK */ }
+      async listEntities(ctx: ConnectorCtx): Promise<ImportableEntity[]> { /* ... */ }
+      async discoverSchema(ctx: ConnectorCtx, entity: string): Promise<DiscoveredColumn[]> { /* ... */ }
+      async extract(ctx: ConnectorCtx, opts: ExtractOptions): Promise<AsyncIterable<Row>> { /* ... */ }
+    }
+    // register (the ONLY wiring):
+    connectorRegistry.register('{{sourceType}}', {{Name}}Connector);

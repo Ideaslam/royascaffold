@@ -1,0 +1,18 @@
+module: landing
+status: implemented
+
+# The public marketing site (third app). Static pages; no auth, no backend calls of its own.
+features:
+  - { id: FEAT-LANDING, name: Marketing Site, visibility: landing-site, uses: [PAGE-LANDING, PAGE-PRIVACY, PAGE-TERMS] }
+
+nodes:
+  - { id: THEME-LANDING, kind: ui, subtype: theme, app: landing-site, status: implemented,
+      reason_note: "shares Roya brand tokens; marketing-tuned hero/section styles" }
+  - { id: PAGE-LANDING, kind: ui, subtype: page, app: landing-site, route: /, status: implemented,
+      renders: [CMP-HERO, CMP-FEATURE-GRID, CMP-PRICING-TABLE], theme: THEME-LANDING, i18n: true, rtl: true,
+      states: [ready], history: [change-040] }
+  - { id: PAGE-PRIVACY, kind: ui, subtype: page, app: landing-site, route: /privacy, status: implemented, theme: THEME-LANDING, i18n: true, rtl: true, states: [ready], history: [change-040] }
+  - { id: PAGE-TERMS, kind: ui, subtype: page, app: landing-site, route: /terms, status: implemented, theme: THEME-LANDING, i18n: true, rtl: true, states: [ready], history: [change-040] }
+  - { id: CMP-HERO, kind: ui, subtype: component, app: landing-site, status: implemented, theme: THEME-LANDING }
+  - { id: CMP-FEATURE-GRID, kind: ui, subtype: component, app: landing-site, status: implemented, theme: THEME-LANDING }
+  - { id: CMP-PRICING-TABLE, kind: ui, subtype: component, app: landing-site, status: implemented, theme: THEME-LANDING }

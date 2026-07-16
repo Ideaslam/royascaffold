@@ -1,0 +1,8 @@
+# Touches EP-DATA-56 too (same node as change-073) → verify reports a CROSS_PLAN_CONFLICT warning.
+target: EP-DATA-56
+change: bug-014
+status: planned
+reason: "Fix sources[].count to exclude unsynced datasets"
+patch:
+  set:
+    note: "listLite: filter analyticsTable != null before counting per source"

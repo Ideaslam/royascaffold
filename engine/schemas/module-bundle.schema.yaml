@@ -1,0 +1,26 @@
+# A module bundle: project/map/modules/<module>.yaml
+# ONE file per module holds the whole module — thin, one-line nodes. Never one file per method.
+
+module-bundle:
+  required: [module]
+  fields:
+    module: { type: string, doc: "module name; becomes MOD-<UPPER> node" }
+    owner:  { type: string, doc: "domain id that owns this module" }
+    status: { type: enum, values: [planned, partial, implemented, deferred], default: implemented }
+  features:  # each becomes a feature-kind node
+    of: feature   # { id, name, visibility, uses:[node ids] }
+  nodes:     # each is a universal node (see node.schema.yaml)
+    of: node
+
+example: |
+  module: data
+  owner: data-source-engine
+  features:
+    - { id: FEAT-DATA-CONN, name: Manage Connections, visibility: both, uses: [EP-DATA-09, SVC-DATA-CONN] }
+  nodes:
+    - { id: EP-DATA-56, kind: surface, subtype: rest.get, route: /data/datasets/lite,
+        auth: authenticated, status: implemented, calls: [SVC-DATA-DS.listLite],
+        rules: [RULE-PAG-01], history: [change-056, change-068, change-069] }
+    - { id: SVC-DATA-DS, kind: logic, subtype: service, implements: [IF-DATA-DS],
+        methods: [listLite, createFromEntities], deps: [SVC-DATA-CONN, Q-SYNC],
+        rules: [RULE-CRED-PATH-01], status: implemented }

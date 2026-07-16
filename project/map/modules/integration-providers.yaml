@@ -1,0 +1,27 @@
+module: integration-providers
+owner: DOM-PLATFORM
+status: implemented
+
+# The integrations layer (src/integrations/*). Every third-party SDK is wrapped here behind an
+# interface (RULE-GLOBAL-003); services depend on interfaces, not SDK classes.
+features:
+  - { id: FEAT-INTEGRATIONS, name: External Providers, visibility: backend-only,
+      uses: [SVC-EXT-AI, SVC-EXT-MAIL, SVC-EXT-STOR, SVC-EXT-PAY] }
+
+nodes:
+  - { id: SVC-EXT-AI, kind: integration, subtype: sdk, provider: anthropic, status: implemented,
+      methods: [register, resolve, generate, stream, analyzeColumns, generateDashboard],
+      deps: [SVC-AILOG, SVC-AILOG-PRICE],
+      rules: [RULE-GLOBAL-001, RULE-GLOBAL-002, RULE-GLOBAL-003], history: [change-016] }
+  - { id: SVC-EXT-MAIL, kind: integration, subtype: sdk, provider: mailjet, status: implemented,
+      methods: [send], rules: [RULE-GLOBAL-003, RULE-NOTIF-001] }
+  - { id: SVC-EXT-MAIL-TPL, kind: logic, subtype: service, status: implemented,
+      methods: [render], rules: [RULE-GLOBAL-009], history: [change-056] }
+  - { id: SVC-EXT-STOR, kind: integration, subtype: sdk, provider: cloudflare_r2, status: implemented,
+      methods: [upload, getPresignedUrl, delete, download], rules: [RULE-GLOBAL-003, RULE-GLOBAL-009] }
+  - { id: SVC-EXT-PAY, kind: integration, subtype: sdk, provider: payup, status: implemented,
+      methods: [createCheckoutSession, getCheckoutSession, validateWebhookSignature, processWebhookEvent],
+      rules: [RULE-GLOBAL-003, RULE-GLOBAL-009, RULE-SUB-001] }
+  - { id: SVC-EXT-OAUTH, kind: integration, subtype: oauth, provider: "google/microsoft", status: partial,
+      reason: "OAuth login callback is a stub; no integration adapter wired (see auth OAuth login)",
+      intentional_drift: true, deps: [SVC-AUTH], rules: [RULE-AUTH-OAUTH-01, RULE-GLOBAL-009] }

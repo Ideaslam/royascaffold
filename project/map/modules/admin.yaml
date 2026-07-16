@@ -1,0 +1,23 @@
+module: admin
+owner: DOM-PLATFORM
+status: implemented
+
+# Admin overview + workspace administration. Workspace CRUD delegates to SVC-WS admin methods.
+features:
+  - { id: FEAT-ADMIN-OVERVIEW, name: Admin Overview, visibility: admin-panel, uses: [EP-ADMIN-01, SVC-ADMIN, PAGE-ADMIN-OVERVIEW] }
+  - { id: FEAT-ADMIN-WORKSPACES, name: Admin Workspaces, visibility: admin-panel, uses: [EP-ADMIN-02, EP-ADMIN-03, PAGE-ADMIN-WORKSPACES] }
+
+nodes:
+  - { id: SVC-ADMIN, kind: logic, subtype: service, status: implemented,
+      methods: [getOverviewStats], deps: [SVC-AILOG, ENT-SUBSCRIPTION, ENT-USER, ENT-PROJECT, ENT-DASHBOARD], history: [change-010] }
+
+  - { id: EP-ADMIN-01, kind: surface, subtype: rest.get, route: /api/v1/admin/overview/stats, auth: "role:admin", status: implemented, calls: [SVC-ADMIN.getOverviewStats], history: [change-010] }
+  - { id: EP-ADMIN-02, kind: surface, subtype: rest.get, route: /api/v1/admin/workspaces, auth: "role:admin", status: implemented, calls: [SVC-WS.adminListWorkspaces], rules: [RULE-PAG-01], history: [change-010] }
+  - { id: EP-ADMIN-03, kind: surface, subtype: rest.patch, route: /api/v1/admin/workspaces/:id/status, auth: "role:admin", status: implemented, calls: [SVC-WS.adminUpdateStatus], history: [change-010] }
+  - { id: EP-ADMIN-04, kind: surface, subtype: rest.delete, route: /api/v1/admin/workspaces/:id, auth: "role:admin", status: implemented, calls: [SVC-WS.deleteWorkspace], history: [change-010] }
+
+  - { id: PAGE-ADMIN-OVERVIEW, kind: ui, subtype: page, app: admin-panel, route: /admin, status: implemented,
+      calls: [EP-ADMIN-01], renders: [CMP-STAT-CARD], theme: THEME-ROYA, states: [loading, error, ready], history: [change-010, change-017] }
+  - { id: PAGE-ADMIN-WORKSPACES, kind: ui, subtype: page, app: admin-panel, route: /admin/workspaces, status: implemented,
+      calls: [EP-ADMIN-02, EP-ADMIN-03, EP-ADMIN-04], renders: [CMP-STAT-CARD], theme: THEME-ROYA, states: [loading, empty, error, ready], history: [change-010] }
+  - { id: CMP-STAT-CARD, kind: ui, subtype: component, app: admin-panel, status: implemented, theme: THEME-ROYA }

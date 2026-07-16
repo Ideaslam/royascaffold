@@ -1,0 +1,17 @@
+status: PASS
+checks:
+  freshness: FRESH
+  links: OK
+  conflicts: FOUND
+  boundaries: OK
+  drift: SKIPPED (no code_roots present)
+  size: SKIPPED (no code_roots configured)
+errors: []
+warnings:
+  - CROSS_PLAN_CONFLICT EP-DATA-56 touched by bug-014-lite-source-count, change-073-csv-export
+summary:
+  nodes: 466
+  rules: 44
+  changes: 3
+  errors: 0
+  warnings: 1

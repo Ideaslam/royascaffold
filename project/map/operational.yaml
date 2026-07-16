@@ -1,0 +1,27 @@
+# Operational nodes — queues + workers, migrations/seed scripts. Bugs live as changes (type: bug).
+nodes:
+  # --- queues (flow) ---
+  - { id: Q-CSV-ANALYSIS, kind: flow, subtype: queue, worker: present, status: implemented,
+      rules: [RULE-GLOBAL-004, RULE-GLOBAL-005], history: [change-002] }
+  - { id: Q-DATA-SYNC, kind: flow, subtype: queue, worker: present, status: implemented,
+      rules: [RULE-GLOBAL-004, RULE-GLOBAL-005], history: [change-018] }
+  - { id: Q-SCHEMA-DISCOVERY, kind: flow, subtype: queue, worker: present, status: implemented,
+      rules: [RULE-GLOBAL-004], history: [change-058] }
+  - { id: Q-DASH-GENERATION, kind: flow, subtype: queue, worker: present, status: implemented,
+      rules: [RULE-GLOBAL-004, RULE-AI-002], history: [change-020] }
+  - { id: Q-SUB-ACTIVATION, kind: flow, subtype: queue, worker: present, status: implemented,
+      rules: [RULE-GLOBAL-004], history: [change-003] }
+  - { id: Q-SUB-ROLLOVER, kind: flow, subtype: queue, worker: present, status: implemented,
+      reason_note: "repeatable job — resets monthly counters, expires periods", rules: [RULE-GLOBAL-004], history: [change-004] }
+
+  # --- documented queues whose worker is not yet wired → partial with reason (situation 8) ---
+  - { id: Q-PDF-EXPORT, kind: flow, subtype: queue, worker: missing, status: partial,
+      reason: "Queue declared; worker/processor not yet implemented", rules: [RULE-GLOBAL-004] }
+  - { id: Q-CACHE-RECALC, kind: flow, subtype: queue, worker: missing, status: partial,
+      reason: "Cache recalculation queue defined; no worker attached yet", rules: [RULE-GLOBAL-004] }
+
+  # --- migrations / seed scripts ---
+  - { id: MIG-DSTYPE-SEED, kind: flow, subtype: migration, status: implemented,
+      history: [change-048], reason_note: "seed:datasource-types — one doc per DataSourceType enum value" }
+  - { id: MIG-CONN-SPLIT, kind: flow, subtype: migration, status: implemented,
+      history: [change-059], reason_note: "Split legacy DataConnection into Connection + DataSource" }

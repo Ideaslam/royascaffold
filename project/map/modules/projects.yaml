@@ -1,0 +1,25 @@
+module: projects
+owner: DOM-REPORTING
+status: implemented
+
+# Projects are dashboard containers, workspace-scoped via the dynamic collection ws_{slug}_projects.
+features:
+  - { id: FEAT-PROJ, name: Projects, visibility: both, uses: [EP-PROJ-01, EP-PROJ-02, SVC-PROJ, PAGE-PROJECTS] }
+
+nodes:
+  - { id: SVC-PROJ, kind: logic, subtype: service, status: implemented,
+      methods: [create, list, getById, update, delete], deps: [ENT-PROJECT, SVC-AUDIT],
+      rules: [RULE-WS-SCOPE-01, RULE-GLOBAL-010], history: [change-013] }
+
+  - { id: ENT-PROJECT, kind: data, subtype: collection, collection_pattern: "ws_{workspaceSlug}_projects", workspace_scoped: true, status: implemented, history: [change-013] }
+
+  - { id: EP-PROJ-01, kind: surface, subtype: rest.post, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.create] }
+  - { id: EP-PROJ-02, kind: surface, subtype: rest.get, route: /api/v1/projects, auth: authenticated, status: implemented, calls: [SVC-PROJ.list], rules: [RULE-PAG-01] }
+  - { id: EP-PROJ-03, kind: surface, subtype: rest.get, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.getById] }
+  - { id: EP-PROJ-04, kind: surface, subtype: rest.put, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.update] }
+  - { id: EP-PROJ-05, kind: surface, subtype: rest.delete, route: /api/v1/projects/:id, auth: authenticated, status: implemented, calls: [SVC-PROJ.delete] }
+
+  - { id: PAGE-PROJECTS, kind: ui, subtype: page, app: customer-portal, route: /app/projects, status: implemented,
+      calls: [EP-PROJ-02, EP-PROJ-01], renders: [CMP-PROJECT-CARD], theme: THEME-ROYA, i18n: true, rtl: true,
+      states: [loading, empty, error, ready], history: [change-034] }
+  - { id: CMP-PROJECT-CARD, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA }

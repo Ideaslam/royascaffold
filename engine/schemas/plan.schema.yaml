@@ -1,0 +1,38 @@
+# plan.yaml — ordered, resumable steps for one change. THE resume anchor.
+# Close the chat, return in a month: a fresh model reads this and knows the exact next step.
+
+plan:
+  required: [change, current_step, steps]
+  fields:
+    change:       { type: string }
+    title:        { type: string }
+    current_step: { type: integer, doc: "id of the step in progress" }
+    steps:        { type: object[] }
+
+step:
+  required: [id, action, status]
+  fields:
+    id:        { type: integer }
+    action:    { type: string, doc: "e.g. update_entity_map, implement, merge_deltas_to_map" }
+    target:    { type: string, doc: "node id" }
+    targets:   { type: string[] }
+    archetype: { type: string, doc: "skeleton the coder fills" }
+    files:     { type: string[], doc: "exact files to touch" }
+    rules:     { type: string[] }
+    calls:     { type: string[], doc: "nodes to wire to" }
+    accept:    { type: string, doc: "one-line acceptance check for a small coder model" }
+    status:    { type: enum, values: [planned, in_progress, done] }
+
+example: |
+  change: change-072
+  title: Workspace scoping
+  current_step: 3
+  steps:
+    - { id: 1, action: update_entity_map,  target: ENT-USER,    status: done }
+    - { id: 2, action: update_endpoint_map, target: EP-USER-GET, status: done }
+    - { id: 3, action: implement, target: ENT-USER, archetype: entity.workspace-scoped,
+        files: [users/schemas/user.schema.ts], rules: [RULE-WS-SCOPE-01],
+        accept: "user.schema has workspaceId; @map ENT-USER present; verify PASS", status: in_progress }
+    - { id: 4, action: implement, target: EP-USER-GET, archetype: endpoint.crud-list,
+        files: [users/users.controller.ts], accept: "GET /users accepts workspaceId; verify PASS", status: planned }
+    - { id: 5, action: merge_deltas_to_map, status: planned }

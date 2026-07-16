@@ -1,0 +1,22 @@
+# Archetype: a paginated list endpoint. A change declares `archetypes: [endpoint.crud-list]`;
+# verify checks the new surface references the required rules and wires to a logic node.
+
+archetype: endpoint.crud-list
+kind: surface
+requires:
+  rules: [RULE-PAG-01]          # must paginate per the contract
+  edges: [calls]                # must call at least one logic node
+  auth: true                    # must declare an auth level
+must:
+  - "accept ?page & ?limit; cap limit per RULE-PAG-01"
+  - "return { items, page, limit, total }"
+  - "delegate all work to the logic node named in `calls`"
+skeleton:
+  stack: nest+angular
+  file: "{{module}}/{{module}}.controller.ts"
+  code: |
+    /** @map {{ID}} */
+    @Get('{{route}}')
+    async {{method}}(@Query() q: {{QueryDto}}): Promise<PaginatedResponseDto<{{ItemDto}}>> {
+      return this.{{service}}.{{serviceMethod}}(q);   // @map {{CALLS}}
+    }

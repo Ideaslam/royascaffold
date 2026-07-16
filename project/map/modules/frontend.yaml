@@ -1,0 +1,22 @@
+module: frontend
+status: implemented
+
+# The frontend is structured like the backend: shared theme + design tokens + app layouts,
+# then per-module pages (co-located in each module bundle) reference the theme. Two apps share
+# the same brand system; the landing site is a third, lighter app.
+nodes:
+  # ── Design system (the "global style" the pages bind to) ──────────────────────────────────────
+  - { id: THEME-ROYA, kind: ui, subtype: theme, status: implemented,
+      reason_note: "brand tokens: --roya-main #ff6043, --roya-primary #5922ea, --roya-secondary #282828; EN/AR + RTL" }
+  - { id: STYLE-TOKENS, kind: ui, subtype: tokens, status: implemented,
+      reason_note: "color / spacing / typography / radius scales consumed by THEME-ROYA and Tailwind config" }
+  - { id: STYLE-I18N, kind: ui, subtype: i18n, status: implemented,
+      reason_note: "en + ar locale bundles; dir=rtl swap; shared across both apps" }
+
+  # ── App layouts (shell per application) ───────────────────────────────────────────────────────
+  - { id: LAYOUT-PORTAL, kind: ui, subtype: layout, app: customer-portal, status: implemented,
+      renders: [CMP-APP-SIDEBAR, CMP-WS-SWITCHER], theme: THEME-ROYA }
+  - { id: LAYOUT-ADMIN, kind: ui, subtype: layout, app: admin-panel, status: implemented,
+      renders: [CMP-APP-SIDEBAR], theme: THEME-ROYA, history: [change-017] }
+  - { id: CMP-APP-SIDEBAR, kind: ui, subtype: component, status: implemented, theme: THEME-ROYA, history: [change-014] }
+  - { id: CMP-WS-SWITCHER, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA, history: [change-008] }

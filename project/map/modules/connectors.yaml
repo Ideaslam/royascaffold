@@ -1,0 +1,69 @@
+module: connectors
+owner: DOM-DATA
+status: implemented
+
+# The connector engine. Every source implements SVC-CONN-INTERFACE + self-registers in SVC-CONN-REG
+# (extend-by-registration, RULE-ARCH-006). SVC-CONN-INTERFACE is a public contract of DOM-DATA.
+features:
+  - { id: FEAT-CONN-ENGINE, name: Connector Engine, visibility: backend-only, uses: [SVC-CONN-INTERFACE, SVC-CONN-REG] }
+
+nodes:
+  - { id: SVC-CONN-INTERFACE, kind: contract, subtype: interface, status: implemented,
+      methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      rules: [RULE-ARCH-006], history: [change-018, change-045] }
+  - { id: SVC-CONN-REG, kind: logic, subtype: registry, status: implemented,
+      methods: [register, resolve], rules: [RULE-ARCH-006], history: [change-018] }
+
+  # concrete connectors (each implements the interface + registers)
+  - { id: SVC-CONN-CSV, kind: integration, subtype: sdk, provider: csv, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG, SVC-EXT-STOR], rules: [RULE-ARCH-006, RULE-DATA-001], history: [change-022, change-047] }
+  - { id: SVC-CONN-GOOGLE, kind: integration, subtype: sdk, provider: google_sheets, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG, SVC-CONN-GOOGLE-OAUTH], rules: [RULE-ARCH-006, RULE-GLOBAL-009], history: [change-023, change-047] }
+  - { id: SVC-CONN-GOOGLE-OAUTH, kind: integration, subtype: oauth, provider: google, status: implemented,
+      methods: [buildAuthUrl, handleCallback, exchangeCode, refreshToken],
+      deps: [SVC-DATA-CONN], rules: [RULE-GLOBAL-009], history: [change-023] }
+  - { id: SVC-CONN-SHOPIFY, kind: integration, subtype: sdk, provider: shopify, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG], rules: [RULE-ARCH-006], history: [change-024] }
+  - { id: SVC-CONN-SHOPIFY-OAUTH, kind: integration, subtype: oauth, provider: shopify, status: implemented,
+      methods: [buildInstallUrl, exchangeCode, registerWebhooks], deps: [SVC-DATA-CONN],
+      rules: [RULE-GLOBAL-009], history: [change-024] }
+  - { id: SVC-CONN-SHOPIFY-DS, kind: logic, subtype: service, status: implemented,
+      methods: [createEntityDatasets, applyWebhookEvent], deps: [SVC-DATA-DS, SVC-DATA-SYNC, SVC-DATA-WHROUTE],
+      history: [change-024, change-042, change-045] }
+  - { id: SVC-CONN-SALLA, kind: integration, subtype: sdk, provider: salla, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG, SVC-CONN-SALLA-OAUTH], rules: [RULE-ARCH-006], history: [change-025] }
+  - { id: SVC-CONN-SALLA-OAUTH, kind: integration, subtype: oauth, provider: salla, status: implemented,
+      methods: [buildAuthUrl, exchangeCode, refreshAccessToken, validateWebhookHmac], deps: [SVC-DATA-CONN],
+      rules: [RULE-GLOBAL-009], history: [change-025] }
+  - { id: SVC-CONN-SALLA-DS, kind: logic, subtype: service, status: implemented,
+      methods: [connectFromOAuth, createSelectedEntities, applyWebhookEvent],
+      deps: [SVC-DATA-DS, SVC-DATA-SYNC, SVC-DATA-WHROUTE], history: [change-025, change-042, change-045] }
+  - { id: SVC-CONN-ZID, kind: integration, subtype: sdk, provider: zid, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG, SVC-CONN-ZID-OAUTH], rules: [RULE-ARCH-006], history: [change-026] }
+  - { id: SVC-CONN-ZID-OAUTH, kind: integration, subtype: oauth, provider: zid, status: implemented,
+      methods: [buildAuthUrl, exchangeCode, validateWebhookHmac, handleInstall], deps: [SVC-DATA-CONN],
+      rules: [RULE-GLOBAL-009], history: [change-026, change-044] }
+  - { id: SVC-CONN-ZID-DS, kind: logic, subtype: service, status: implemented,
+      methods: [connectFromOAuth, createSelectedEntities, applyWebhookEvent],
+      deps: [SVC-DATA-DS, SVC-DATA-SYNC, SVC-DATA-WHROUTE], history: [change-026, change-042, change-045] }
+  - { id: SVC-CONN-SQLSERVER, kind: integration, subtype: sdk, provider: sql_server, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities, listTables, previewTable],
+      deps: [SVC-CONN-REG, SVC-CONN-SQLSERVER-QB], rules: [RULE-ARCH-006, RULE-GLOBAL-009], history: [change-027] }
+  - { id: SVC-CONN-SQLSERVER-QB, kind: logic, subtype: service, status: implemented,
+      methods: [buildSelectPage, buildSchemaQuery, buildTablesQuery, buildPreviewQuery], history: [change-027] }
+  - { id: SVC-CONN-MONGOATLAS, kind: integration, subtype: sdk, provider: mongodb_atlas, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities, listCollections, previewCollection],
+      deps: [SVC-CONN-REG, SVC-CONN-MONGOATLAS-SAMPLER], rules: [RULE-ARCH-006, RULE-GLOBAL-009], history: [change-028] }
+  - { id: SVC-CONN-MONGOATLAS-SAMPLER, kind: logic, subtype: service, status: implemented,
+      methods: [infer], history: [change-028] }
+  - { id: SVC-CONN-GOOGLE-ADS, kind: integration, subtype: sdk, provider: google_ads, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG], rules: [RULE-ARCH-006], history: [change-067] }
+  - { id: SVC-CONN-META-ADS, kind: integration, subtype: sdk, provider: meta_ads, status: implemented,
+      implements: [SVC-CONN-INTERFACE], methods: [testConnection, discoverSchema, extract, normalize, listEntities],
+      deps: [SVC-CONN-REG], rules: [RULE-ARCH-006], history: [change-070] }

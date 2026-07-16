@@ -1,0 +1,39 @@
+# The universal node — every map artifact, any stack, has this shape.
+# Per-kind fields are additive (documented in `per_kind` below). The engine validates `kind`,
+# `status`, edge resolution, and rule references; everything else is free-form intent.
+
+node:
+  required: [id, kind, status]
+  fields:
+    id:       { type: string, doc: "stable, unique; PREFIX-{MODULE}-{NN} or PREFIX-{NAME}" }
+    kind:     { type: enum, values: [surface, ui, logic, contract, data, integration, flow, rule, boundary, domain, feature, module] }
+    subtype:  { type: string, doc: "stack label declared in profile.yaml (e.g. rest.get)" }
+    status:   { type: enum, values: [planned, partial, implemented, deferred] }
+    reason:   { type: string, doc: "required when status is partial or deferred" }
+    intentional_drift: { type: boolean, doc: "documented-but-not-coded on purpose; verify won't flag" }
+    module:   { type: string }
+    location: { type: string, doc: "optional pointer; the @map annotation is the real link" }
+    history:  { type: string[], doc: "change ids that touched this node" }
+    rules:    { type: string[], doc: "rule ids this node must obey" }
+  edges:      # any of these resolve to node ids (method-level allowed: SVC-X.method)
+    calls:      { doc: "surfaces/logic this node invokes" }
+    uses:       { doc: "features/nodes this grouping references" }
+    deps:       { doc: "repositories/other services depended on" }
+    implements: { doc: "contract ids this logic satisfies" }
+    renders:    { doc: "ui children a page/layout renders" }
+    owns:       { doc: "modules a domain owns" }
+    contracts:  { doc: "public node ids a domain exposes" }
+
+per_kind:
+  surface:     { extra: [route, auth, calls], doc: "endpoint/handler/screen/section" }
+  ui:          { extra: [route, calls, renders, i18n, rtl, theme], doc: "page/component/layout/theme; calls = endpoint ids" }
+  logic:       { extra: [implements, deps, methods], doc: "methods = public method names only (light)" }
+  contract:    { extra: [di_token, methods, implemented_by], doc: "interface/port" }
+  data:        { extra: [collection, collection_pattern, workspace_scoped, legacy], doc: "entity/collection" }
+  integration: { extra: [provider, env, secrets], doc: "external adapter" }
+  flow:        { extra: [subtype, worker, owner, order, overrides], doc: "queue/worker/cron/pipeline" }
+  rule:        { see: rule.schema.yaml }
+  boundary:    { extra: [from, to, mode, enforce], doc: "mode: contract-only" }
+  domain:      { extra: [owns, contracts, layer], doc: "ownership zone" }
+  feature:     { extra: [name, visibility, uses], doc: "visibility: both|backend-only|frontend-only|admin-panel" }
+  module:      { extra: [name, owner], doc: "auto-created from bundle header" }

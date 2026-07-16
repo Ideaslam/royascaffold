@@ -1,0 +1,70 @@
+module: workspace
+owner: DOM-PLATFORM
+status: implemented
+
+# Multi-tenancy root. Each workspace owns dynamic ws_{slug}_* collections. Membership drives the
+# workspace-role auth layer (SVC-GUARD-WSROLE).
+features:
+  - { id: FEAT-WS-MGMT, name: Workspace Management, visibility: both, uses: [EP-WS-01, EP-WS-07, SVC-WS, PAGE-WORKSPACE-SETTINGS] }
+  - { id: FEAT-WS-INVITE, name: Invitations, visibility: both, uses: [EP-WS-11, EP-WS-15, SVC-WS-INVITE] }
+  - { id: FEAT-WS-BRAND, name: Branding, visibility: customer-portal, uses: [EP-WS-16, EP-WS-17, SVC-WS-BRAND] }
+  - { id: FEAT-WS-ONBOARD, name: Onboarding, visibility: customer-portal, uses: [EP-WS-20, EP-WS-21, SVC-WS-ONBOARD], history: [change-006] }
+
+nodes:
+  - { id: SVC-WS, kind: logic, subtype: service, status: implemented,
+      methods: [createWorkspace, getWorkspace, updateWorkspace, checkSlugAvailability, switchWorkspace, deleteWorkspace,
+                listUserWorkspaces, adminListWorkspaces, adminUpdateStatus],
+      deps: [ENT-WORKSPACE, ENT-WS-MEMBERSHIP, ENT-WS-BRANDING, ENT-ONBOARDING, ENT-WS-INVITATION, ENT-USER, SVC-AUDIT, SVC-SUB],
+      rules: [RULE-WS-SCOPE-01, RULE-GLOBAL-010], history: [change-008, change-056] }
+  - { id: SVC-WS-MEMBER, kind: logic, subtype: service, status: implemented,
+      methods: [listMembers, removeMember, changeRole], deps: [ENT-WS-MEMBERSHIP, SVC-AUDIT], history: [change-008] }
+  - { id: SVC-WS-INVITE, kind: logic, subtype: service, status: implemented,
+      methods: [invite, resendInvite, revokeInvite, acceptInvitation, listInvitations],
+      deps: [ENT-WS-INVITATION, ENT-WS-MEMBERSHIP, SVC-EXT-MAIL, SVC-PAY-CHKOUT],
+      rules: [RULE-NOTIF-001, RULE-SUB-001], history: [change-007, change-008, change-009] }
+  - { id: SVC-WS-BRAND, kind: logic, subtype: service, status: implemented,
+      methods: [uploadLogo, selectColorTemplate, getBranding, deleteLogo],
+      deps: [ENT-WS-BRANDING, SVC-EXT-STOR, ENT-COLOR-TPL], rules: [RULE-GLOBAL-009] }
+  - { id: SVC-WS-ONBOARD, kind: logic, subtype: service, status: implemented,
+      methods: [getProgress, updateProgress], deps: [ENT-ONBOARDING], history: [change-006] }
+
+  # data
+  - { id: ENT-WORKSPACE, kind: data, subtype: collection, collection: workspaces, workspace_scoped: false, status: implemented, history: [change-008] }
+  - { id: ENT-WS-MEMBERSHIP, kind: data, subtype: collection, collection: workspacememberships, workspace_scoped: false, status: implemented, history: [change-008] }
+  - { id: ENT-WS-BRANDING, kind: data, subtype: collection, collection: workspacebrandings, workspace_scoped: false, status: implemented }
+  - { id: ENT-WS-INVITATION, kind: data, subtype: collection, collection: workspaceinvitations, workspace_scoped: false, status: implemented, history: [change-007] }
+  - { id: ENT-ONBOARDING, kind: data, subtype: collection, collection: onboardingprogress, workspace_scoped: false, status: implemented, history: [change-006] }
+
+  # surfaces
+  - { id: EP-WS-01, kind: surface, subtype: rest.post, route: /api/v1/workspaces, auth: authenticated, status: implemented, calls: [SVC-WS.createWorkspace] }
+  - { id: EP-WS-02, kind: surface, subtype: rest.get, route: /api/v1/workspaces/me, auth: authenticated, status: implemented, calls: [SVC-WS.listUserWorkspaces] }
+  - { id: EP-WS-03, kind: surface, subtype: rest.get, route: /api/v1/workspaces/slug-availability, auth: authenticated, status: implemented, calls: [SVC-WS.checkSlugAvailability] }
+  - { id: EP-WS-04, kind: surface, subtype: rest.get, route: /api/v1/workspaces/:id, auth: "ws-role:member", status: implemented, calls: [SVC-WS.getWorkspace] }
+  - { id: EP-WS-05, kind: surface, subtype: rest.patch, route: /api/v1/workspaces/:id, auth: "ws-role:owner", status: implemented, calls: [SVC-WS.updateWorkspace] }
+  - { id: EP-WS-06, kind: surface, subtype: rest.delete, route: /api/v1/workspaces/:id, auth: "ws-role:owner", status: implemented, calls: [SVC-WS.deleteWorkspace] }
+  - { id: EP-WS-07, kind: surface, subtype: rest.post, route: /api/v1/workspaces/switch, auth: authenticated, status: implemented, calls: [SVC-WS.switchWorkspace] }
+  - { id: EP-WS-08, kind: surface, subtype: rest.get, route: /api/v1/workspaces/:id/members, auth: "ws-role:member", status: implemented, calls: [SVC-WS-MEMBER.listMembers] }
+  - { id: EP-WS-09, kind: surface, subtype: rest.delete, route: /api/v1/workspaces/:id/members/:userId, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-MEMBER.removeMember] }
+  - { id: EP-WS-10, kind: surface, subtype: rest.patch, route: /api/v1/workspaces/:id/members/:userId/role, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-MEMBER.changeRole] }
+  - { id: EP-WS-11, kind: surface, subtype: rest.post, route: /api/v1/workspaces/:id/invite, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-INVITE.invite], rules: [RULE-SUB-001], history: [change-009] }
+  - { id: EP-WS-12, kind: surface, subtype: rest.get, route: /api/v1/workspaces/:id/invitations, auth: "ws-role:member", status: implemented, calls: [SVC-WS-INVITE.listInvitations] }
+  - { id: EP-WS-13, kind: surface, subtype: rest.post, route: /api/v1/workspaces/invitations/:invitationId/resend, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-INVITE.resendInvite], history: [change-007] }
+  - { id: EP-WS-14, kind: surface, subtype: rest.delete, route: /api/v1/workspaces/invitations/:invitationId, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-INVITE.revokeInvite] }
+  - { id: EP-WS-15, kind: surface, subtype: rest.get, route: /api/v1/workspaces/invitation/accept, auth: public, status: implemented, calls: [SVC-WS-INVITE.acceptInvitation], rules: [RULE-GLOBAL-011], history: [change-006] }
+  - { id: EP-WS-16, kind: surface, subtype: rest.get, route: /api/v1/workspaces/:id/branding, auth: "ws-role:member", status: implemented, calls: [SVC-WS-BRAND.getBranding] }
+  - { id: EP-WS-17, kind: surface, subtype: rest.post, route: /api/v1/workspaces/:id/branding/logo, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-BRAND.uploadLogo], rules: [RULE-GLOBAL-009] }
+  - { id: EP-WS-18, kind: surface, subtype: rest.delete, route: /api/v1/workspaces/:id/branding/logo, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-BRAND.deleteLogo] }
+  - { id: EP-WS-19, kind: surface, subtype: rest.patch, route: /api/v1/workspaces/:id/branding/color-template, auth: "ws-role:owner", status: implemented, calls: [SVC-WS-BRAND.selectColorTemplate] }
+  - { id: EP-WS-20, kind: surface, subtype: rest.get, route: /api/v1/onboarding/progress, auth: authenticated, status: implemented, calls: [SVC-WS-ONBOARD.getProgress] }
+  - { id: EP-WS-21, kind: surface, subtype: rest.patch, route: /api/v1/onboarding/progress, auth: authenticated, status: implemented, calls: [SVC-WS-ONBOARD.updateProgress] }
+
+  # frontend
+  - { id: PAGE-WORKSPACE-SETTINGS, kind: ui, subtype: page, app: customer-portal, route: /app/workspace, status: implemented,
+      calls: [EP-WS-04, EP-WS-05, EP-WS-08, EP-WS-11, EP-WS-16, EP-WS-17, EP-WS-19], renders: [CMP-MEMBER-LIST, CMP-BRAND-PICKER],
+      theme: THEME-ROYA, i18n: true, rtl: true, states: [loading, error, ready], history: [change-004, change-008] }
+  - { id: PAGE-ONBOARDING, kind: ui, subtype: page, app: customer-portal, route: /app/onboarding, status: implemented,
+      calls: [EP-WS-20, EP-WS-21], theme: THEME-ROYA, i18n: true, rtl: true, states: [ready], history: [change-006] }
+  - { id: PAGE-ACCEPT-INVITE, kind: ui, subtype: page, app: customer-portal, route: /workspaces/accept, status: implemented,
+      calls: [EP-WS-15], theme: THEME-ROYA, i18n: true, rtl: true, states: [ready, error], history: [change-006, change-007] }
+  - { id: CMP-MEMBER-LIST, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA }
+  - { id: CMP-BRAND-PICKER, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA }

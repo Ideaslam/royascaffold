@@ -1,0 +1,13 @@
+target: EP-EXPORT-04
+change: change-073
+status: planned
+creates: true
+reason: "New CSV export endpoint"
+patch:
+  set:
+    kind: surface
+    subtype: rest.get
+    module: export
+    route: /api/v1/data/datasets/export
+    auth: authenticated
+    status: implemented

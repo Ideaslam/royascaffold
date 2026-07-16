@@ -1,0 +1,26 @@
+# change.yaml — metadata for one change (feature or bug). Lives in changes/<id>/change.yaml.
+# A change may be a simple change or a multi-phase PROGRAM (phases[] each with sub-plans).
+
+change:
+  required: [id, title, type, owner, status]
+  fields:
+    id:      { type: string, doc: "change-NNN or bug-NNN" }
+    title:   { type: string }
+    type:    { type: enum, values: [feature, bug, refactor] }
+    owner:   { type: enum, values: [business, support, dev], doc: "who planned it" }
+    status:  { type: enum, values: [planned, in_progress, implemented, cancelled] }
+    rationale: { type: string, doc: "one line — the why" }
+    acceptance: { type: string[], doc: "acceptance criteria" }
+    archetypes: { type: string[], doc: "structural contracts this change must satisfy" }
+    phases:  { type: object[], doc: "optional; for programs: [{ id, title, plan, deltas }]" }
+
+example: |
+  id: change-072
+  title: Workspace scoping
+  type: feature
+  owner: business
+  status: in_progress
+  rationale: "Scope users and their queries to a workspace"
+  acceptance:
+    - "ENT-USER has workspaceId; EP-USER-GET accepts workspaceId; verify PASS"
+  archetypes: [endpoint.crud-list]

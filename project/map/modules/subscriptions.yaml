@@ -1,0 +1,60 @@
+module: subscriptions
+owner: DOM-PLATFORM
+status: implemented
+
+# Plan catalog + per-workspace subscription lifecycle + extensible quota enforcement (limit registry).
+features:
+  - { id: FEAT-SUB-SELF, name: Self-service Subscribe, visibility: customer-portal, uses: [EP-SUB-14, EP-SUB-18, SVC-SUB, PAGE-SUBSCRIPTIONS] }
+  - { id: FEAT-SUB-ADMIN, name: Plans + Assignment (admin), visibility: admin-panel, uses: [EP-SUB-03, EP-SUB-11, SVC-SUB, PAGE-ADMIN-SUBSCRIPTIONS] }
+  - { id: FEAT-SUB-LIMITS, name: Quota Enforcement, visibility: backend-only, uses: [SVC-SUB-LIM] }
+
+nodes:
+  - { id: SVC-SUB, kind: logic, subtype: service, status: implemented,
+      methods: [listPlans, assignDefaultFreePlan, listAllPlans, createPlan, updatePlan, deletePlan, getMySubscription,
+                selfSubscribe, selfCancel, selfUpgrade, selfDowngrade, listAllSubscriptions, getSubscriptionById,
+                createSubscription, updateSubscription, assignSubscription, changeSubscription, cancelSubscription,
+                activateFromPayment, activateSubscription, deactivateSubscription, listPendingPayments, payPendingInvoice],
+      deps: [ENT-SUBSCRIPTION, ENT-PLAN, ENT-USER, SVC-AUDIT, SVC-PAY-CHKOUT, SVC-SUB-LIM, Q-SUB-ACTIVATION],
+      rules: [RULE-SUB-001, RULE-SUB-002, RULE-GLOBAL-010], history: [change-001, change-003, change-004, change-005, change-056] }
+
+  - { id: SVC-SUB-LIM, kind: logic, subtype: registry, status: implemented,
+      methods: [check, assertAllowed, incrementUsage, buildUsageEnvelope, assertResourceUnlocked,
+                incrementSyncedRows, incrementSyncsToday, checkSyncAllowed],
+      deps: [ENT-SUBSCRIPTION, ENT-DASHBOARD], rules: [RULE-GLOBAL-007, RULE-SUB-002, RULE-ARCH-006], history: [change-004, change-029] }
+
+  - { id: SVC-SUB-ROLL, kind: logic, subtype: worker, status: implemented,
+      methods: [process], deps: [ENT-SUBSCRIPTION, Q-SUB-ROLLOVER], rules: [RULE-GLOBAL-004], history: [change-004] }
+
+  - { id: ENT-SUBSCRIPTION, kind: data, subtype: collection, collection: usersubscriptions, workspace_scoped: false, status: implemented, history: [change-004] }
+  - { id: ENT-PLAN, kind: data, subtype: collection, collection: subscriptionplans, workspace_scoped: false, status: implemented }
+
+  # surfaces
+  - { id: EP-SUB-01, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/plans, auth: authenticated, status: implemented, calls: [SVC-SUB.listPlans] }
+  - { id: EP-SUB-02, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/plans/all, auth: "role:admin", status: implemented, calls: [SVC-SUB.listAllPlans] }
+  - { id: EP-SUB-03, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/plans, auth: "role:admin", status: implemented, calls: [SVC-SUB.createPlan] }
+  - { id: EP-SUB-04, kind: surface, subtype: rest.put, route: /api/v1/subscriptions/plans/:id, auth: "role:admin", status: implemented, calls: [SVC-SUB.updatePlan] }
+  - { id: EP-SUB-05, kind: surface, subtype: rest.delete, route: /api/v1/subscriptions/plans/:id, auth: "role:admin", status: implemented, calls: [SVC-SUB.deletePlan] }
+  - { id: EP-SUB-06, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/me, auth: authenticated, status: implemented, calls: [SVC-SUB.getMySubscription], history: [change-004] }
+  - { id: EP-SUB-07, kind: surface, subtype: rest.get, route: /api/v1/subscriptions, auth: "role:admin", status: implemented, calls: [SVC-SUB.listAllSubscriptions], rules: [RULE-PAG-01] }
+  - { id: EP-SUB-08, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/:id, auth: "role:admin", status: implemented, calls: [SVC-SUB.getSubscriptionById] }
+  - { id: EP-SUB-09, kind: surface, subtype: rest.post, route: /api/v1/subscriptions, auth: "role:admin", status: implemented, calls: [SVC-SUB.createSubscription] }
+  - { id: EP-SUB-10, kind: surface, subtype: rest.put, route: /api/v1/subscriptions/:id, auth: "role:admin", status: implemented, calls: [SVC-SUB.updateSubscription] }
+  - { id: EP-SUB-11, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/assign, auth: "role:admin", status: implemented, calls: [SVC-SUB.assignSubscription], history: [change-005] }
+  - { id: EP-SUB-12, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/change, auth: "role:admin", status: implemented, calls: [SVC-SUB.changeSubscription], history: [change-005] }
+  - { id: EP-SUB-13, kind: surface, subtype: rest.patch, route: /api/v1/subscriptions/:userId/cancel, auth: "role:admin", status: implemented, calls: [SVC-SUB.cancelSubscription] }
+  - { id: EP-SUB-14, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/subscribe, auth: authenticated, status: implemented, calls: [SVC-SUB.selfSubscribe], rules: [RULE-SUB-001, RULE-SUB-002], history: [change-003, change-004, change-005] }
+  - { id: EP-SUB-15, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/cancel, auth: authenticated, status: implemented, calls: [SVC-SUB.selfCancel] }
+  - { id: EP-SUB-16, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/:id/activate, auth: "role:admin", status: implemented, calls: [SVC-SUB.activateSubscription], history: [change-004] }
+  - { id: EP-SUB-17, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/:id/deactivate, auth: "role:admin", status: implemented, calls: [SVC-SUB.deactivateSubscription], history: [change-005] }
+  - { id: EP-SUB-18, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/upgrade, auth: authenticated, status: implemented, calls: [SVC-SUB.selfUpgrade], rules: [RULE-SUB-002], history: [change-005] }
+  - { id: EP-SUB-19, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/downgrade, auth: authenticated, status: implemented, calls: [SVC-SUB.selfDowngrade], rules: [RULE-SUB-002], history: [change-005] }
+  - { id: EP-SUB-20, kind: surface, subtype: rest.get, route: /api/v1/subscriptions/me/pending-payments, auth: authenticated, status: implemented, calls: [SVC-SUB.listPendingPayments], history: [change-005] }
+  - { id: EP-SUB-21, kind: surface, subtype: rest.post, route: /api/v1/subscriptions/payments/:paymentId/pay, auth: authenticated, status: implemented, calls: [SVC-SUB.payPendingInvoice], history: [change-005] }
+
+  # frontend
+  - { id: PAGE-SUBSCRIPTIONS, kind: ui, subtype: page, app: customer-portal, route: /app/subscriptions, status: implemented,
+      calls: [EP-SUB-01, EP-SUB-06, EP-SUB-14, EP-SUB-18, EP-SUB-19, EP-SUB-20, EP-SUB-21], renders: [CMP-PLAN-CARD],
+      theme: THEME-ROYA, i18n: true, rtl: true, states: [loading, error, ready], history: [change-013] }
+  - { id: PAGE-ADMIN-SUBSCRIPTIONS, kind: ui, subtype: page, app: admin-panel, route: /admin/subscriptions, status: implemented,
+      calls: [EP-SUB-02, EP-SUB-03, EP-SUB-07, EP-SUB-11], theme: THEME-ROYA, states: [loading, empty, error, ready], history: [change-002, change-010] }
+  - { id: CMP-PLAN-CARD, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA, history: [change-013] }

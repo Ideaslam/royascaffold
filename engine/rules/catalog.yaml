@@ -1,0 +1,33 @@
+# Generic, stack-neutral rule catalog. A project adopts what it needs into project/map/rules.yaml
+# (verify reads the project's rules.yaml — this file is the reusable library, not a live source).
+
+rules:
+  - id: RULE-PAG-01
+    scope: global
+    title: Pagination contract
+    applies_to: [surface]
+    constraint: "List endpoints paginate via ?page&limit; response { items, page, limit, total }; cap limit at 100"
+
+  - id: RULE-AUTH-01
+    scope: global
+    title: Declare auth
+    applies_to: [surface]
+    constraint: "Every surface declares an auth level (public | authenticated | role:<name>); no implicit public"
+
+  - id: RULE-SECRET-01
+    scope: global
+    title: Never expose secrets
+    applies_to: [logic, integration, surface]
+    constraint: "Credentials are encrypted at rest and never returned in a response or logged"
+
+  - id: RULE-REGISTER-01
+    scope: architecture
+    title: Extend by registration
+    applies_to: [integration, flow]
+    constraint: "New sources/steps/providers implement an interface + one registry entry; no kernel edit or switch"
+
+  - id: RULE-BOUNDARY-01
+    scope: architecture
+    title: Contract-only across domains
+    applies_to: [logic, surface]
+    constraint: "A domain may only import another domain's public contracts, never its internals"

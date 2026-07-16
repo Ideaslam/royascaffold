@@ -1,0 +1,21 @@
+module: notifications
+owner: DOM-PLATFORM
+status: implemented
+
+features:
+  - { id: FEAT-NOTIF, name: In-app Notifications, visibility: customer-portal, uses: [EP-NOTIF-01, EP-NOTIF-02, SVC-NOTIF, PAGE-NOTIFICATIONS] }
+
+nodes:
+  - { id: SVC-NOTIF, kind: logic, subtype: service, status: implemented,
+      methods: [notify, listNotifications, markAsRead, markAllAsRead, countUnread],
+      deps: [ENT-NOTIFICATION, SVC-EXT-MAIL], rules: [RULE-NOTIF-001], history: [change-029] }
+
+  - { id: ENT-NOTIFICATION, kind: data, subtype: collection, collection: notifications, workspace_scoped: false, status: implemented }
+
+  - { id: EP-NOTIF-01, kind: surface, subtype: rest.get, route: /api/v1/notifications, auth: authenticated, status: implemented, calls: [SVC-NOTIF.listNotifications], rules: [RULE-PAG-01] }
+  - { id: EP-NOTIF-02, kind: surface, subtype: rest.get, route: /api/v1/notifications/unread-count, auth: authenticated, status: implemented, calls: [SVC-NOTIF.countUnread] }
+  - { id: EP-NOTIF-03, kind: surface, subtype: rest.patch, route: /api/v1/notifications/:id/read, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAsRead] }
+  - { id: EP-NOTIF-04, kind: surface, subtype: rest.patch, route: /api/v1/notifications/read-all, auth: authenticated, status: implemented, calls: [SVC-NOTIF.markAllAsRead] }
+
+  - { id: PAGE-NOTIFICATIONS, kind: ui, subtype: page, app: customer-portal, route: /app/notifications, status: implemented,
+      calls: [EP-NOTIF-01, EP-NOTIF-02, EP-NOTIF-03, EP-NOTIF-04], theme: THEME-ROYA, i18n: true, rtl: true, states: [loading, empty, error, ready] }

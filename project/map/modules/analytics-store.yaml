@@ -1,0 +1,35 @@
+module: analytics-store
+owner: DOM-DATA
+status: implemented
+
+# OLAP engine layer. Engine-neutral operations resolve the workspace's active OLAP engine via a
+# strategy registry (extend-by-registration). Table naming ds_{workspaceSlug}_{datasetId} enforced here.
+features:
+  - { id: FEAT-OLAP, name: Analytics Store, visibility: backend-only, uses: [SVC-OLAP-STORE, SVC-OLAP-ENGINE] }
+
+nodes:
+  - { id: IF-OLAP-ENGINE, kind: contract, subtype: interface, status: implemented,
+      methods: [createTable, dropTable, insert, query, createView], rules: [RULE-ARCH-006] }
+  - { id: SVC-OLAP-ENGINE, kind: logic, subtype: registry, status: implemented,
+      methods: [register, resolve], rules: [RULE-ARCH-006] }
+  - { id: SVC-OLAP-CH, kind: integration, subtype: sdk, provider: clickhouse, status: implemented,
+      implements: [IF-OLAP-ENGINE], deps: [SVC-OLAP-ENGINE] }
+  - { id: SVC-OLAP-BQ, kind: integration, subtype: sdk, provider: bigquery, status: implemented,
+      implements: [IF-OLAP-ENGINE], deps: [SVC-OLAP-ENGINE] }
+
+  - { id: SVC-OLAP-STORE, kind: logic, subtype: service, status: implemented,
+      methods: [createDatasetTable, dropDatasetTable, insertRows, createCanonicalView, runQuery,
+                defineAggregate, distinctValues, searchValues, cacheGet, cacheSet, cacheInvalidate],
+      deps: [SVC-OLAP-ENGINE], rules: [RULE-GLOBAL-006] }
+  - { id: SVC-OLAP-BENCH, kind: logic, subtype: service, status: implemented,
+      methods: [runBenchmark, getResult], deps: [SVC-OLAP-STORE, ENT-OLAP-BENCH] }
+  - { id: ENT-OLAP-BENCH, kind: data, subtype: collection, collection: olap_benchmark_runs, workspace_scoped: false, status: implemented }
+
+  # admin benchmark surfaces
+  - { id: EP-AS-01, kind: surface, subtype: rest.post, route: /api/v1/admin/olap/benchmark, auth: "role:admin",
+      status: implemented, calls: [SVC-OLAP-BENCH.runBenchmark], rules: [RULE-GLOBAL-004] }
+  - { id: EP-AS-02, kind: surface, subtype: rest.get, route: /api/v1/admin/olap/benchmark/:id, auth: "role:admin",
+      status: implemented, calls: [SVC-OLAP-BENCH.getResult] }
+
+  - { id: PAGE-ADMIN-ANALYTICS-STORE, kind: ui, subtype: page, app: admin-panel, route: /admin/analytics-store, status: implemented,
+      calls: [EP-AS-01, EP-AS-02], theme: THEME-ROYA, states: [loading, empty, error, ready] }

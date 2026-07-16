@@ -1,0 +1,19 @@
+# Archetype: a workspace-scoped entity. Used when a change adds a workspace boundary to data.
+
+archetype: entity.workspace-scoped
+kind: data
+requires:
+  rules: [RULE-WS-SCOPE-01]
+must:
+  - "carry a workspace reference (workspaceId or a dynamic ws_{slug}_* collection)"
+  - "every query filters by the workspace — never leak cross-workspace rows"
+skeleton:
+  stack: nest+angular
+  file: "{{module}}/schemas/{{name}}.schema.ts"
+  code: |
+    /** @map {{ID}} */
+    @Schema({ collection: '{{collection}}' })
+    export class {{Name}} {
+      @Prop({ type: Types.ObjectId, ref: 'Workspace', index: true })
+      workspaceId: Types.ObjectId;   // @map {{ID}} — added by {{CHANGE}}
+    }

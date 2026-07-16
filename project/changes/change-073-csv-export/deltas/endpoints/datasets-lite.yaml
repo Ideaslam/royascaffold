@@ -1,0 +1,9 @@
+# NOTE: this change and bug-014 both patch EP-DATA-56 — verify flags the cross-plan conflict so the
+# two teams (business + support) coordinate instead of overwriting each other.
+target: EP-DATA-56
+change: change-073
+status: planned
+reason: "Add a ?format=csv hint used by the export button"
+patch:
+  query:
+    add: [format]

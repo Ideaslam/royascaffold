@@ -1,0 +1,13 @@
+module: background-jobs
+owner: DOM-PLATFORM
+status: implemented
+
+# Global job-tracking helper + BullMQ queue registration. Job records let the frontend poll progress.
+features:
+  - { id: FEAT-BGJOBS, name: Background Job Tracking, visibility: backend-only, uses: [SVC-BGJOBS] }
+
+nodes:
+  - { id: SVC-BGJOBS, kind: logic, subtype: service, status: implemented,
+      methods: [getJobStatus, createJob], deps: [ENT-BGJOB], rules: [RULE-GLOBAL-004], history: [change-058] }
+
+  - { id: ENT-BGJOB, kind: data, subtype: collection, collection: backgroundjobs, workspace_scoped: false, status: implemented }

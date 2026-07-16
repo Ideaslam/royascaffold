@@ -1,0 +1,22 @@
+# Archetype: a new pipeline step. Registers into the step seam; applies to every source automatically.
+
+archetype: pipeline.step
+kind: flow
+subtype: pipeline-step
+requires:
+  register: STEP-REGISTRY
+must:
+  - "declare inputs + outputs; be idempotent (safe to re-run)"
+  - "register through the step seam — never seed steps in the kernel"
+  - "not assume a specific source; operate on the canonical row shape"
+skeleton:
+  stack: nest+angular
+  file: "data/pipeline/steps/{{name}}.step.ts"
+  code: |
+    /** @map {{ID}} */
+    export class {{Name}}Step implements PipelineStep {
+      readonly name = '{{name}}';
+      readonly order = {{order}};
+      async run(ctx: PipelineCtx, input: StepInput): Promise<StepOutput> { /* idempotent */ }
+    }
+    stepRegistry.register(new {{Name}}Step());

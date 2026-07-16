@@ -1,0 +1,47 @@
+module: templates
+owner: DOM-REPORTING
+status: implemented
+
+# Canonical dashboard-template catalog (change-049): global industries -> fields -> templates.
+# Blueprints reference only canonical dictionary fields; validated on write + at seed.
+features:
+  - { id: FEAT-TPL-BROWSE, name: Template Catalog (customer), visibility: customer-portal, uses: [EP-TPL-01, EP-TPL-02, EP-TPL-03, EP-TPL-04, SVC-TPL] }
+  - { id: FEAT-TPL-ADMIN, name: Template Catalog (admin), visibility: admin-panel, uses: [EP-TPL-11, EP-TPL-21, SVC-TPL, PAGE-ADMIN-TEMPLATES] }
+
+nodes:
+  - { id: SVC-TPL, kind: logic, subtype: service, status: implemented,
+      methods: [listIndustries, createIndustry, updateIndustry, toggleIndustryActive, deleteIndustry,
+                listFields, createField, updateField, toggleFieldActive, deleteField,
+                listTemplates, getTemplate, createTemplate, updateTemplate, toggleTemplateActive, deleteTemplate, validateBlueprint],
+      deps: [ENT-TPL-INDUSTRY, ENT-TPL-FIELD, ENT-DASH-TEMPLATE, ENT-WIDGETDEF],
+      rules: [RULE-TPL-001], history: [change-049] }
+  - { id: SVC-TPL-SEED, kind: logic, subtype: service, status: implemented,
+      methods: [seed], deps: [SVC-TPL], rules: [RULE-ARCH-006], history: [change-049] }
+
+  - { id: ENT-TPL-INDUSTRY, kind: data, subtype: collection, collection: template_industries, workspace_scoped: false, status: implemented, history: [change-049] }
+  - { id: ENT-TPL-FIELD, kind: data, subtype: collection, collection: template_industry_fields, workspace_scoped: false, status: implemented, history: [change-049] }
+  - { id: ENT-DASH-TEMPLATE, kind: data, subtype: collection, collection: dashboard_templates, workspace_scoped: false, status: implemented, history: [change-049] }
+
+  # customer browse
+  - { id: EP-TPL-01, kind: surface, subtype: rest.get, route: /api/v1/templates/industries, auth: authenticated, status: implemented, calls: [SVC-TPL.listIndustries], history: [change-049] }
+  - { id: EP-TPL-02, kind: surface, subtype: rest.get, route: /api/v1/templates, auth: authenticated, status: implemented, calls: [SVC-TPL.listTemplates], history: [change-049] }
+  - { id: EP-TPL-03, kind: surface, subtype: rest.get, route: /api/v1/templates/:id, auth: authenticated, status: implemented, calls: [SVC-TPL.getTemplate], history: [change-049] }
+  - { id: EP-TPL-04, kind: surface, subtype: rest.get, route: /api/v1/templates/:id/matching-datasets, auth: authenticated, status: implemented, calls: [IF-DATA-RESOLVER.listBySemanticFlags], rules: [RULE-DATA-005], history: [change-049] }
+  # admin CRUD
+  - { id: EP-TPL-10, kind: surface, subtype: rest.get, route: /api/v1/admin/template-catalog/industries, auth: "role:admin", status: implemented, calls: [SVC-TPL.listIndustries], history: [change-049] }
+  - { id: EP-TPL-11, kind: surface, subtype: rest.post, route: /api/v1/admin/template-catalog/industries, auth: "role:admin", status: implemented, calls: [SVC-TPL.createIndustry], history: [change-049] }
+  - { id: EP-TPL-12, kind: surface, subtype: rest.patch, route: /api/v1/admin/template-catalog/industries/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.updateIndustry], history: [change-049] }
+  - { id: EP-TPL-13, kind: surface, subtype: rest.patch, route: /api/v1/admin/template-catalog/industries/:id/toggle, auth: "role:admin", status: implemented, calls: [SVC-TPL.toggleIndustryActive], history: [change-049] }
+  - { id: EP-TPL-14, kind: surface, subtype: rest.delete, route: /api/v1/admin/template-catalog/industries/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.deleteIndustry], history: [change-049] }
+  - { id: EP-TPL-15, kind: surface, subtype: rest.get, route: /api/v1/admin/template-catalog/industries/:id/fields, auth: "role:admin", status: implemented, calls: [SVC-TPL.listFields], history: [change-049] }
+  - { id: EP-TPL-16, kind: surface, subtype: rest.post, route: /api/v1/admin/template-catalog/industries/:id/fields, auth: "role:admin", status: implemented, calls: [SVC-TPL.createField], history: [change-049] }
+  - { id: EP-TPL-17, kind: surface, subtype: rest.patch, route: /api/v1/admin/template-catalog/fields/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.updateField], history: [change-049] }
+  - { id: EP-TPL-18, kind: surface, subtype: rest.delete, route: /api/v1/admin/template-catalog/fields/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.deleteField], history: [change-049] }
+  - { id: EP-TPL-19, kind: surface, subtype: rest.get, route: /api/v1/admin/template-catalog/fields/:id/templates, auth: "role:admin", status: implemented, calls: [SVC-TPL.listTemplates], history: [change-049] }
+  - { id: EP-TPL-20, kind: surface, subtype: rest.get, route: /api/v1/admin/template-catalog/templates/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.getTemplate], history: [change-049] }
+  - { id: EP-TPL-21, kind: surface, subtype: rest.post, route: /api/v1/admin/template-catalog/fields/:id/templates, auth: "role:admin", status: implemented, calls: [SVC-TPL.createTemplate], rules: [RULE-TPL-001], history: [change-049] }
+  - { id: EP-TPL-22, kind: surface, subtype: rest.patch, route: /api/v1/admin/template-catalog/templates/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.updateTemplate], rules: [RULE-TPL-001], history: [change-049] }
+  - { id: EP-TPL-23, kind: surface, subtype: rest.delete, route: /api/v1/admin/template-catalog/templates/:id, auth: "role:admin", status: implemented, calls: [SVC-TPL.deleteTemplate], history: [change-049] }
+
+  - { id: PAGE-ADMIN-TEMPLATES, kind: ui, subtype: page, app: admin-panel, route: /admin/template-catalog, status: implemented,
+      calls: [EP-TPL-10, EP-TPL-11, EP-TPL-21], theme: THEME-ROYA, states: [loading, empty, error, ready], history: [change-049] }

@@ -1,0 +1,165 @@
+module: data
+owner: DOM-DATA
+status: implemented
+
+# ── Features (user-facing groupings; visibility = where they surface) ──────────────────────────
+features:
+  - { id: FEAT-DATA-CSV,     name: Legacy CSV Upload,        visibility: both,        uses: [EP-DATA-01, EP-DATA-04, SVC-DATA] }
+  - { id: FEAT-DATA-CONN,    name: Manage Connections,       visibility: both,        uses: [EP-DATA-09, EP-DATA-10, SVC-DATA-CONN] }
+  - { id: FEAT-DATA-SOURCE,  name: Manage Data Sources,      visibility: both,        uses: [EP-DATA-51, EP-DATA-52, SVC-DATA-SOURCE, PAGE-DATA-SOURCES] }
+  - { id: FEAT-DATA-DATASET, name: Tables + Schema + Sync,   visibility: both,        uses: [EP-DATA-56, EP-DATA-44, SVC-DATA-DS] }
+  - { id: FEAT-DATA-OAUTH,   name: OAuth + Webhooks,         visibility: backend-only, uses: [EP-DATA-25, EP-DATA-27, SVC-CONN-GOOGLE-OAUTH, SVC-CONN-SHOPIFY-OAUTH] }
+  - { id: FEAT-DATA-DSTYPE,  name: Data Source Type Catalog, visibility: admin-panel,  uses: [EP-DATA-47, EP-DSTYPE-01, SVC-DSTYPE] }
+
+nodes:
+  # ── Contract owned by the data engine (the reporting engine depends on THIS, not internals) ───
+  - { id: IF-DATA-RESOLVER, kind: contract, subtype: interface, di_token: DATA_SOURCE_RESOLVER, status: implemented,
+      methods: [resolveConnection, listBySemanticFlags, getDatasetReadiness],
+      rules: [RULE-ARCH-001], history: [change-060],
+      reason_note: "The data engine's public read contract — the reporting engine depends on THIS, never DatasetRepository" }
+
+  # ── Services (logic) — methods listed by name only (light); detail lives in code via @map ─────
+  - { id: SVC-DATA, kind: logic, subtype: service, status: implemented,
+      methods: [uploadFile, initiateUpload, completeUpload, listFiles, getFile, updateColumns, deleteFile, retryAnalysis],
+      deps: [ENT-CSVFILE, ENT-COLUMNMETA, ENT-CSVDATA, Q-CSV-ANALYSIS, SVC-EXT-STOR],
+      rules: [RULE-DATA-001, RULE-GLOBAL-004, RULE-GLOBAL-009], history: [change-001, change-047] }
+
+  - { id: SVC-DATA-CONN, kind: logic, subtype: service, status: implemented,
+      methods: [create, list, get, update, reauth, delete, testConnection, decryptCredentials, setStatus, setError],
+      deps: [ENT-CONNECTION, ENT-DATASOURCE, SVC-CONN-REG],
+      rules: [RULE-DATA-004, RULE-CRED-PATH-01, RULE-GLOBAL-009], history: [change-015, change-059] }
+
+  - { id: SVC-DATA-SOURCE, kind: logic, subtype: service, status: implemented,
+      implements: [IF-DATA-RESOLVER],
+      methods: [create, list, get, update, delete, resolveConnection, listBySemanticFlags, getDatasetReadiness],
+      deps: [ENT-DATASOURCE, ENT-CONNECTION, ENT-DATASET],
+      rules: [RULE-DATA-004], history: [change-059] }
+
+  - { id: SVC-DATA-DS, kind: logic, subtype: service, status: implemented,
+      methods: [create, list, listLite, listByDataSource, createFromEntities, listDataSourceEntities, get, update, delete,
+                enqueueSchemaDiscovery, confirmMapping, proposeMappingForFlag, updateSchemaColumns, confirmSchemaSelection,
+                refreshAvailableColumns, discoverSchemaWithAiProposal, listSyncHistory, listBySemanticFlags],
+      deps: [ENT-DATASET, ENT-DATASOURCE, ENT-CONNECTION, SVC-DATA-CONN, SVC-DATA-SOURCE, SVC-CONN-REG, Q-DATA-SYNC, Q-SCHEMA-DISCOVERY],
+      rules: [RULE-CRED-PATH-01, RULE-DATA-005, RULE-GLOBAL-002], history: [change-015, change-022, change-045, change-058, change-059] }
+
+  - { id: SVC-DATA-SYNC, kind: logic, subtype: worker, status: implemented,
+      methods: [process, updateProgress, triggerSync, retryRun, getRun],
+      deps: [ENT-DATASET, ENT-DATASOURCE, ENT-CONNECTION, ENT-SYNCRUN, Q-DATA-SYNC, SVC-PIPE-ENGINE, SVC-OLAP-STORE],
+      rules: [RULE-GLOBAL-004, RULE-GLOBAL-005, RULE-ARCH-004], history: [change-018, change-045] }
+
+  - { id: SVC-DATA-SCHEMA-DISCOVERY, kind: logic, subtype: worker, status: implemented,
+      methods: [process], deps: [SVC-DATA-DS, Q-SCHEMA-DISCOVERY],
+      rules: [RULE-GLOBAL-004], history: [change-058] }
+
+  - { id: SVC-DATA-SCHEMA-DRIFT, kind: logic, subtype: service, status: implemented,
+      methods: [detect], history: [change-029] }
+
+  - { id: SVC-DATA-SCHED, kind: logic, subtype: cron, status: implemented,
+      methods: [runHourlySyncs, runDailySyncs], deps: [ENT-DATASET, SVC-DATA-SYNC], history: [change-023] }
+
+  - { id: SVC-DSTYPE, kind: logic, subtype: service, status: implemented,
+      methods: [findAll, findOne, update, toggleActive], deps: [ENT-DSTYPE-META], history: [change-048] }
+
+  - { id: SVC-DATA-WHROUTE, kind: logic, subtype: service, status: implemented,
+      methods: [upsert, findByStore], deps: [ENT-WEBHOOK-ROUTE], history: [change-043] }
+
+  - { id: SVC-DATA-PIPELINE, kind: logic, subtype: service, status: implemented,
+      methods: [resolveIngestSteps, getSetupFlow], deps: [SVC-CONN-REG, SVC-PIPE-TYPE-REG],
+      rules: [RULE-ARCH-006], history: [change-064, change-065] }
+
+  - { id: SVC-ADMIN-SYNC-HEALTH, kind: logic, subtype: service, status: implemented,
+      methods: [getHealth], deps: [ENT-SYNCRUN], history: [change-029] }
+
+  # ── Data (entities / collections; dynamic collections use collection_pattern) ─────────────────
+  - { id: ENT-CSVFILE, kind: data, subtype: collection, collection: csvfiles, workspace_scoped: false, status: implemented }
+  - { id: ENT-COLUMNMETA, kind: data, subtype: collection, collection: columnmetadata, status: implemented }
+  - { id: ENT-CSVDATA, kind: data, subtype: collection, collection_pattern: "csvdata_{fileId}", legacy: true, status: implemented,
+      reason_note: "dynamic per-file row collection" }
+  - { id: ENT-CONNECTION, kind: data, subtype: collection, collection: connections, workspace_scoped: true, status: implemented,
+      rules: [RULE-GLOBAL-009], history: [change-015, change-059] }
+  - { id: ENT-DATASOURCE, kind: data, subtype: collection, collection: datasources, workspace_scoped: true, status: implemented, history: [change-059] }
+  - { id: ENT-DATASET, kind: data, subtype: collection, collection: datasets, workspace_scoped: true, status: implemented,
+      reason_note: "analyticsTable = ds_{workspaceSlug}_{datasetId}", history: [change-015, change-055] }
+  - { id: ENT-SYNCRUN, kind: data, subtype: collection, collection: syncruns, workspace_scoped: true, status: implemented, history: [change-018, change-029] }
+  - { id: ENT-DSTYPE-META, kind: data, subtype: collection, collection: datasourcetypemeta, workspace_scoped: false, status: implemented, history: [change-048] }
+  - { id: ENT-WEBHOOK-ROUTE, kind: data, subtype: collection, collection: webhook_routes, workspace_scoped: false, status: implemented, history: [change-043] }
+
+  # ── Surfaces (endpoints) — one line each; calls resolve to service methods ────────────────────
+  # Legacy CSV
+  - { id: EP-DATA-01, kind: surface, subtype: rest.post, route: /api/v1/data/upload/file, auth: authenticated, status: implemented, calls: [SVC-DATA.uploadFile], rules: [RULE-DATA-001, RULE-GLOBAL-004], history: [change-001, change-047] }
+  - { id: EP-DATA-02, kind: surface, subtype: rest.post, route: /api/v1/data/upload/initiate, auth: authenticated, status: implemented, calls: [SVC-DATA.initiateUpload], rules: [RULE-DATA-001] }
+  - { id: EP-DATA-03, kind: surface, subtype: rest.post, route: /api/v1/data/upload/:fileId/complete, auth: authenticated, status: implemented, calls: [SVC-DATA.completeUpload], rules: [RULE-DATA-001] }
+  - { id: EP-DATA-04, kind: surface, subtype: rest.get, route: /api/v1/data/files, auth: authenticated, status: implemented, calls: [SVC-DATA.listFiles], rules: [RULE-PAG-01] }
+  - { id: EP-DATA-05, kind: surface, subtype: rest.get, route: /api/v1/data/files/:fileId, auth: authenticated, status: implemented, calls: [SVC-DATA.getFile] }
+  - { id: EP-DATA-06, kind: surface, subtype: rest.patch, route: /api/v1/data/files/:fileId/columns, auth: authenticated, status: implemented, calls: [SVC-DATA.updateColumns], rules: [RULE-DATA-003] }
+  - { id: EP-DATA-07, kind: surface, subtype: rest.delete, route: /api/v1/data/files/:fileId, auth: authenticated, status: implemented, calls: [SVC-DATA.deleteFile] }
+  - { id: EP-DATA-08, kind: surface, subtype: rest.post, route: /api/v1/data/files/:fileId/analyze/retry, auth: authenticated, status: implemented, calls: [SVC-DATA.retryAnalysis], rules: [RULE-GLOBAL-004] }
+  # Connections
+  - { id: EP-DATA-09, kind: surface, subtype: rest.post, route: /api/v1/data/connections, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.create], rules: [RULE-DATA-004, RULE-GLOBAL-009, RULE-GLOBAL-011], history: [change-015, change-059] }
+  - { id: EP-DATA-10, kind: surface, subtype: rest.get, route: /api/v1/data/connections, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.list], rules: [RULE-PAG-01], history: [change-059] }
+  - { id: EP-DATA-11, kind: surface, subtype: rest.get, route: /api/v1/data/connections/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.get] }
+  - { id: EP-DATA-12, kind: surface, subtype: rest.patch, route: /api/v1/data/connections/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.update], rules: [RULE-DATA-004] }
+  - { id: EP-DATA-13, kind: surface, subtype: rest.delete, route: /api/v1/data/connections/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.delete], rules: [RULE-DATA-004], history: [change-059] }
+  - { id: EP-DATA-14, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/test, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.testConnection], rules: [RULE-GLOBAL-011], history: [change-059] }
+  - { id: EP-DATA-50, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/reauth, auth: authenticated, status: implemented, calls: [SVC-DATA-CONN.reauth], rules: [RULE-GLOBAL-011], history: [change-059] }
+  # Data sources
+  - { id: EP-DATA-51, kind: surface, subtype: rest.post, route: /api/v1/data/sources, auth: authenticated, status: implemented, calls: [SVC-DATA-SOURCE.create], rules: [RULE-DATA-004], history: [change-059] }
+  - { id: EP-DATA-52, kind: surface, subtype: rest.get, route: /api/v1/data/sources, auth: authenticated, status: implemented, calls: [SVC-DATA-SOURCE.list], rules: [RULE-PAG-01], history: [change-059] }
+  - { id: EP-DATA-53, kind: surface, subtype: rest.get, route: /api/v1/data/sources/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-SOURCE.get] }
+  - { id: EP-DATA-54, kind: surface, subtype: rest.patch, route: /api/v1/data/sources/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-SOURCE.update] }
+  - { id: EP-DATA-55, kind: surface, subtype: rest.delete, route: /api/v1/data/sources/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-SOURCE.delete] }
+  # Datasets / tables
+  - { id: EP-DATA-15, kind: surface, subtype: rest.post, route: /api/v1/data/datasets, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.create], history: [change-015, change-058, change-059] }
+  - { id: EP-DATA-56, kind: surface, subtype: rest.get, route: /api/v1/data/datasets/lite, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.listLite], rules: [RULE-PAG-01], history: [change-056, change-068, change-069] }
+  - { id: EP-DATA-16, kind: surface, subtype: rest.get, route: /api/v1/data/datasets, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.list], rules: [RULE-PAG-01] }
+  - { id: EP-DATA-17, kind: surface, subtype: rest.get, route: /api/v1/data/datasets/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.get] }
+  - { id: EP-DATA-18, kind: surface, subtype: rest.patch, route: /api/v1/data/datasets/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.update] }
+  - { id: EP-DATA-19, kind: surface, subtype: rest.delete, route: /api/v1/data/datasets/:id, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.delete] }
+  - { id: EP-DATA-20, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/sync, auth: authenticated, status: implemented, calls: [SVC-DATA-SYNC.triggerSync], rules: [RULE-GLOBAL-004], history: [change-038] }
+  - { id: EP-DATA-21, kind: surface, subtype: rest.get, route: /api/v1/data/datasets/:id/sync-history, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.listSyncHistory], rules: [RULE-PAG-01] }
+  - { id: EP-DATA-40, kind: surface, subtype: rest.patch, route: /api/v1/data/datasets/:id/schema-columns, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.updateSchemaColumns], rules: [RULE-DATA-005], history: [change-038, change-055] }
+  - { id: EP-DATA-48, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/confirm-schema-selection, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.confirmSchemaSelection], rules: [RULE-DATA-005], history: [change-055] }
+  - { id: EP-DATA-49, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/refresh-available-columns, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.enqueueSchemaDiscovery], rules: [RULE-DATA-005], history: [change-055, change-058] }
+  - { id: EP-DATA-22, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/discover-schema, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.enqueueSchemaDiscovery], history: [change-022, change-058] }
+  - { id: EP-DATA-23, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/confirm-mapping, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.confirmMapping], history: [change-022, change-045] }
+  # OAuth + webhooks (handlers live in the connectors module)
+  - { id: EP-DATA-24, kind: surface, subtype: rest.get, route: /api/v1/data/google/auth-url, auth: authenticated, status: implemented, calls: [SVC-CONN-GOOGLE-OAUTH.buildAuthUrl], history: [change-023] }
+  - { id: EP-DATA-25, kind: surface, subtype: oauth-callback, route: /api/v1/data/google/callback, auth: public, status: implemented, calls: [SVC-CONN-GOOGLE-OAUTH.handleCallback], rules: [RULE-GLOBAL-011], history: [change-023, change-059] }
+  - { id: EP-DATA-26, kind: surface, subtype: rest.get, route: /api/v1/data/shopify/install-url, auth: authenticated, status: implemented, calls: [SVC-CONN-SHOPIFY-OAUTH.buildInstallUrl], history: [change-024] }
+  - { id: EP-DATA-27, kind: surface, subtype: oauth-callback, route: /api/v1/data/shopify/callback, auth: public, status: implemented, calls: [SVC-CONN-SHOPIFY-OAUTH.exchangeCode], history: [change-024] }
+  - { id: EP-DATA-28, kind: surface, subtype: webhook, route: /api/v1/data/shopify/webhook, auth: public, status: implemented, calls: [SVC-CONN-SHOPIFY-DS.applyWebhookEvent], history: [change-024, change-042] }
+  - { id: EP-DATA-29, kind: surface, subtype: rest.get, route: /api/v1/data/salla/auth-url, auth: authenticated, status: implemented, calls: [SVC-CONN-SALLA-OAUTH.buildAuthUrl], history: [change-025] }
+  - { id: EP-DATA-30, kind: surface, subtype: oauth-callback, route: /api/v1/data/salla/callback, auth: public, status: implemented, calls: [SVC-CONN-SALLA-OAUTH.exchangeCode], history: [change-025, change-045] }
+  - { id: EP-DATA-31, kind: surface, subtype: webhook, route: /api/v1/data/salla/webhook, auth: public, status: implemented, calls: [SVC-CONN-SALLA-DS.applyWebhookEvent], history: [change-025, change-042] }
+  - { id: EP-DATA-32, kind: surface, subtype: rest.get, route: /api/v1/data/zid/auth-url, auth: authenticated, status: implemented, calls: [SVC-CONN-ZID-OAUTH.buildAuthUrl], history: [change-026] }
+  - { id: EP-DATA-33, kind: surface, subtype: oauth-callback, route: /api/v1/data/zid/callback, auth: public, status: implemented, calls: [SVC-CONN-ZID-OAUTH.exchangeCode], history: [change-026, change-045] }
+  - { id: EP-DATA-34, kind: surface, subtype: webhook, route: /api/v1/data/zid/webhook, auth: public, status: implemented, calls: [SVC-CONN-ZID-DS.applyWebhookEvent], history: [change-026, change-042] }
+  - { id: EP-DATA-35, kind: surface, subtype: rest.get, route: /api/v1/data/zid/install, auth: public, status: implemented, calls: [SVC-CONN-ZID-OAUTH.handleInstall], history: [change-044] }
+  # SQL Server — renumbered from v1's duplicate EP-DATA-35/36 to fix the ID collision (Part B5)
+  - { id: EP-DATA-57, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/sql-server/tables, auth: authenticated, status: implemented, calls: [SVC-CONN-SQLSERVER.listTables], history: [change-027], reason_note: "was EP-DATA-35 in v1 (collided with Zid install) — renumbered" }
+  - { id: EP-DATA-58, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/sql-server/preview, auth: authenticated, status: implemented, calls: [SVC-CONN-SQLSERVER.previewTable], history: [change-027], reason_note: "was EP-DATA-36 in v1 — renumbered with its sibling" }
+  # MongoDB Atlas
+  - { id: EP-DATA-37, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/mongodb/collections, auth: authenticated, status: implemented, calls: [SVC-CONN-MONGOATLAS.listCollections], history: [change-028] }
+  - { id: EP-DATA-38, kind: surface, subtype: rest.post, route: /api/v1/data/connections/:id/mongodb/preview, auth: authenticated, status: implemented, calls: [SVC-CONN-MONGOATLAS.previewCollection], history: [change-028] }
+  # Sync ops + admin health
+  - { id: EP-DATA-39, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/sync-runs/:runId/retry, auth: authenticated, status: implemented, calls: [SVC-DATA-SYNC.retryRun], history: [change-029] }
+  - { id: EP-ADMIN-SH-1, kind: surface, subtype: rest.get, route: /api/v1/admin/data/sync-health, auth: "role:admin", status: implemented, calls: [SVC-ADMIN-SYNC-HEALTH.getHealth], history: [change-029] }
+  # Grouping / entity selection / progress
+  - { id: EP-DATA-41, kind: surface, subtype: rest.get, route: /api/v1/data/setup-flow, auth: authenticated, status: implemented, calls: [SVC-DATA-PIPELINE.getSetupFlow], history: [change-059, change-065] }
+  - { id: EP-DATA-42, kind: surface, subtype: rest.get, route: /api/v1/data/sources/:id/datasets, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.listByDataSource], rules: [RULE-PAG-01], history: [change-045, change-058, change-059] }
+  - { id: EP-DATA-43, kind: surface, subtype: rest.get, route: /api/v1/data/sources/:id/entities, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.listDataSourceEntities], history: [change-059] }
+  - { id: EP-DATA-44, kind: surface, subtype: rest.post, route: /api/v1/data/sources/:id/datasets/from-entities, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.createFromEntities], history: [change-045, change-058, change-059] }
+  - { id: EP-DATA-45, kind: surface, subtype: rest.get, route: /api/v1/data/datasets/:id/sync-runs/:runId, auth: authenticated, status: implemented, calls: [SVC-DATA-SYNC.getRun], history: [change-045] }
+  - { id: EP-DATA-46, kind: surface, subtype: rest.post, route: /api/v1/data/datasets/:id/propose-mapping, auth: authenticated, status: implemented, calls: [SVC-DATA-DS.proposeMappingForFlag], history: [change-045] }
+  # Data source type metadata (customer + admin)
+  - { id: EP-DATA-47, kind: surface, subtype: rest.get, route: /api/v1/data/source-types, auth: authenticated, status: implemented, calls: [SVC-DSTYPE.findAll], history: [change-048] }
+  - { id: EP-DSTYPE-01, kind: surface, subtype: rest.get, route: /api/v1/admin/data-source-types, auth: "role:admin", status: implemented, calls: [SVC-DSTYPE.findAll], history: [change-048] }
+  - { id: EP-DSTYPE-02, kind: surface, subtype: rest.get, route: /api/v1/admin/data-source-types/:type, auth: "role:admin", status: implemented, calls: [SVC-DSTYPE.findOne], history: [change-048] }
+  - { id: EP-DSTYPE-03, kind: surface, subtype: rest.patch, route: /api/v1/admin/data-source-types/:type, auth: "role:admin", status: implemented, calls: [SVC-DSTYPE.update], history: [change-048] }
+  - { id: EP-DSTYPE-04, kind: surface, subtype: rest.patch, route: /api/v1/admin/data-source-types/:type/toggle, auth: "role:admin", status: implemented, calls: [SVC-DSTYPE.toggleActive], history: [change-048] }
+
+  # ── UI (frontend, structured like the backend: page -> component -> theme) ────────────────────
+  - { id: PAGE-DATA-SOURCES, kind: ui, subtype: page, app: customer-portal, route: /app/data/sources, status: implemented,
+      calls: [EP-DATA-52, EP-DATA-56], renders: [CMP-SOURCE-TABLE], theme: THEME-ROYA, i18n: true, rtl: true,
+      states: [loading, empty, error, ready], history: [change-059] }
+  - { id: CMP-SOURCE-TABLE, kind: ui, subtype: component, app: customer-portal, status: implemented, theme: THEME-ROYA }

@@ -1,8 +1,0 @@
-id: bug-014
-title: Lite picker per-source count is off by one
-type: bug
-owner: support
-status: planned
-rationale: "The `sources[].count` in the lite response double-counts unsynced datasets."
-acceptance:
-  - "EP-DATA-56 sources[].count excludes unsynced datasets; verify PASS"

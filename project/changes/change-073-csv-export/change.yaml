@@ -1,9 +1,0 @@
-id: change-073
-title: CSV export of dataset picker
-type: feature
-owner: business
-status: planned
-rationale: "Let users export the dataset lite list as CSV."
-acceptance:
-  - "New EP-EXPORT-04 streams CSV; EP-DATA-56 gains a ?format hint; verify PASS"
-archetypes: [endpoint.crud-list]

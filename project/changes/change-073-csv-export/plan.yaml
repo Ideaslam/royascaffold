@@ -1,7 +1,0 @@
-change: change-073
-title: CSV export of dataset picker
-current_step: 1
-steps:
-  - { id: 1, action: create_endpoint_map, target: EP-EXPORT-04, status: planned }
-  - { id: 2, action: update_endpoint_map, target: EP-DATA-56,   status: planned }
-  - { id: 3, action: merge_deltas_to_map, status: planned }

@@ -11,9 +11,11 @@
     "init": "node engine/verify/roya.mjs init",
     "index": "node engine/verify/roya.mjs index project",
     "verify": "node engine/verify/roya.mjs verify project",
-    "status": "node engine/verify/roya.mjs index project && node engine/verify/roya.mjs verify project"
+    "status": "node engine/verify/roya.mjs index project && node engine/verify/roya.mjs verify project",
+    "viewer": "node engine/viewer/server.mjs project"
   },
   "dependencies": {
+    "express": "^4.22.2",
     "js-yaml": "^4.1.0"
   }
 }

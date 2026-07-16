@@ -24,12 +24,25 @@ Never read a whole module unless a step names it. The map is intentionally light
 
 ## Pick a flow
 
+Each flow is **end to end** — discovery is built into it, and implement + merge run inside it behind
+confirmation gates. There are only three:
+
 | You want to… | Flow |
 |--------------|------|
-| Plan a new feature or bug (no code) | `flows/plan-change.md` |
-| Implement a queued change (write code) | `flows/implement-change.md` |
-| Merge a finished change into the map | `flows/merge-change.md` |
+| Start a brand-new system from zero (no code, no map) | `flows/new-system.md` |
+| Add a feature / bug / refactor (discover → plan → implement → merge) | `flows/change.md` |
 | Import an existing codebase into the map | `flows/reverse-engineer.md` |
+
+## Confirmation gates (a human approves before the engine advances)
+
+Every flow pauses at `>> GATE` boundaries. The engine states what it is about to do and waits for an
+explicit human "go" before crossing:
+
+- **plan approved** — before any code is written (planner → coder handoff).
+- **ready to merge** — before the map is mutated (deltas fold into implemented truth).
+- new-system adds **scope approved** and **architecture approved** up front.
+
+A gate is a stop, not a suggestion. Nothing past a gate happens without approval.
 
 ## The one rule that never bends
 

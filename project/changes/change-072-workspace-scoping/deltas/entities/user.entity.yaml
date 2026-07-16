@@ -1,6 +1,6 @@
 # The workspaceId field is PLANNED here — the map still shows ENT-USER without it. This is exactly
 # the gap that broke v1: a fresh AI reads this and knows workspaceId belongs to change-072 and is
-# NOT yet implemented. It becomes real only when merge-change.md runs.
+# NOT yet implemented. It becomes real only at the Merge phase of change.md.
 target: ENT-USER
 change: change-072
 status: planned

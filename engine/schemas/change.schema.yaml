@@ -12,6 +12,7 @@ change:
     rationale: { type: string, doc: "one line — the why" }
     acceptance: { type: string[], doc: "acceptance criteria" }
     archetypes: { type: string[], doc: "structural contracts this change must satisfy" }
+    assumptions: { type: object[], doc: "defaulted answers from discovery: [{ q, value, assumed: true }] — correct in place, no re-interview" }
     phases:  { type: object[], doc: "optional; for programs: [{ id, title, plan, deltas }]" }
 
 example: |

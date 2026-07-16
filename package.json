@@ -8,6 +8,7 @@
     "roya": "engine/verify/roya.mjs"
   },
   "scripts": {
+    "init": "node engine/verify/roya.mjs init",
     "index": "node engine/verify/roya.mjs index project",
     "verify": "node engine/verify/roya.mjs verify project",
     "status": "node engine/verify/roya.mjs index project && node engine/verify/roya.mjs verify project"

@@ -1,0 +1,28 @@
+# Archetype: wrapping any third-party service (AI, email, storage, payment, OAuth) behind an interface.
+# The rule: services depend on the INTERFACE, never the SDK. Swapping a provider = new adapter + rebind.
+
+archetype: integration.external
+kind: integration
+requires:
+  implements: ["IF-<CAPABILITY>"]   # e.g. IF-MAIL, IF-STORAGE, IF-PAYMENT, IF-AI
+  di_token: "<CAPABILITY>_PROVIDER" # callers inject the token, not the concrete class
+must:
+  - "wrap the vendor SDK; expose only the capability interface's methods"
+  - "read all credentials from config/env — never hardcode keys, never log secrets or tokens"
+  - "bind the concrete provider to the DI token in one place (module providers) — swap = rebind only"
+  - "outbound side effects only; carry no domain logic (that lives in the calling service)"
+rules: [RULE-GLOBAL-003, RULE-GLOBAL-009]
+skeleton:
+  stack: nest+angular
+  file: "integrations/{{capability}}/{{name}}.provider.ts"
+  code: |
+    /** @map {{ID}} */
+    @Injectable()
+    export class {{Name}}Provider implements {{Capability}}ProviderInterface {
+      constructor(private readonly config: ConfigService) {}       // secrets from env only
+      async {{method}}(input: {{Input}}): Promise<{{Result}}> {
+        // wrap the vendor SDK; map errors to the interface's contract
+      }
+    }
+    // bind (the ONLY wiring — swap provider here, callers never change):
+    { provide: '{{CAPABILITY}}_PROVIDER', useClass: {{Name}}Provider }

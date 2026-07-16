@@ -4,11 +4,11 @@
 archetype: connector.source-type
 kind: integration
 requires:
-  implements: [IF-CONNECTOR]     # must satisfy the connector contract
-  register: CONNECTOR-REGISTRY   # must self-register (verify checks the register op)
+  implements: [SVC-CONN-INTERFACE]   # must satisfy the connector contract
+  register: SVC-CONN-REG             # must self-register (verify checks the register op)
 must:
-  - "implement every method of IF-CONNECTOR (testConnection, listEntities, discoverSchema, extract)"
-  - "register in CONNECTOR-REGISTRY via one entry — never edit the kernel or a switch statement"
+  - "implement every method of SVC-CONN-INTERFACE (testConnection, listEntities, discoverSchema, extract, normalize)"
+  - "register in SVC-CONN-REG via one entry — never edit the kernel or a switch statement"
   - "wrap the external SDK; isolate credentials; no direct SDK calls from services"
 skeleton:
   stack: nest+angular

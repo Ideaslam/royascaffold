@@ -6,9 +6,9 @@ product:
 
 # The stack subtype vocabulary — what the universal `kind`s mean for THIS system.
 subtypes:
-  surface: [rest.get, rest.post, rest.patch, rest.delete, webhook, oauth-callback]
-  ui: [page, component, layout, theme]
-  logic: [service, worker, cron, guard, registry]
+  surface: [rest.get, rest.post, rest.put, rest.patch, rest.delete, webhook, oauth-callback]
+  ui: [page, component, layout, theme, tokens, i18n]
+  logic: [service, worker, cron, guard, registry, repository]
   contract: [interface]
   data: [entity, collection]
   integration: [oauth, sdk]

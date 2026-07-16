@@ -4,11 +4,19 @@ status: implemented
 
 # Multi-tenancy root. Each workspace owns dynamic ws_{slug}_* collections. Membership drives the
 # workspace-role auth layer (SVC-GUARD-WSROLE).
+doc:
+  short: "Multi-tenancy root: workspaces, members, invites, branding, onboarding."
+  description: "The tenancy root. Each workspace owns dynamic ws_{slug}_* collections and its membership drives the workspace-role auth layer. Covers workspace CRUD, member management, invitations, branding, and onboarding progress."
+  rules:
+    - "Every tenant-scoped resource belongs to a workspace"
+    - "Member/owner actions are gated by the workspace-role guard"
+    - "Workspace slugs are unique"
+
 features:
-  - { id: FEAT-WS-MGMT, name: Workspace Management, visibility: both, uses: [EP-WS-01, EP-WS-07, SVC-WS, PAGE-WORKSPACE-SETTINGS] }
-  - { id: FEAT-WS-INVITE, name: Invitations, visibility: both, uses: [EP-WS-11, EP-WS-15, SVC-WS-INVITE] }
-  - { id: FEAT-WS-BRAND, name: Branding, visibility: customer-portal, uses: [EP-WS-16, EP-WS-17, SVC-WS-BRAND] }
-  - { id: FEAT-WS-ONBOARD, name: Onboarding, visibility: customer-portal, uses: [EP-WS-20, EP-WS-21, SVC-WS-ONBOARD], history: [change-006] }
+  - { id: FEAT-WS-MGMT, name: Workspace Management, visibility: both, uses: [EP-WS-01, EP-WS-07, SVC-WS, PAGE-WORKSPACE-SETTINGS], doc: { short: "Create and manage workspaces.", description: "Workspace creation, settings, slug-availability checks, switching the active workspace, and deletion.", rules: ["Only owners may update or delete a workspace"] } }
+  - { id: FEAT-WS-INVITE, name: Invitations, visibility: both, uses: [EP-WS-11, EP-WS-15, SVC-WS-INVITE], doc: { short: "Invite and admit members.", description: "Send, resend, revoke, and accept workspace invitations, subject to the plan's seat limits.", rules: ["Invites respect the subscription seat quota"] } }
+  - { id: FEAT-WS-BRAND, name: Branding, visibility: customer-portal, uses: [EP-WS-16, EP-WS-17, SVC-WS-BRAND], doc: { short: "Customize workspace branding.", description: "Upload a logo and pick a color template applied across the workspace UI.", rules: ["Logos stored via the storage provider, never inline"] } }
+  - { id: FEAT-WS-ONBOARD, name: Onboarding, visibility: customer-portal, uses: [EP-WS-20, EP-WS-21, SVC-WS-ONBOARD], history: [change-006], doc: { short: "Track onboarding progress.", description: "Persists and reports each workspace's onboarding checklist progress." } }
 
 nodes:
   - { id: SVC-WS, kind: logic, subtype: service, status: implemented,

@@ -3,8 +3,14 @@ owner: DOM-PLATFORM
 status: implemented
 
 # Global job-tracking helper + BullMQ queue registration. Job records let the frontend poll progress.
+doc:
+  short: "Job-status tracking for async work."
+  description: "A global helper that records background-job documents and registers queues, so any long-running work can be tracked and polled for progress by the frontend."
+  rules:
+    - "Every background job writes a status record that is finalized on completion/failure"
+
 features:
-  - { id: FEAT-BGJOBS, name: Background Job Tracking, visibility: backend-only, uses: [SVC-BGJOBS] }
+  - { id: FEAT-BGJOBS, name: Background Job Tracking, visibility: backend-only, uses: [SVC-BGJOBS], doc: { short: "Create and query job status.", description: "Create a job record and read its status/progress, giving async operations a pollable handle." } }
 
 nodes:
   - { id: SVC-BGJOBS, kind: logic, subtype: service, status: implemented,

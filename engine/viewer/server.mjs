@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { generateIndex } from '../verify/index.mjs';
 import { verify } from '../verify/verify.mjs';
-import { overview, moduleView, featureView, nodeView, graphStub } from './model.mjs';
+import { overview, moduleView, featureView, nodeView, graphStub, kindsInfo } from './model.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, 'public');
@@ -52,6 +52,10 @@ app.post('/api/verify', (_req, res) => {
 
 app.get('/api/graph', (_req, res) => {
   res.json(graphStub(projectDir));
+});
+
+app.get('/api/kinds', (_req, res) => {
+  res.json(kindsInfo());
 });
 
 app.use(express.static(publicDir));

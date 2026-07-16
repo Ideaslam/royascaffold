@@ -3,9 +3,16 @@ owner: DOM-PLATFORM
 status: implemented
 
 # Users are global (system role admin|editor|viewer). Workspace membership is separate (workspace module).
+doc:
+  short: "Global user accounts and admin user management."
+  description: "Owns the users collection and the global system role (admin|editor|viewer). Covers self-service profile/password plus admin CRUD, suspend/reactivate. Workspace membership is a separate concern (workspace module)."
+  rules:
+    - "A user's system role is global, independent of workspace membership"
+    - "Admin user-management endpoints require role:admin"
+
 features:
-  - { id: FEAT-USER-SELF, name: Self-service Profile, visibility: customer-portal, uses: [EP-USR-01, EP-USR-02, SVC-USR, PAGE-PROFILE] }
-  - { id: FEAT-USER-ADMIN, name: Admin User Management, visibility: admin-panel, uses: [EP-USR-03, EP-USR-05, SVC-USR, PAGE-ADMIN-USERS] }
+  - { id: FEAT-USER-SELF, name: Self-service Profile, visibility: customer-portal, uses: [EP-USR-01, EP-USR-02, SVC-USR, PAGE-PROFILE], doc: { short: "Users manage their own profile and password.", description: "Self-service profile update and password change for the signed-in user.", rules: ["A user may only edit their own profile"] } }
+  - { id: FEAT-USER-ADMIN, name: Admin User Management, visibility: admin-panel, uses: [EP-USR-03, EP-USR-05, SVC-USR, PAGE-ADMIN-USERS], doc: { short: "Admins manage all user accounts.", description: "Admin listing, creation, update, and suspension/reactivation of users from the admin panel.", rules: ["Restricted to role:admin"] } }
 
 nodes:
   - { id: ENT-USER, kind: data, subtype: collection, collection: users, workspace_scoped: false, status: implemented,

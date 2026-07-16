@@ -3,10 +3,17 @@ owner: DOM-PLATFORM
 status: implemented
 
 # Plan catalog + per-workspace subscription lifecycle + extensible quota enforcement (limit registry).
+doc:
+  short: "Plan catalog, subscription lifecycle, and quota enforcement."
+  description: "Owns the plan catalog, each workspace's subscription lifecycle (subscribe, upgrade/downgrade, cancel, activate), and an extensible quota/limit registry that other modules check before consuming resources."
+  rules:
+    - "Activation is driven by the durable subscription-activation event"
+    - "Quotas are enforced through the limit registry"
+
 features:
-  - { id: FEAT-SUB-SELF, name: Self-service Subscribe, visibility: customer-portal, uses: [EP-SUB-14, EP-SUB-18, SVC-SUB, PAGE-SUBSCRIPTIONS] }
-  - { id: FEAT-SUB-ADMIN, name: Plans + Assignment (admin), visibility: admin-panel, uses: [EP-SUB-03, EP-SUB-11, SVC-SUB, PAGE-ADMIN-SUBSCRIPTIONS] }
-  - { id: FEAT-SUB-LIMITS, name: Quota Enforcement, visibility: backend-only, uses: [SVC-SUB-LIM] }
+  - { id: FEAT-SUB-SELF, name: Self-service Subscribe, visibility: customer-portal, uses: [EP-SUB-14, EP-SUB-18, SVC-SUB, PAGE-SUBSCRIPTIONS], doc: { short: "Subscribe and manage your plan.", description: "Customers view plans, subscribe, upgrade/downgrade, cancel, and pay pending invoices." } }
+  - { id: FEAT-SUB-ADMIN, name: Plans + Assignment (admin), visibility: admin-panel, uses: [EP-SUB-03, EP-SUB-11, SVC-SUB, PAGE-ADMIN-SUBSCRIPTIONS], doc: { short: "Manage plans and assignments.", description: "Admins create/edit plans and assign or change subscriptions for any workspace.", rules: ["Admin-only"] } }
+  - { id: FEAT-SUB-LIMITS, name: Quota Enforcement, visibility: backend-only, uses: [SVC-SUB-LIM], doc: { short: "Enforce plan quotas.", description: "An extensible limit registry that checks a workspace's plan quota before a resource is consumed." } }
 
 nodes:
   - { id: SVC-SUB, kind: logic, subtype: service, status: implemented,

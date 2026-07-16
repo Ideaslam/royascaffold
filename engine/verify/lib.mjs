@@ -94,7 +94,7 @@ export function loadModel(projectDir) {
     const doc = readYaml(f);
     model.sizeBytes.map += statSync(f).size;
     // The module itself is a node.
-    if (doc.module) addNode({ id: `MOD-${doc.module.toUpperCase()}`, kind: 'module', name: doc.module, owner: doc.owner, status: doc.status || 'implemented', reason: doc.reason }, src);
+    if (doc.module) addNode({ id: `MOD-${doc.module.toUpperCase()}`, kind: 'module', name: doc.module, owner: doc.owner, status: doc.status || 'implemented', reason: doc.reason, doc: doc.doc }, src);
     for (const feat of doc.features || []) addNode({ ...feat, kind: 'feature', module: doc.module }, src);
     for (const n of doc.nodes || []) addNode({ ...n, module: doc.module }, src);
   }

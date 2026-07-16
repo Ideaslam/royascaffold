@@ -4,9 +4,16 @@ status: implemented
 
 # JWT is the sole auth mechanism (RULE-AUTH-003). Guards live in architecture/auth.yaml
 # (SVC-GUARD-JWT, SVC-GUARD-WSROLE). This module owns registration/login/token/verification.
+doc:
+  short: "Registration, login, tokens, and email verification."
+  description: "Owns the credential lifecycle: register, login, OAuth login, token refresh/logout, password reset, and email verification. JWT is the sole auth mechanism; the runtime guards live in architecture/auth.yaml."
+  rules:
+    - "JWT is the only authentication mechanism"
+    - "Passwords are hashed, never stored or returned in plaintext"
+
 features:
-  - { id: FEAT-AUTH-LOGIN, name: Register + Login, visibility: both, uses: [EP-AUTH-01, EP-AUTH-02, SVC-AUTH, PAGE-LOGIN] }
-  - { id: FEAT-AUTH-VERIFY, name: Email Verification, visibility: customer-portal, uses: [EP-AUTH-09, EP-AUTH-10, SVC-AUTH-EMAIL], history: [change-056] }
+  - { id: FEAT-AUTH-LOGIN, name: Register + Login, visibility: both, uses: [EP-AUTH-01, EP-AUTH-02, SVC-AUTH, PAGE-LOGIN], doc: { short: "Register a new account and log in.", description: "Email/password registration and login returning a JWT, plus password reset flows.", rules: ["Credentials validated server-side", "Returns a signed JWT on success"] } }
+  - { id: FEAT-AUTH-VERIFY, name: Email Verification, visibility: customer-portal, uses: [EP-AUTH-09, EP-AUTH-10, SVC-AUTH-EMAIL], history: [change-056], doc: { short: "Verify a user's email address.", description: "Issues and checks email-verification tokens and resends verification mail, gating access that requires a verified address.", rules: ["Verification token is single-use and time-bound"] } }
 
 nodes:
   - { id: SVC-AUTH, kind: logic, subtype: service, status: implemented,

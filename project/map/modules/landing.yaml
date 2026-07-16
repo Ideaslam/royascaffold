@@ -2,8 +2,14 @@ module: landing
 status: implemented
 
 # The public marketing site (third app). Static pages; no auth, no backend calls of its own.
+doc:
+  short: "The public marketing site (third app)."
+  description: "A lightweight public marketing site — landing, privacy, and terms pages. Static content with no authentication and no backend calls of its own; shares the Roya brand tokens."
+  rules:
+    - "Public and static; performs no authenticated backend calls"
+
 features:
-  - { id: FEAT-LANDING, name: Marketing Site, visibility: landing-site, uses: [PAGE-LANDING, PAGE-PRIVACY, PAGE-TERMS] }
+  - { id: FEAT-LANDING, name: Marketing Site, visibility: landing-site, uses: [PAGE-LANDING, PAGE-PRIVACY, PAGE-TERMS], doc: { short: "Public marketing pages.", description: "The landing, privacy, and terms pages shown to anonymous visitors.", rules: ["No auth required"] } }
 
 nodes:
   - { id: THEME-LANDING, kind: ui, subtype: theme, app: landing-site, status: implemented,

@@ -4,9 +4,15 @@ status: implemented
 
 # Admin manual ledger (SVC-PAY) + PayUp hosted-checkout orchestration (SVC-PAY-CHKOUT). Activation is
 # never inline — only via the durable subscription-activation event (RULE-SUB-001).
+doc:
+  short: "Payment ledger and hosted-checkout orchestration."
+  description: "An admin manual payment ledger plus PayUp hosted-checkout orchestration for subscriptions. Subscription activation is never inline — it flows through the durable subscription-activation event/queue."
+  rules:
+    - "Subscription activation happens only via the durable activation event, never inline"
+
 features:
-  - { id: FEAT-PAY-LEDGER, name: Payment Ledger (admin), visibility: admin-panel, uses: [EP-PAY-01, EP-PAY-03, SVC-PAY, PAGE-ADMIN-PAYMENTS] }
-  - { id: FEAT-PAY-CHECKOUT, name: PayUp Checkout, visibility: both, uses: [EP-PAY-06, EP-PAY-07, SVC-PAY-CHKOUT] }
+  - { id: FEAT-PAY-LEDGER, name: Payment Ledger (admin), visibility: admin-panel, uses: [EP-PAY-01, EP-PAY-03, SVC-PAY, PAGE-ADMIN-PAYMENTS], doc: { short: "Manually record and manage payments.", description: "Admins maintain a manual payment ledger (create/list/update/delete records).", rules: ["Admin-only"] } }
+  - { id: FEAT-PAY-CHECKOUT, name: PayUp Checkout, visibility: both, uses: [EP-PAY-06, EP-PAY-07, SVC-PAY-CHKOUT], doc: { short: "Pay for a subscription via PayUp.", description: "Initiate a hosted checkout, then confirm or cancel it; on confirmation it enqueues subscription activation.", rules: ["Activation enqueued, not applied inline"] } }
 
 nodes:
   - { id: SVC-PAY, kind: logic, subtype: service, status: implemented,

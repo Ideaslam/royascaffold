@@ -4,9 +4,16 @@ status: implemented
 
 # The only module that calls the AI provider (RULE-GLOBAL-001). Thin BullMQ workers — heavy logic
 # lives in pipeline steps (dashboard generation) or the CSV analyzer.
+doc:
+  short: "The AI worker tier — the only caller of the AI provider."
+  description: "Thin background workers that invoke the AI provider for CSV column analysis and dashboard generation. Heavy logic lives in pipeline steps; this module owns the async job wiring and enforces the AI usage rules."
+  rules:
+    - "The only module permitted to call the AI provider"
+    - "AI never receives raw data rows — only column names, types, and sample stats"
+
 features:
-  - { id: FEAT-AI-CSV, name: CSV Column Analysis, visibility: backend-only, uses: [SVC-AI-CSV] }
-  - { id: FEAT-AI-DASH, name: Dashboard Generation Worker, visibility: backend-only, uses: [SVC-AI-DASH] }
+  - { id: FEAT-AI-CSV, name: CSV Column Analysis, visibility: backend-only, uses: [SVC-AI-CSV], doc: { short: "Analyze CSV columns with AI.", description: "A worker that profiles an uploaded CSV's columns (types, semantics) using the AI provider.", rules: ["Runs on a background queue"] } }
+  - { id: FEAT-AI-DASH, name: Dashboard Generation Worker, visibility: backend-only, uses: [SVC-AI-DASH], doc: { short: "Run dashboard generation asynchronously.", description: "A worker that drives the dashboard-generation pipeline for a queued request and records AI cost/tokens.", rules: ["AI cost and tokens logged"] } }
 
 nodes:
   - { id: SVC-AI-CSV, kind: logic, subtype: worker, status: implemented,

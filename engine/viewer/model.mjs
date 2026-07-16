@@ -1,11 +1,23 @@
 // View DTOs for the Roya System Viewer — built from the live map model.
 
 import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 import { loadModel, buildGraph } from '../verify/lib.mjs';
 
 const COMPONENT_KINDS = ['surface', 'logic', 'data', 'ui', 'contract', 'integration', 'flow'];
+const ENGINE_DIR = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+let _kindsCache = null;
+export function kindsInfo() {
+  if (_kindsCache) return _kindsCache;
+  const p = join(ENGINE_DIR, 'kinds.yaml');
+  if (!existsSync(p)) return {};
+  const doc = yaml.load(readFileSync(p, 'utf8')) || {};
+  _kindsCache = doc.kinds || {};
+  return _kindsCache;
+}
 
 function loadContext(projectDir) {
   const model = loadModel(projectDir);
@@ -96,6 +108,7 @@ export function overview(projectDir) {
     verifyStatus: verifyReport?.status || null,
     verifyChecks: verifyReport?.checks || {},
     modules,
+    kinds: kindsInfo(),
   };
 }
 
@@ -138,6 +151,7 @@ export function moduleView(projectDir, modId) {
     owner: mod.owner || null,
     status: mod.status || 'implemented',
     reason: mod.reason || null,
+    doc: mod.doc || null,
     source: mod._source || null,
     features: featuresOut.sort((a, b) => a.id.localeCompare(b.id)),
     componentsByKind: byKind,
@@ -158,6 +172,7 @@ export function featureView(projectDir, featId) {
     module: feat.module || null,
     visibility: feat.visibility || null,
     status: feat.status || 'implemented',
+    doc: feat.doc || null,
     source: feat._source || null,
     spec: feat.spec || null,
     uses,
@@ -205,9 +220,13 @@ export function nodeView(projectDir, nodeId) {
     addEdgeGroup('uses', n.uses || n.edges?.uses);
   }
 
+  const allKinds = kindsInfo();
+
   return {
     id: base,
     ...pickNodeFields(n),
+    kindInfo: allKinds[n.kind] || null,
+    doc: n.doc || null,
     spec: n.spec || null,
     source: n._source || null,
     rules: resolveRules(model, n.rules || []),

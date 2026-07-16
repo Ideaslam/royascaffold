@@ -3,24 +3,52 @@
 # `spec` (see conventions.md → spec_by_kind). A spec records ONLY deviations from profile.conventions.
 # One bundle per module — never one file per method. Delete the kinds you don't use.
 # Placeholders are quoted so this file stays valid YAML; drop the quotes when you fill real values.
+#
+# The 12 universal KINDS (full descriptions in engine/kinds.yaml; short reminders inline below):
+#   module      — a code module: one bundle of related nodes (this file's header).
+#   feature     — a user-facing grouping of nodes (carries the detailed narrative).
+#   data        — a persisted shape (entity/collection/table).
+#   contract    — an interface / port plus its DI token.
+#   logic       — behavior with no I/O surface of its own (service/worker/handler).
+#   surface     — an externally reachable entry point (endpoint/webhook/cli/event).
+#   ui          — something rendered for a human (page/component/layout/theme).
+#   integration — an adapter to an external provider (declared in operational/profile).
+#   flow        — async or scheduled work (queue/worker/cron); usually in operational.yaml.
+#   rule/boundary/domain — cross-cutting; live in map/rules.yaml + map/architecture/.
 
-module: "<module>"                 # lowercase; becomes MOD-<MODULE>
+module: "<module>"                 # lowercase; becomes MOD-<MODULE>  (kind: module)
 owner: "DOM-<DOMAIN>"             # the domain that owns this module
 status: planned                   # planned | partial | implemented (+ reason if partial)
 
+# doc — human-readable description of this MODULE. Free-text; ignored by verify. The viewer renders it.
+#   short       one-liner shown in lists.
+#   description detailed paragraph — what it is, what it owns, how it fits.
+#   rules       list of the constraints/policies that govern it (plain sentences, not RULE- ids;
+#               the enforceable RULE- references stay on the individual nodes' `rules:` field).
+doc:
+  short: "<one-liner: what this module is>"
+  description: "<detailed: responsibilities, what it owns, how it fits the system>"
+  rules:
+    - "<a constraint this module obeys>"
+
+# kind: feature — a user-facing grouping of nodes; carries the detailed narrative (what + why).
 features:
   - id: "FEAT-<MODULE>-<NAME>"
     name: "<Human name>"
     visibility: both               # both | backend-only | frontend-only | admin-panel
     uses: ["EP-...", "SVC-...", "PAGE-..."]
-    spec:                          # the detailed feature explanation (what + why)
+    doc:                           # human description of this FEATURE (viewer renders it)
+      short: "<one-liner>"
+      description: "<detailed: the user outcome and how it works>"
+      rules: ["<a constraint this feature obeys>"]
+    spec:                          # the detailed BUILD contract (what + why) — required when planned
       narrative: "what this feature does and why it exists"
       rules: ["RULE-..."]
       acceptance: ["testable outcome 1", "testable outcome 2"]
       edge_cases: ["invalid input", "not-found", "external failure"]
 
 nodes:
-  # ── data (entity/collection) ──
+  # ── data — a persisted shape (entity/collection/table) ──
   - id: "ENT-<NAME>"
     kind: data
     subtype: collection
@@ -33,7 +61,7 @@ nodes:
       relations: "one <Other> -> many <Name>"
       indexes: ["{ <field> }"]
 
-  # ── contract (interface/port) ──
+  # ── contract — an interface / port plus its DI token ──
   - id: "IF-<NAME>"
     kind: contract
     subtype: interface
@@ -42,7 +70,7 @@ nodes:
     methods: [doThing]
     implemented_by: ["SVC-<NAME>"]
 
-  # ── logic (service/worker) ──
+  # ── logic — behavior with no I/O surface of its own (service/worker/handler) ──
   - id: "SVC-<NAME>"
     kind: logic
     subtype: service
@@ -55,7 +83,7 @@ nodes:
         - { sig: "create(dto): <Name>", does: "validate + persist", side_effects: none }
         - { sig: "list(q): Paginated<Name>", does: "paginated query", side_effects: none }
 
-  # ── surface (endpoint/handler) ──
+  # ── surface — an externally reachable entry point (endpoint/webhook/cli/event) ──
   - id: "EP-<MODULE>-01"
     kind: surface
     subtype: rest.get
@@ -69,7 +97,7 @@ nodes:
       response: { status: 200, shape: "Paginated<NameDto>" }
       errors: ["{ code: 401, when: unauthenticated }"]
 
-  # ── ui (page/component) ──
+  # ── ui — something rendered for a human (page/component/layout/theme) ──
   - id: "PAGE-<NAME>"
     kind: ui
     subtype: page

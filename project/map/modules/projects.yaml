@@ -3,8 +3,14 @@ owner: DOM-REPORTING
 status: implemented
 
 # Projects are dashboard containers, workspace-scoped via the dynamic collection ws_{slug}_projects.
+doc:
+  short: "Dashboard containers, one per workspace."
+  description: "Projects group dashboards. They are workspace-scoped via the dynamic collection ws_{slug}_projects and provide standard CRUD."
+  rules:
+    - "Workspace-scoped; a project belongs to exactly one workspace"
+
 features:
-  - { id: FEAT-PROJ, name: Projects, visibility: both, uses: [EP-PROJ-01, EP-PROJ-02, SVC-PROJ, PAGE-PROJECTS] }
+  - { id: FEAT-PROJ, name: Projects, visibility: both, uses: [EP-PROJ-01, EP-PROJ-02, SVC-PROJ, PAGE-PROJECTS], doc: { short: "Create and manage projects.", description: "CRUD for projects that contain dashboards, listed and edited from the customer portal.", rules: ["Scoped to the active workspace"] } }
 
 nodes:
   - { id: SVC-PROJ, kind: logic, subtype: service, status: implemented,

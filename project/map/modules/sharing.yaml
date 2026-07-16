@@ -2,8 +2,15 @@ module: sharing
 owner: DOM-REPORTING
 status: implemented
 
+doc:
+  short: "Public, tokenized share links for dashboards."
+  description: "Create, list, and revoke public share links that expose a read-only dashboard via an unguessable token, plus the public page that resolves a shared dashboard."
+  rules:
+    - "Shared access is read-only and scoped to the link's dashboard"
+    - "Share tokens are unguessable and revocable"
+
 features:
-  - { id: FEAT-SHARE, name: Public Share Links, visibility: both, uses: [EP-SHARE-01, EP-SHARE-04, SVC-SHARE, PAGE-SHARED] }
+  - { id: FEAT-SHARE, name: Public Share Links, visibility: both, uses: [EP-SHARE-01, EP-SHARE-04, SVC-SHARE, PAGE-SHARED], doc: { short: "Share a dashboard via a public link.", description: "Owners create/revoke share links; anonymous visitors resolve a read-only dashboard by token.", rules: ["Read-only; token grants access to one dashboard"] } }
 
 nodes:
   - { id: SVC-SHARE, kind: logic, subtype: service, status: implemented,

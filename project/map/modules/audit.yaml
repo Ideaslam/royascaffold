@@ -3,8 +3,14 @@ owner: DOM-PLATFORM
 status: implemented
 
 # Global fire-and-forget audit logger — best-effort, never propagates errors (RULE-GLOBAL-010).
+doc:
+  short: "Best-effort audit trail of significant actions."
+  description: "A global, fire-and-forget audit logger. Services call it to record significant actions; it is best-effort and never propagates its own errors back to the caller. Admins browse the trail."
+  rules:
+    - "Audit logging is best-effort and never breaks the calling operation"
+
 features:
-  - { id: FEAT-AUDIT, name: Audit Trail, visibility: admin-panel, uses: [EP-AUDIT-01, SVC-AUDIT, PAGE-ADMIN-AUDIT] }
+  - { id: FEAT-AUDIT, name: Audit Trail, visibility: admin-panel, uses: [EP-AUDIT-01, SVC-AUDIT, PAGE-ADMIN-AUDIT], doc: { short: "Review the audit trail.", description: "Admins browse a paginated log of recorded actions across the system.", rules: ["Admin-only visibility"] } }
 
 nodes:
   - { id: SVC-AUDIT, kind: logic, subtype: service, status: implemented,

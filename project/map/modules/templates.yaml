@@ -4,9 +4,16 @@ status: implemented
 
 # Canonical dashboard-template catalog (change-049): global industries -> fields -> templates.
 # Blueprints reference only canonical dictionary fields; validated on write + at seed.
+doc:
+  short: "Canonical dashboard-template catalog."
+  description: "A global catalog structured as industries -> canonical fields -> templates. Templates are blueprints for generating dashboards; they may reference only canonical dictionary fields, validated on write and at seed."
+  rules:
+    - "Template blueprints reference only canonical dictionary fields"
+    - "Blueprints are validated on write and at seed time"
+
 features:
-  - { id: FEAT-TPL-BROWSE, name: Template Catalog (customer), visibility: customer-portal, uses: [EP-TPL-01, EP-TPL-02, EP-TPL-03, EP-TPL-04, SVC-TPL] }
-  - { id: FEAT-TPL-ADMIN, name: Template Catalog (admin), visibility: admin-panel, uses: [EP-TPL-11, EP-TPL-21, SVC-TPL, PAGE-ADMIN-TEMPLATES] }
+  - { id: FEAT-TPL-BROWSE, name: Template Catalog (customer), visibility: customer-portal, uses: [EP-TPL-01, EP-TPL-02, EP-TPL-03, EP-TPL-04, SVC-TPL], doc: { short: "Browse the template catalog.", description: "Customers browse industries, fields, and templates to pick one when creating a dashboard." } }
+  - { id: FEAT-TPL-ADMIN, name: Template Catalog (admin), visibility: admin-panel, uses: [EP-TPL-11, EP-TPL-21, SVC-TPL, PAGE-ADMIN-TEMPLATES], doc: { short: "Curate the template catalog.", description: "Admins create and manage industries, canonical fields, and templates, and validate their blueprints.", rules: ["Restricted to role:admin"] } }
 
 nodes:
   - { id: SVC-TPL, kind: logic, subtype: service, status: implemented,

@@ -4,8 +4,15 @@ status: implemented
 
 # OLAP engine layer. Engine-neutral operations resolve the workspace's active OLAP engine via a
 # strategy registry (extend-by-registration). Table naming ds_{workspaceSlug}_{datasetId} enforced here.
+doc:
+  short: "The OLAP store: tables, queries, and chart-data cache."
+  description: "An engine-neutral analytics store. Operations resolve the workspace's active OLAP engine (ClickHouse, BigQuery, ...) via a strategy registry, and enforce the ds_{workspaceSlug}_{datasetId} table naming. Also owns the chart-data cache."
+  rules:
+    - "Analytics tables are named ds_{workspaceSlug}_{datasetId}"
+    - "The concrete OLAP engine is resolved per workspace via a registry"
+
 features:
-  - { id: FEAT-OLAP, name: Analytics Store, visibility: backend-only, uses: [SVC-OLAP-STORE, SVC-OLAP-ENGINE] }
+  - { id: FEAT-OLAP, name: Analytics Store, visibility: backend-only, uses: [SVC-OLAP-STORE, SVC-OLAP-ENGINE], doc: { short: "Store, query, and cache analytics data.", description: "Create dataset tables, insert rows, run queries and aggregates, and get/set/invalidate the chart-data cache across pluggable OLAP engines." } }
 
 nodes:
   - { id: IF-OLAP-ENGINE, kind: contract, subtype: interface, status: implemented,

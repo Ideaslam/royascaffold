@@ -2,14 +2,22 @@ module: data
 owner: DOM-DATA
 status: implemented
 
+doc:
+  short: "Ingestion and management of connections, data sources, and datasets."
+  description: "The data engine's application module: legacy CSV upload, connections, data sources, datasets (tables/schema/sync), OAuth + webhook intake, and the data-source-type catalog. Exposes its public read contract IF-DATA-RESOLVER to the reporting engine."
+  rules:
+    - "Credentials are encrypted at rest and never returned in a response"
+    - "Slow work (ingest, sync, analysis) runs on background queues"
+    - "AI never receives raw data rows"
+
 # ── Features (user-facing groupings; visibility = where they surface) ──────────────────────────
 features:
-  - { id: FEAT-DATA-CSV,     name: Legacy CSV Upload,        visibility: both,        uses: [EP-DATA-01, EP-DATA-04, SVC-DATA] }
-  - { id: FEAT-DATA-CONN,    name: Manage Connections,       visibility: both,        uses: [EP-DATA-09, EP-DATA-10, SVC-DATA-CONN] }
-  - { id: FEAT-DATA-SOURCE,  name: Manage Data Sources,      visibility: both,        uses: [EP-DATA-51, EP-DATA-52, SVC-DATA-SOURCE, PAGE-DATA-SOURCES] }
-  - { id: FEAT-DATA-DATASET, name: Tables + Schema + Sync,   visibility: both,        uses: [EP-DATA-56, EP-DATA-44, SVC-DATA-DS] }
-  - { id: FEAT-DATA-OAUTH,   name: OAuth + Webhooks,         visibility: backend-only, uses: [EP-DATA-25, EP-DATA-27, SVC-CONN-GOOGLE-OAUTH, SVC-CONN-SHOPIFY-OAUTH] }
-  - { id: FEAT-DATA-DSTYPE,  name: Data Source Type Catalog, visibility: admin-panel,  uses: [EP-DATA-47, EP-DSTYPE-01, SVC-DSTYPE] }
+  - { id: FEAT-DATA-CSV,     name: Legacy CSV Upload,        visibility: both,        uses: [EP-DATA-01, EP-DATA-04, SVC-DATA], doc: { short: "Upload and analyze CSV files.", description: "The legacy direct CSV upload path with asynchronous column analysis.", rules: ["Upload + analysis run on a background queue"] } }
+  - { id: FEAT-DATA-CONN,    name: Manage Connections,       visibility: both,        uses: [EP-DATA-09, EP-DATA-10, SVC-DATA-CONN], doc: { short: "Create and manage source connections.", description: "CRUD, test, and re-auth of connections to external data providers.", rules: ["Connection credentials encrypted at rest"] } }
+  - { id: FEAT-DATA-SOURCE,  name: Manage Data Sources,      visibility: both,        uses: [EP-DATA-51, EP-DATA-52, SVC-DATA-SOURCE, PAGE-DATA-SOURCES], doc: { short: "Manage data sources.", description: "Create, list, update, and delete data sources built on top of connections; implements the public IF-DATA-RESOLVER contract." } }
+  - { id: FEAT-DATA-DATASET, name: Tables + Schema + Sync,   visibility: both,        uses: [EP-DATA-56, EP-DATA-44, SVC-DATA-DS], doc: { short: "Define tables, discover schema, and sync.", description: "Create datasets from source entities, discover/confirm schema, and run and track syncs into the analytics store.", rules: ["Schema discovery + sync run asynchronously"] } }
+  - { id: FEAT-DATA-OAUTH,   name: OAuth + Webhooks,         visibility: backend-only, uses: [EP-DATA-25, EP-DATA-27, SVC-CONN-GOOGLE-OAUTH, SVC-CONN-SHOPIFY-OAUTH], doc: { short: "OAuth connect and provider webhooks.", description: "OAuth authorization flows and inbound webhooks for Google, Shopify, Salla, and Zid.", rules: ["Callbacks/webhooks are public but state/signature validated"] } }
+  - { id: FEAT-DATA-DSTYPE,  name: Data Source Type Catalog, visibility: admin-panel,  uses: [EP-DATA-47, EP-DSTYPE-01, SVC-DSTYPE], doc: { short: "Catalog of supported data-source types.", description: "Admin-managed catalog describing each supported data-source type and its capabilities." } }
 
 nodes:
   # ── Contract owned by the data engine (the reporting engine depends on THIS, not internals) ───

@@ -2,8 +2,14 @@ module: ai-logs
 owner: DOM-PLATFORM
 status: implemented
 
+doc:
+  short: "AI call logs, token usage, and cost accounting."
+  description: "Records every AI call with its tokens and computed cost (using a per-model pricing table), and exposes cost summaries to admins."
+  rules:
+    - "Every AI call is logged with tokens and cost"
+
 features:
-  - { id: FEAT-AILOG, name: AI Logs + Cost, visibility: admin-panel, uses: [EP-AILOG-01, EP-AILOG-02, SVC-AILOG, PAGE-ADMIN-AILOGS] }
+  - { id: FEAT-AILOG, name: AI Logs + Cost, visibility: admin-panel, uses: [EP-AILOG-01, EP-AILOG-02, SVC-AILOG, PAGE-ADMIN-AILOGS], doc: { short: "Review AI usage and spend.", description: "Admins browse paginated AI logs and cost summaries derived from per-model pricing.", rules: ["Admin-only visibility"] } }
 
 nodes:
   - { id: SVC-AILOG, kind: logic, subtype: repository, status: implemented,

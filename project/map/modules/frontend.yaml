@@ -4,6 +4,13 @@ status: implemented
 # The frontend is structured like the backend: shared theme + design tokens + app layouts,
 # then per-module pages (co-located in each module bundle) reference the theme. Two apps share
 # the same brand system; the landing site is a third, lighter app.
+doc:
+  short: "Shared design system: theme, tokens, i18n, and app layouts."
+  description: "The cross-cutting frontend foundation — brand theme, design tokens, localization bundles, and per-app layout shells. Individual pages live in their own module bundles and bind to this shared system."
+  rules:
+    - "All apps bind to the shared theme and tokens"
+    - "Pages live in their feature module, not here"
+
 nodes:
   # ── Design system (the "global style" the pages bind to) ──────────────────────────────────────
   - { id: THEME-ROYA, kind: ui, subtype: theme, status: implemented,

@@ -4,8 +4,15 @@ status: implemented
 
 # The connector engine. Every source implements SVC-CONN-INTERFACE + self-registers in SVC-CONN-REG
 # (extend-by-registration, RULE-ARCH-006). SVC-CONN-INTERFACE is a public contract of DOM-DATA.
+doc:
+  short: "Pluggable connectors for every data source."
+  description: "The connector engine: a common interface (SVC-CONN-INTERFACE) plus a registry (SVC-CONN-REG) that every concrete source connector implements and self-registers into. New sources are added by registration, never by editing the engine."
+  rules:
+    - "Every connector implements SVC-CONN-INTERFACE and self-registers"
+    - "New sources are added by registration, not by modifying the engine"
+
 features:
-  - { id: FEAT-CONN-ENGINE, name: Connector Engine, visibility: backend-only, uses: [SVC-CONN-INTERFACE, SVC-CONN-REG] }
+  - { id: FEAT-CONN-ENGINE, name: Connector Engine, visibility: backend-only, uses: [SVC-CONN-INTERFACE, SVC-CONN-REG], doc: { short: "The extend-by-registration connector core.", description: "Defines the connector contract and registry that all concrete source connectors plug into.", rules: ["Connectors register themselves at startup"] } }
 
 nodes:
   - { id: SVC-CONN-INTERFACE, kind: contract, subtype: interface, status: implemented,

@@ -11,6 +11,10 @@ nodes:
     to: "DOM-<TO>"
     status: planned
     reason_note: "<why this boundary exists — what may/may not cross>"
+    doc:                         # human description (viewer renders it)
+      short: "<one-liner: what this boundary restricts>"
+      description: "<detailed: what may cross, what may not, and why>"
+      rules: ["<the constraint this boundary enforces>"]
 
   # Example (delete):
   # - id: BND-REPORTING-DATA

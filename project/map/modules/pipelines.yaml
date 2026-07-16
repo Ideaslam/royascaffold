@@ -5,9 +5,16 @@ status: implemented
 # Transitional: concrete step packs + the run repo live in src/modules/pipelines/ until they move
 # with their owning engine (ingest -> data engine, dashboard -> reporting). They self-register into
 # the kernel's StepRegistry (a public engine-core contract), never editing the kernel.
+doc:
+  short: "Concrete pipeline step packs (ingest + dashboard)."
+  description: "The concrete step implementations that run on the kernel's PipelineEngine, plus the run repository. Step packs self-register into the kernel's StepRegistry; they never edit the kernel."
+  rules:
+    - "Step packs self-register into the kernel StepRegistry"
+    - "Steps depend on engine-core seams, never the kernel internals"
+
 features:
-  - { id: FEAT-PIPE-INGEST, name: Ingest Pipeline, visibility: backend-only, uses: [SVC-PIPE-STEPS-INGEST] }
-  - { id: FEAT-PIPE-DASH, name: Dashboard Pipeline, visibility: backend-only, uses: [SVC-PIPE-STEPS-DASH] }
+  - { id: FEAT-PIPE-INGEST, name: Ingest Pipeline, visibility: backend-only, uses: [SVC-PIPE-STEPS-INGEST], doc: { short: "The data-ingestion step pack.", description: "Extract, identify columns, apply mapping, clean, type-cast, dedupe, and load rows into the analytics store." } }
+  - { id: FEAT-PIPE-DASH, name: Dashboard Pipeline, visibility: backend-only, uses: [SVC-PIPE-STEPS-DASH], doc: { short: "The dashboard-generation step pack.", description: "Gather dataset schemas, load the widget catalog, generate widgets with AI, build filters, and persist widgets." } }
 
 nodes:
   - { id: SVC-PIPE-RUN-REPO, kind: logic, subtype: repository, status: implemented,

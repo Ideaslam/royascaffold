@@ -12,6 +12,10 @@ nodes:
     contracts: ["<IF-... or SVC-... ids exposed publicly>"]
     history: []                                 # change ids that touched it
     reason_note: "<what this domain is responsible for>"
+    doc:                                        # human description (viewer renders it)
+      short: "<one-liner: what this domain owns>"
+      description: "<detailed: responsibilities, the modules it groups, its public surface>"
+      rules: ["<a constraint/policy this domain enforces>"]
 
   # Example (delete):
   # - id: DOM-PLATFORM

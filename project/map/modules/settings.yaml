@@ -2,8 +2,15 @@ module: settings
 owner: DOM-PLATFORM
 status: implemented
 
+doc:
+  short: "Global system settings singleton."
+  description: "A single global settings document that admins read and update to configure system-wide behavior."
+  rules:
+    - "Exactly one global settings document exists"
+    - "Only admins may read or update settings"
+
 features:
-  - { id: FEAT-SETTINGS, name: System Settings, visibility: admin-panel, uses: [EP-SET-01, EP-SET-02, SVC-SET, PAGE-ADMIN-SETTINGS] }
+  - { id: FEAT-SETTINGS, name: System Settings, visibility: admin-panel, uses: [EP-SET-01, EP-SET-02, SVC-SET, PAGE-ADMIN-SETTINGS], doc: { short: "View and edit system settings.", description: "Admins read and update the global settings singleton from the admin panel.", rules: ["Admin-only"] } }
 
 nodes:
   - { id: SVC-SET, kind: logic, subtype: service, status: implemented,

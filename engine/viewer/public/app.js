@@ -10,6 +10,18 @@ const verifyDrawer = $('#verify-drawer');
 const verifyDrawerBody = $('#verify-drawer-body');
 const drawerBackdrop = $('#drawer-backdrop');
 
+// ── Kind descriptions (loaded once) ───────────────────────────────────────────
+let KINDS = {};
+
+function kindDesc(kind) {
+  return KINDS[kind] || null;
+}
+
+function kindTip(kind) {
+  const k = kindDesc(kind);
+  return k?.short ? ` title="${k.short.replace(/"/g, '&quot;')}"` : '';
+}
+
 // ── Status pill ──────────────────────────────────────────────────────────────
 const STATUS_COLORS = {
   implemented: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -86,6 +98,19 @@ function viewBtn(hash, label = 'View details') {
   return `<button onclick="location.hash='${hash}'" class="px-2.5 py-1 text-xs rounded bg-indigo-600 hover:bg-indigo-700 text-white transition whitespace-nowrap">${label}</button>`;
 }
 
+function renderDoc(doc) {
+  if (!doc) return '';
+  const rules = Array.isArray(doc.rules) ? doc.rules : (doc.rules ? [doc.rules] : []);
+  return `<div class="rounded-lg border border-slate-200 bg-white shadow-sm p-4 mb-6">
+    ${doc.short ? `<p class="text-sm font-semibold text-slate-800">${doc.short}</p>` : ''}
+    ${doc.description ? `<p class="text-sm text-slate-600 mt-1 leading-relaxed whitespace-pre-wrap">${doc.description}</p>` : ''}
+    ${rules.length ? `<div class="mt-3">
+      <h3 class="text-xs uppercase text-slate-500 mb-1">Constraints</h3>
+      <ul class="list-disc list-inside text-sm text-slate-700 space-y-1">${rules.map((r) => `<li>${r}</li>`).join('')}</ul>
+    </div>` : ''}
+  </div>`;
+}
+
 function nodeLink(id, label) {
   return `<button onclick="location.hash='#/node/${id}'" class="font-mono text-indigo-600 hover:text-indigo-800 text-xs">${label || id}</button>`;
 }
@@ -116,10 +141,11 @@ function renderStats(totals, statusRollup, backlogCount) {
 function renderKindBreakdown(totals) {
   const rows = Object.entries(totals || {})
     .sort((a, b) => b[1] - a[1])
-    .map(([kind, count]) => ({ kind, count }));
+    .map(([kind, count]) => ({ kind, count, short: kindDesc(kind)?.short || '' }));
   return renderTable(
     [
       { label: 'Kind', render: (r) => `<span class="font-medium">${r.kind}</span>` },
+      { label: 'What it is', render: (r) => `<span class="text-xs text-slate-500">${r.short || '—'}</span>` },
       { label: 'Count', render: (r) => r.count },
     ],
     rows,
@@ -199,8 +225,10 @@ async function renderModule(id) {
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([kind, items]) => {
       const rows = items.map((c) => ({ ...c, hash: `#/node/${c.id}` }));
+      const short = kindDesc(kind)?.short;
       return `<div class="mb-6">
-        <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-2">${kind} <span class="text-slate-400 font-normal">(${items.length})</span></h3>
+        <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-0.5">${kind} <span class="text-slate-400 font-normal">(${items.length})</span></h3>
+        ${short ? `<p class="text-xs text-slate-500 mb-2">${short}</p>` : '<div class="mb-2"></div>'}
         ${renderTable(
           [
             { label: 'ID', render: (r) => `<span class="font-mono text-xs">${r.id}</span>` },
@@ -216,7 +244,7 @@ async function renderModule(id) {
     .join('');
 
   content.innerHTML = `
-    <div class="mb-6 flex flex-wrap items-start gap-4">
+    <div class="mb-2 flex flex-wrap items-start gap-4">
       <div>
         <h2 class="text-2xl font-semibold">${data.name}</h2>
         <p class="font-mono text-sm text-slate-500 mt-1">${data.id}</p>
@@ -226,7 +254,9 @@ async function renderModule(id) {
         ${data.owner ? `<span class="text-sm text-slate-500">Owner: ${nodeLink(data.owner, data.owner)}</span>` : ''}
       </div>
     </div>
+    ${kindDesc('module')?.short ? `<p class="text-sm text-slate-500 mb-4">${kindDesc('module').short}</p>` : ''}
     ${data.reason ? `<p class="text-sm text-amber-800 mb-4 border border-amber-200 rounded-lg px-3 py-2 bg-amber-50">${data.reason}</p>` : ''}
+    ${renderDoc(data.doc)}
 
     <h2 class="text-lg font-semibold mb-3">Features <span class="text-slate-500 text-sm font-normal">(${data.features.length})</span></h2>
     ${renderTable(
@@ -269,11 +299,13 @@ async function renderFeature(id) {
   const useRows = data.uses.map((u) => ({ ...u, hash: `#/node/${u.id}` }));
 
   content.innerHTML = `
-    <div class="mb-6">
+    <div class="mb-4">
       <h2 class="text-2xl font-semibold">${data.name}</h2>
       <p class="font-mono text-sm text-slate-500 mt-1">${data.id}</p>
       <div class="flex gap-2 mt-2">${statusPill(data.status)}</div>
+      ${kindDesc('feature')?.short ? `<p class="text-sm text-slate-500 mt-2">${kindDesc('feature').short}</p>` : ''}
     </div>
+    ${renderDoc(data.doc)}
     ${specHtml}
     <h2 class="text-lg font-semibold mb-3">Uses <span class="text-slate-500 text-sm font-normal">(${data.uses.length})</span></h2>
     ${renderTable(
@@ -358,14 +390,24 @@ async function renderNode(id) {
     })
     .join('');
 
+  const ki = data.kindInfo || kindDesc(data.kind);
+  const kindBox = ki ? `
+    <div class="rounded-lg border border-indigo-100 bg-indigo-50/60 p-4 mb-4">
+      <h3 class="text-xs uppercase text-indigo-700 font-semibold mb-1">Kind · ${data.kind}</h3>
+      ${ki.short ? `<p class="text-sm text-slate-800 font-medium">${ki.short}</p>` : ''}
+      ${ki.long ? `<p class="text-sm text-slate-600 mt-1 leading-relaxed">${ki.long}</p>` : ''}
+    </div>` : '';
+
   content.innerHTML = `
-    <div class="mb-6 flex flex-wrap items-start gap-3">
+    <div class="mb-4 flex flex-wrap items-start gap-3">
       <div>
         <h2 class="text-2xl font-semibold font-mono">${data.id}</h2>
         <p class="text-sm text-slate-500 mt-1">${data.kind}${data.subtype ? ` · ${data.subtype}` : ''}</p>
       </div>
       ${statusPill(data.status)}
     </div>
+    ${kindBox}
+    ${renderDoc(data.doc)}
     ${renderFields(data)}
     ${renderSpecBlock(data.spec)}
     ${rulesHtml}
@@ -455,4 +497,12 @@ $('#close-drawer').addEventListener('click', closeDrawer);
 drawerBackdrop.addEventListener('click', closeDrawer);
 
 window.addEventListener('hashchange', route);
-route();
+
+(async function init() {
+  try {
+    KINDS = await api('/api/kinds');
+  } catch (e) {
+    KINDS = {};
+  }
+  route();
+})();

@@ -10,6 +10,12 @@ nodes:
     status: implemented
     history: [change-063]
     reason_note: "Reporting may import the Data Source contract only, never DatasetRepository/internals"
+    doc:
+      short: "Reporting reaches Data only through its public contracts."
+      description: "The reporting engine may call the data engine's public contracts (IF-DATA-RESOLVER, SVC-OLAP-STORE) but must never import DatasetRepository or other internals. Enforced by verify."
+      rules:
+        - "Only DOM-DATA's public contracts may be imported from DOM-REPORTING"
+        - "A violating cross-domain edge fails verification"
 
   - id: BND-APP-CORE
     kind: boundary
@@ -19,3 +25,9 @@ nodes:
     to: DOM-ENGINE-CORE
     status: implemented
     reason_note: "Engines use the kernel via its seams; no upward import from kernel into apps"
+    doc:
+      short: "Engines use the kernel only through its seams."
+      description: "The data engine (and other outer rings) may depend on the kernel via its public contracts and seams, but the kernel must never import outward into application code. Enforced by verify."
+      rules:
+        - "Only DOM-ENGINE-CORE's public contracts/seams may be depended on"
+        - "No upward import from the kernel into outer rings"

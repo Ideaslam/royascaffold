@@ -8,6 +8,12 @@ nodes:
     contracts: [SVC-PIPE-ENGINE, SVC-PIPE-STEP-REG, SVC-PIPE-TYPE-REG, IF-PIPELINE-RUN-STORE, IF-TENANT-CONTEXT]
     history: [change-060, change-064]
     reason_note: "Neutral kernel (PipelineEngine + registries + seams); zero feature knowledge (RULE-ARCH-002)"
+    doc:
+      short: "The neutral kernel ring — pipeline engine and registries."
+      description: "The innermost ring. Owns the engine-core module: the pipeline engine, step/type registries, and the persistence + tenant seams. It exposes these as public contracts and knows nothing about features."
+      rules:
+        - "Zero feature knowledge; nothing application-specific may live here"
+        - "No upward imports — the kernel never depends on outer rings"
 
   - id: DOM-DATA
     kind: domain
@@ -17,6 +23,12 @@ nodes:
     owns: [data, connectors, analytics-store, pipelines]
     contracts: [SVC-CONN-INTERFACE, IF-DATA-RESOLVER, IF-OLAP-ENGINE, SVC-OLAP-STORE]
     history: [change-060]
+    doc:
+      short: "The data-source engine — ingestion, connectors, and analytics store."
+      description: "Groups the data, connectors, analytics-store, and pipelines modules. It ingests external data and serves it, exposing a small public surface (connector interface, data resolver, OLAP engine + store) that the reporting engine consumes."
+      rules:
+        - "Other domains may use only its public contracts, never its repositories/internals"
+        - "Credentials never leave the domain in a response"
 
   - id: DOM-REPORTING
     kind: domain
@@ -26,6 +38,12 @@ nodes:
     owns: [dashboards, sharing, export, templates, color-templates, projects]
     contracts: [IF-REPORTING]
     history: [change-060]
+    doc:
+      short: "The reporting engine — dashboards, sharing, export, templates."
+      description: "Groups the dashboards, sharing, export, templates, color-templates, and projects modules. It turns datasets into dashboards and shares/exports them, consuming the data engine strictly through its public contracts."
+      rules:
+        - "Reads the data engine only via its public contracts (BND-REPORTING-DATA)"
+        - "First chart paint is cache-served"
 
   - id: DOM-PLATFORM
     kind: domain
@@ -34,3 +52,9 @@ nodes:
     status: implemented
     owns: [users, auth, workspace, subscriptions, payments, notifications, ai-processing, ai-logs, audit, admin, settings, background-jobs, integration-providers]
     contracts: []
+    doc:
+      short: "The application platform — identity, tenancy, billing, and shared services."
+      description: "The outermost ring: users/auth, workspaces (tenancy), subscriptions and payments, notifications, AI workers and logs, audit, admin, settings, background jobs, and the integrations layer. It wires the product together and hosts the cross-cutting services the engines rely on."
+      rules:
+        - "Multi-tenancy: tenant-scoped data is always keyed by workspace"
+        - "Third-party SDKs are reached only through the integrations layer"

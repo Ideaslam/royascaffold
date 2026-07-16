@@ -4,6 +4,14 @@ status: implemented
 
 # The reporting engine. Depends on the data engine's PUBLIC contracts only (IF-DATA-RESOLVER +
 # SVC-OLAP-STORE) — never DatasetRepository/internals (BND-REPORTING-DATA, RULE-ARCH-001).
+doc:
+  short: "AI-generated dashboards, widgets, filters, and chart data."
+  description: "The reporting engine's core module: generate dashboards from a dataset via AI, view them with widgets and filters, and serve cached chart data. Reads the data engine only through its public contracts (IF-DATA-RESOLVER, SVC-OLAP-STORE)."
+  rules:
+    - "Depends on the data engine's public contracts only, never its internals"
+    - "First chart paint is served from cache (<200ms)"
+    - "Dashboard generation runs asynchronously via a queue"
+
 features:
   # Rich feature spec (optional on implemented nodes, shown here to prove the map carries the FULL
   # descriptive value a builder needs — the "detailed explanation" v1 was valued for).
@@ -11,6 +19,13 @@ features:
     name: AI Dashboard Generation
     visibility: both
     uses: [EP-DASH-01, SVC-DASH, SVC-PIPE-STEPS-DASH]
+    doc:
+      short: "Generate a dashboard from a dataset with AI."
+      description: "The user picks a synced dataset; the pipeline profiles columns, the AI proposes chart widgets, and the system persists a Dashboard with ChartWidgets and warms the cache. Generation is async and polled via a job id."
+      rules:
+        - "Runs asynchronously on Q-DASH-GENERATION"
+        - "AI cost and tokens are recorded to the AI log"
+        - "Tier quota is checked before enqueue"
     spec:
       narrative: >
         From a synced dataset the user asks for a dashboard; the pipeline profiles the columns,
@@ -26,9 +41,9 @@ features:
         - "empty/one-row dataset -> generate a single summary card, not charts"
         - "AI provider timeout/failure -> job status=failed with a retryable reason; no partial dashboard persisted"
         - "tier quota exceeded -> 402 before enqueue"
-  - { id: FEAT-DASH-VIEW, name: View + Widgets, visibility: both, uses: [PAGE-DASHBOARD-VIEW, EP-DASH-08, SVC-DASH] }
-  - { id: FEAT-DASH-FILTERS, name: Dashboard Filters, visibility: both, uses: [EP-DASH-14, EP-DASH-15, SVC-DASH-FILTER] }
-  - { id: FEAT-DASH-TEMPLATE, name: Dashboard From Template, visibility: both, uses: [EP-DASH-16, SVC-DASH] }
+  - { id: FEAT-DASH-VIEW, name: View + Widgets, visibility: both, uses: [PAGE-DASHBOARD-VIEW, EP-DASH-08, SVC-DASH], doc: { short: "View a dashboard and its widgets.", description: "Renders the dashboard with its widget grid and serves per-widget chart data from cache.", rules: ["Chart data served from cache first"] } }
+  - { id: FEAT-DASH-FILTERS, name: Dashboard Filters, visibility: both, uses: [EP-DASH-14, EP-DASH-15, SVC-DASH-FILTER], doc: { short: "Filter a dashboard's data.", description: "Compute filter options and search filter values so viewers can slice widget data interactively." } }
+  - { id: FEAT-DASH-TEMPLATE, name: Dashboard From Template, visibility: both, uses: [EP-DASH-16, SVC-DASH], doc: { short: "Create a dashboard from a template.", description: "Instantiate a dashboard from a canonical template, mapping template fields onto the chosen dataset." } }
 
 nodes:
   - { id: IF-REPORTING, kind: contract, subtype: interface, status: implemented,

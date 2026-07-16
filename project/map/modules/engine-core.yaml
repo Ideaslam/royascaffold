@@ -5,6 +5,13 @@ status: implemented
 # The neutral kernel (change-060 Phase 1, src/engine-core/). Pure registration/lookup mechanics —
 # zero feature knowledge (RULE-ARCH-002). Persistence is supplied via the PIPELINE_RUN_STORE seam,
 # so the engine has no edge to any repository (it stays persistence-agnostic).
+doc:
+  short: "The neutral kernel: pipeline engine, registries, and seams."
+  description: "The stack-neutral core that runs pipelines and holds the step/type registries. It has zero feature knowledge and no persistence of its own; storage and tenant context are supplied through seams (PIPELINE_RUN_STORE, TenantContext)."
+  rules:
+    - "Zero feature knowledge — the kernel never imports application code"
+    - "Persistence and tenant context enter only through seams"
+
 nodes:
   - { id: SVC-PIPE-ENGINE, kind: logic, subtype: service, status: implemented,
       methods: [run], deps: [SVC-PIPE-TYPE-REG, SVC-PIPE-STEP-REG],

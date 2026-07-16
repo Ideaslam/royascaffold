@@ -4,9 +4,17 @@ status: implemented
 
 # The integrations layer (src/integrations/*). Every third-party SDK is wrapped here behind an
 # interface (RULE-GLOBAL-003); services depend on interfaces, not SDK classes.
+doc:
+  short: "The integrations layer wrapping every third-party SDK."
+  description: "The single home for external provider adapters (AI, mail, storage, payments). Every third-party SDK is wrapped behind an interface here; the rest of the system depends on those interfaces, never the SDK classes."
+  rules:
+    - "All third-party SDKs are called only through this layer"
+    - "Callers depend on interfaces, not concrete SDK classes"
+
 features:
   - { id: FEAT-INTEGRATIONS, name: External Providers, visibility: backend-only,
-      uses: [SVC-EXT-AI, SVC-EXT-MAIL, SVC-EXT-STOR, SVC-EXT-PAY] }
+      uses: [SVC-EXT-AI, SVC-EXT-MAIL, SVC-EXT-STOR, SVC-EXT-PAY],
+      doc: { short: "Adapters for AI, mail, storage, and payments.", description: "Interface-wrapped clients for the AI, email, object-storage, and payment providers used across the system.", rules: ["Secrets come from env; never logged or returned"] } }
 
 nodes:
   - { id: SVC-EXT-AI, kind: integration, subtype: sdk, provider: anthropic, status: implemented,

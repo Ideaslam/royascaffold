@@ -3,8 +3,14 @@ owner: DOM-REPORTING
 status: partial
 reason: "Excel + CSV export work; PDF export enqueues jobs but no worker consumes them yet"
 
+doc:
+  short: "Export dashboards to Excel, CSV, and (planned) PDF."
+  description: "Excel and CSV export are implemented and synchronous. PDF export enqueues a job but no worker consumes it yet, so that path is partial."
+  rules:
+    - "Excel/CSV export is synchronous; PDF export is queued"
+
 features:
-  - { id: FEAT-EXPORT, name: Dashboard Export, visibility: both, uses: [EP-EXPORT-02, EP-EXPORT-03, SVC-EXPORT] }
+  - { id: FEAT-EXPORT, name: Dashboard Export, visibility: both, uses: [EP-EXPORT-02, EP-EXPORT-03, SVC-EXPORT], doc: { short: "Download a dashboard as a file.", description: "Excel and CSV downloads work today; PDF export is queued but not yet processed by a worker.", rules: ["PDF export is partial pending a worker"] } }
 
 nodes:
   - { id: SVC-EXPORT, kind: logic, subtype: service, status: implemented,

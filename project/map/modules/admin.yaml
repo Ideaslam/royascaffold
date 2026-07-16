@@ -3,9 +3,15 @@ owner: DOM-PLATFORM
 status: implemented
 
 # Admin overview + workspace administration. Workspace CRUD delegates to SVC-WS admin methods.
+doc:
+  short: "Admin dashboard and cross-workspace administration."
+  description: "The admin panel's home: aggregate overview stats and workspace administration. Workspace CRUD here delegates to the workspace module's admin methods."
+  rules:
+    - "All endpoints require role:admin"
+
 features:
-  - { id: FEAT-ADMIN-OVERVIEW, name: Admin Overview, visibility: admin-panel, uses: [EP-ADMIN-01, SVC-ADMIN, PAGE-ADMIN-OVERVIEW] }
-  - { id: FEAT-ADMIN-WORKSPACES, name: Admin Workspaces, visibility: admin-panel, uses: [EP-ADMIN-02, EP-ADMIN-03, PAGE-ADMIN-WORKSPACES] }
+  - { id: FEAT-ADMIN-OVERVIEW, name: Admin Overview, visibility: admin-panel, uses: [EP-ADMIN-01, SVC-ADMIN, PAGE-ADMIN-OVERVIEW], doc: { short: "See system-wide stats.", description: "Aggregate counts across users, subscriptions, projects, and dashboards for the admin home." } }
+  - { id: FEAT-ADMIN-WORKSPACES, name: Admin Workspaces, visibility: admin-panel, uses: [EP-ADMIN-02, EP-ADMIN-03, PAGE-ADMIN-WORKSPACES], doc: { short: "Administer all workspaces.", description: "List every workspace, change status, and delete — delegating to the workspace module's admin methods." } }
 
 nodes:
   - { id: SVC-ADMIN, kind: logic, subtype: service, status: implemented,

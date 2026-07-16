@@ -1,0 +1,101 @@
+# Canonical descriptions of the 12 universal node KINDS (types). Single source of truth:
+# the viewer reads this to explain each type, and the module-bundle template mirrors the `short`
+# lines as comments. Stack-neutral — these describe the ENGINE vocabulary, never a framework.
+
+kinds:
+  surface:
+    short: "An externally reachable entry point into the system."
+    long: >
+      A surface is any boundary where the outside world enters the system — an HTTP endpoint,
+      GraphQL query, CLI command, webhook receiver, event consumer, or screen route. It validates
+      input, enforces auth, and delegates to logic; it never holds business rules itself. Its spec
+      captures the route, auth (only when it deviates from the project default), request shape,
+      response shape, and error cases.
+
+  ui:
+    short: "Something rendered for a human to see or interact with."
+    long: >
+      A ui node is a visible or interactive artifact — a page, screen, component, layout, theme, or
+      widget. It wires to surfaces (endpoints) for data and renders child components. Its spec
+      captures the route, the components it composes, which endpoints it wires to and why, its guard,
+      and its states (loading/empty/error/success) only when they deviate from the project default.
+
+  logic:
+    short: "Behavior with no I/O surface of its own."
+    long: >
+      A logic node holds business behavior — a service, use-case, handler, worker, or function —
+      invoked by surfaces or other logic. It owns the rules and orchestration, depends on data and
+      contracts, and exposes public methods. Its spec lists each public method's signature, what it
+      does, and its side effects.
+
+  contract:
+    short: "An interface / port plus its DI token."
+    long: >
+      A contract is an abstraction boundary — an interface or port with a dependency-injection
+      token — that decouples callers from a concrete implementation. Logic nodes declare which
+      contracts they implement; other nodes depend on the contract, not the implementation. This is
+      the seam that keeps domains loosely coupled and swappable.
+
+  data:
+    short: "A persisted shape."
+    long: >
+      A data node is something stored — an entity, collection, table, or model. Its spec captures
+      fields (name, type, constraints, references), relations, indexes, and enums. When
+      workspace-scoped, every row belongs to a tenant. Implemented data nodes stay thin because the
+      schema/code is the source of truth; planned ones carry the full field list.
+
+  integration:
+    short: "An adapter to an external provider."
+    long: >
+      An integration node wraps a third-party provider behind the system's own interface — an OAuth
+      flow, SDK client, or API adapter. It isolates external SDKs to one place, declares the provider
+      and the environment variables/secrets it needs, and is always called through a contract so the
+      rest of the system never touches the vendor SDK directly.
+
+  flow:
+    short: "Async or scheduled work."
+    long: >
+      A flow node is work that happens outside a request/response cycle — a queue, background worker,
+      cron job, pipeline, or migration. It offloads slow or repeatable work (ingest, AI, export,
+      recalculation, seeding) so surfaces stay fast. It declares whether its worker is wired, its
+      schedule/order, and the jobs it tracks.
+
+  rule:
+    short: "A constraint referenced by ID."
+    long: >
+      A rule is an enforceable statement that nodes must obey — global, module-scoped, or
+      architectural. Nodes reference rules by ID (rules: [RULE-...]), and verify proves every
+      reference resolves. A rule may carry a performance target or a boundary constraint; it is the
+      single place a cross-cutting requirement is written down and checked.
+
+  boundary:
+    short: "An import / architecture boundary between domains."
+    long: >
+      A boundary declares that one domain may only reach another through its public contracts —
+      never its internals. With enforce: true, verify turns a violating cross-domain edge into an
+      error. Boundaries are how the architecture stays layered and how the map catches illegal
+      coupling before it ships.
+
+  domain:
+    short: "An ownership zone over a set of modules."
+    long: >
+      A domain groups related modules under one owner and exposes a curated set of public contracts.
+      Everything outside the domain must enter through those contracts (guarded by boundaries).
+      Domains are the top-level partitioning of the system — the rings/zones that give the
+      architecture its shape.
+
+  feature:
+    short: "A user-facing grouping of nodes."
+    long: >
+      A feature is a coherent user outcome expressed as a grouping of the nodes that deliver it
+      (uses: endpoints, services, pages). It carries the detailed narrative — what it does and why —
+      plus its rules, acceptance criteria, and edge cases. This is where the descriptive story of the
+      system lives, tying technical nodes back to product value.
+
+  module:
+    short: "A code module — one bundle of related nodes."
+    long: >
+      A module is a single cohesive unit of the codebase, authored as one bundle file
+      (map/modules/<name>.yaml) containing its features and all its nodes. It is owned by a domain and
+      is the unit of organization for the map: one bundle per module, never one file per artifact. The
+      MOD- node is created automatically from the bundle header.

@@ -20,6 +20,9 @@ history: [change-056]
 
 ### Universal kinds (the engine only understands these)
 
+Full short + long descriptions of every kind live in **`engine/kinds.yaml`** (the single source the
+viewer renders and the module-bundle template mirrors). The table below is the quick reference.
+
 | kind | meaning | example subtypes |
 |------|---------|------------------|
 | `surface` | an externally reachable entry point | `rest.get`, `graphql.query`, `cli.command`, `webhook`, `event`, `screen-route`, `section` |

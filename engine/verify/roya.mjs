@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // roya — the AI-Control Engine v2 CLI.
 //   roya init      <projectDir>        scaffold a NEW empty system (profile + map skeleton + index)
-//   roya index     <projectDir>        regenerate map/index.yaml + status.md
+//   roya index     <projectDir>        regenerate map/index.yaml + status.md + status.yaml
 //   roya verify    <projectDir>        check freshness + consistency, emit verify-report.yaml
 //   roya query     <projectDir> <id>   show a node + its inbound/outbound edges
 //   roya effective <projectDir> <id>   show the IMPLEMENTED node + any PLANNED deltas (which change owns them)
@@ -47,7 +47,7 @@ if (cmd === 'init') {
   console.log('next: fill profile.yaml + description.md, then plan the foundation change program (engine/flows/new-system.md).');
 } else if (cmd === 'index') {
   const { index } = generateIndex(projectDir);
-  console.log(`index: wrote map/index.yaml (${Object.values(index.totals).reduce((a, b) => a + b, 0)} nodes) + status.md`);
+  console.log(`index: wrote map/index.yaml (${Object.values(index.totals).reduce((a, b) => a + b, 0)} nodes) + status.md + status.yaml`);
 } else if (cmd === 'verify') {
   const r = verify(projectDir);
   printReport(r);

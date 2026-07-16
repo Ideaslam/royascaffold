@@ -1,0 +1,23 @@
+# TEMPLATE — architectural domains. Copy to project/map/architecture/domains.yaml.
+# A domain is an ownership zone over modules that exposes a PUBLIC contract set. Cross-domain edges
+# may only target another domain's `contracts` (enforced by boundaries.yaml + verify).
+
+nodes:
+  - id: "DOM-<NAME>"
+    kind: domain
+    name: "<human name>"
+    layer: "<kernel | engine | application>"   # optional; describes the ring
+    status: planned                             # planned until its modules land
+    owns: ["<module>", "<module>"]             # module names (bundle headers)
+    contracts: ["<IF-... or SVC-... ids exposed publicly>"]
+    history: []                                 # change ids that touched it
+    reason_note: "<what this domain is responsible for>"
+
+  # Example (delete):
+  # - id: DOM-PLATFORM
+  #   kind: domain
+  #   name: platform
+  #   layer: application
+  #   status: implemented
+  #   owns: [users, auth, workspace]
+  #   contracts: []

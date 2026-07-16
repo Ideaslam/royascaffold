@@ -51,11 +51,14 @@ Four non-overlapping helpers under `engine/`:
 | Asset | Answers | Where |
 |-------|---------|-------|
 | **schema** | "what MUST be true" (verify enforces it) | `schemas/*.yaml` |
-| **template** | "a blank file of this type, ready to fill" | `templates/` (module bundle + a whole `change/`) |
+| **template** | "a blank file of this type, ready to fill" | `templates/` (one per file type — see below) |
 | **archetype** | "the pattern for this recurring node" (rules + spec + code skeleton) | `archetypes/*.yaml` |
 | **discovery** | "what to ask the human", structured by target/type | `discovery.yaml` |
 
-Start a module from `templates/module-bundle.yaml`; start a change by copying `templates/change/`.
+`templates/` mirrors `project/` — copy the one matching the file you're authoring:
+
+- **Authored** (fill these): `profile.yaml`, `description.md`, `module-bundle.yaml`, `map/architecture/{domains,boundaries}.yaml`, `map/rules.yaml`, `map/operational.yaml`, and the whole `change/` (change + plan + deltas).
+- **Generated** (shape reference only — never hand-write): `map/index.yaml`, `status.yaml`, `verify-report.yaml`. These are written by `roya index` / `roya verify`.
 
 ## The one rule that never bends
 

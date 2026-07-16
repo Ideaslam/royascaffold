@@ -1,0 +1,64 @@
+# TEMPLATE — project profile. Copy to project/profile.yaml and fill.
+# The ONE home for concrete facts. The engine refers to these, never hardcodes them.
+# Placeholders use <...> so this file stays valid YAML; replace them with real values.
+
+product:
+  name: "<Product Name>"
+  summary: "<one line — what it is>"
+  type: "<SaaS web app | mobile app | CLI | backend service>"
+
+# What the 12 universal kinds mean for THIS stack. Trim to the subtypes you use.
+subtypes:
+  surface: [rest.get, rest.post, rest.put, rest.patch, rest.delete, webhook, cli, event]
+  ui: [page, screen, component, layout, theme]
+  logic: [service, worker, cron, guard, registry, repository]
+  contract: [interface]
+  data: [entity, collection, table]
+  integration: [oauth, sdk]
+  flow: [queue, worker, cron, pipeline, migration]
+
+# ID prefix -> kind. Keeps IDs readable; the engine only cares about `kind`.
+id_prefixes:
+  EP: surface
+  PAGE: ui
+  CMP: ui
+  SVC: logic
+  IF: contract
+  ENT: data
+  Q: flow
+  MIG: flow
+  RULE: rule
+  BND: boundary
+  DOM: domain
+  FEAT: feature
+  MOD: module
+
+apps:
+  - { key: "<app-key>", type: "<web|api|mobile|web-static>", repo: "<repo>", framework: "<framework>" }
+
+# Set once code exists so map<->code drift + size-budget checks activate.
+code_roots: []
+map_size_budget: 0.6    # guards against unstructured duplication, not spec richness
+
+# Inherited defaults. A node `spec` documents a value ONLY when it DEVIATES from these.
+conventions:
+  api:
+    route_prefix: /api/v1
+    auth_default: "<global guard(s)>"
+    success_envelope: "{ success: true, data }"
+    error_envelope: "{ success: false, message, error?, statusCode }"
+    pagination: "?page=1&limit=20 -> { data[], total, page, limit }; cap limit 100"
+    validation: "<validation approach>"
+  ui:
+    states: [loading, empty, error, success]
+    error_ux: "<how errors surface>"
+    api_base: "<config-driven base; no direct third-party calls from the client>"
+    guards: ["<AuthGuard>", "<AdminGuard>"]
+  naming:
+    entity: "PascalCase singular"
+    collection: "lowercase plural"
+    dto: "PascalCase + Dto"
+    service: "PascalCase + Service"
+
+integrations:
+  - { id: "INT-<NAME>", provider: "<provider>", purpose: "<why>", env: ["<ENV_VAR>"] }

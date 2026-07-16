@@ -1,0 +1,19 @@
+# TEMPLATE — project rules. Copy to project/map/rules.yaml.
+# Adopt the generic ones from engine/rules/catalog.yaml, then add project-specific rules.
+# Nodes reference rules by ID (rules: [RULE-...]); verify flags any dangling reference.
+# A rule may carry a `performance` target that the artifact it governs must meet.
+
+rules:
+  # --- adopted generic (copy the ones you need from engine/rules/catalog.yaml) ---
+  - { id: RULE-PAG-01, scope: global, title: Pagination contract, applies_to: [surface],
+      constraint: "List endpoints paginate via ?page&limit; response { items, page, limit, total }; cap limit at 100" }
+
+  # --- project-specific ---
+  - id: "RULE-<AREA>-<NN>"
+    scope: "<global | module | architecture>"
+    module: "<module>"            # required when scope: module
+    title: "<short title>"
+    applies_to: ["<surface|logic|data|ui|flow|integration>"]
+    constraint: "<the enforceable statement>"
+    # optional performance target attached to the artifact this rule governs:
+    # performance: { cached_ms: 200, uncached_ms: 2000 }

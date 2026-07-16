@@ -10,7 +10,8 @@ Phase 3. `>> GATE` marks each point where a human must approve before the engine
    their `skip_when` matches the change type. Ask in ONE batch; **default the rest** and record each as
    `change.yaml.assumptions[]`. Stop as soon as you can write artifacts that `verify` PASS.
 2. **Create** `changes/<id>/` by copying **`engine/templates/change/`** (`change-NNN` or `bug-NNN`;
-   next free id — verify enforces uniqueness).
+   next free id — verify enforces uniqueness). If this change introduces a **new module**, also start its
+   map bundle from **`engine/templates/module-bundle.yaml`** (created at merge, Phase 3).
 3. **Write `change.yaml`** (template provided) — id, title, `type`, `owner`, `status: planned`,
    rationale, acceptance, `archetypes`, `assumptions`.
 4. **Write the deltas — WITH the full build `spec`** (templates: `deltas/create-node.yaml` /

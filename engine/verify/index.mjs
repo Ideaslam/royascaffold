@@ -1,4 +1,4 @@
-// Index generator: derives project/map/index.yaml + project/status.md from the map.
+// Index generator: derives project/map/index.yaml + project/status.md + project/status.yaml.
 // Never hand-written. Run after any map change; verify checks it is fresh.
 
 import { writeFileSync } from 'node:fs';
@@ -88,8 +88,21 @@ export function generateIndex(projectDir) {
     backlog,
   };
 
+  // Machine-readable board (same facts as status.md, for querying).
+  const attention = [...model.nodes.values()]
+    .filter((n) => n.status === 'partial' || n.status === 'deferred')
+    .map((n) => ({ id: n.id, kind: n.kind, status: n.status, reason: n.reason || null }));
+  const statusYaml = {
+    generated_at: index.generated_at,
+    totals: index.totals,
+    status_rollup: index.status_rollup,
+    backlog: index.backlog,
+    attention,
+  };
+
   writeFileSync(join(projectDir, 'map', 'index.yaml'), yaml.dump(index, { lineWidth: 120, sortKeys: false }), 'utf8');
   writeFileSync(join(projectDir, 'status.md'), renderStatus(model, index, byKind), 'utf8');
+  writeFileSync(join(projectDir, 'status.yaml'), yaml.dump(statusYaml, { lineWidth: 120, sortKeys: false }), 'utf8');
   return { model, index };
 }
 

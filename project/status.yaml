@@ -1,0 +1,134 @@
+generated_at: '2026-07-16T13:38:15.530Z'
+totals:
+  module: 26
+  feature: 44
+  logic: 66
+  surface: 197
+  ui: 53
+  data: 38
+  contract: 6
+  integration: 20
+  boundary: 2
+  domain: 4
+  flow: 10
+status_rollup:
+  module:
+    implemented: 25
+    partial: 1
+    planned: 0
+    deferred: 0
+  feature:
+    implemented: 44
+    partial: 0
+    planned: 0
+    deferred: 0
+  logic:
+    implemented: 64
+    partial: 2
+    planned: 0
+    deferred: 0
+  surface:
+    implemented: 195
+    partial: 2
+    planned: 0
+    deferred: 0
+  ui:
+    implemented: 53
+    partial: 0
+    planned: 0
+    deferred: 0
+  data:
+    implemented: 38
+    partial: 0
+    planned: 0
+    deferred: 0
+  contract:
+    implemented: 6
+    partial: 0
+    planned: 0
+    deferred: 0
+  integration:
+    implemented: 19
+    partial: 1
+    planned: 0
+    deferred: 0
+  boundary:
+    implemented: 2
+    partial: 0
+    planned: 0
+    deferred: 0
+  domain:
+    implemented: 4
+    partial: 0
+    planned: 0
+    deferred: 0
+  flow:
+    implemented: 8
+    partial: 2
+    planned: 0
+    deferred: 0
+backlog:
+  - id: bug-014-lite-source-count
+    type: bug
+    title: Lite picker per-source count is off by one
+    owner: support
+    status: planned
+    current_step: 1
+    targets:
+      - EP-DATA-56
+    conflicts:
+      - change-073-csv-export
+  - id: change-072-workspace-scoping
+    type: feature
+    title: Workspace scoping for users
+    owner: business
+    status: in_progress
+    current_step: 3
+    targets:
+      - EP-USR-03
+      - ENT-USER
+    conflicts: []
+  - id: change-073-csv-export
+    type: feature
+    title: CSV export of dataset picker
+    owner: business
+    status: planned
+    current_step: 1
+    targets:
+      - EP-DATA-56
+      - EP-EXPORT-04
+    conflicts:
+      - bug-014-lite-source-count
+attention:
+  - id: SVC-AI-DGC
+    kind: logic
+    status: partial
+    reason: DashboardGenerationComplete worker is a stub — not implemented
+  - id: EP-AUTH-03
+    kind: surface
+    status: partial
+    reason: OAuth callback handler is a stub — not wired to SVC-AUTH.oauthLogin
+  - id: MOD-EXPORT
+    kind: module
+    status: partial
+    reason: Excel + CSV export work; PDF export enqueues jobs but no worker consumes them yet
+  - id: EP-EXPORT-01
+    kind: surface
+    status: partial
+    reason: Job queued but no PDF worker implemented — export never completes
+  - id: SVC-EXT-OAUTH
+    kind: integration
+    status: partial
+    reason: OAuth login callback is a stub; no integration adapter wired (see auth OAuth login)
+  - id: SVC-PIPE-STEPS-TPL
+    kind: logic
+    status: partial
+    reason: Template instantiation pipeline documented (change-049); not yet in code
+  - id: Q-PDF-EXPORT
+    kind: flow
+    status: partial
+    reason: Queue declared; worker/processor not yet implemented
+  - id: Q-CACHE-RECALC
+    kind: flow
+    status: partial
+    reason: Cache recalculation queue defined; no worker attached yet

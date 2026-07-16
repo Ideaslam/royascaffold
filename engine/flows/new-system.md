@@ -16,13 +16,17 @@ rules · constraints — each block says which file it fills). Ask only what cha
 1. `roya init <projectDir>` (or `npm run init`) → `profile.yaml`, `description.md`, an empty `map/`
    and a valid empty `index.yaml`. `verify` is PASS immediately (0 real nodes).
 2. Fill `description.md` (Product Story, jobs, shape, constraints) and `profile.yaml`
-   (`product`, `apps`, `subtypes`, `id_prefixes`, integrations) from Phase 1. Leave `code_roots: []`.
+   (`product`, `apps`, `subtypes`, `id_prefixes`, `conventions`, integrations) from Phase 1. Leave
+   `code_roots: []`. `roya init` writes a minimal starter; for the richer prompts use
+   **`engine/templates/profile.yaml`** and **`engine/templates/description.md`** as the fill-in guide.
 
 ## Phase 3 — Design the architecture (as `planned`)
-In `map/architecture/`: declare `DOM-` domains (`owns[]` + `contracts[]`) and `BND-` boundaries.
-In `map/rules.yaml`: adopt the generic rules from `engine/rules/catalog.yaml`, then add project rules.
-Pick or author the `engine/archetypes/` you will build against. Every node stays `status: planned` —
-this is design, not code.
+In `map/architecture/` declare `DOM-` domains (`owns[]` + `contracts[]`) and `BND-` boundaries —
+copy **`engine/templates/map/architecture/domains.yaml`** and **`boundaries.yaml`**. In `map/rules.yaml`
+(**`engine/templates/map/rules.yaml`**) adopt the generic rules from `engine/rules/catalog.yaml`, then
+add project rules. Declare any queues/migrations in `map/operational.yaml`
+(**`engine/templates/map/operational.yaml`**). Pick or author the `engine/archetypes/` you will build
+against. Every node stays `status: planned` — this is design, not code.
 
 > **GATE 2 — architecture approved.** Confirm domains, boundaries, and rules before planning work.
 

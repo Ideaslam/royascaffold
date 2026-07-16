@@ -1,0 +1,15 @@
+# TEMPLATE — operational nodes. Copy to project/map/operational.yaml.
+# Small nodes that aren't part of a feature module: async queues + their workers, migrations/seeds.
+# (Bugs are NOT here — a bug is a change with type: bug under project/changes/.)
+
+nodes:
+  # --- queues (flow) ---
+  - { id: "Q-<NAME>", kind: flow, subtype: queue, worker: present, status: planned,
+      rules: [RULE-GLOBAL-004], history: [] }
+  # a queue whose worker isn't wired yet -> partial (+reason):
+  - { id: "Q-<NAME>", kind: flow, subtype: queue, worker: missing, status: partial,
+      reason: "Queue declared; worker/processor not yet implemented", rules: [RULE-GLOBAL-004] }
+
+  # --- migrations / seed scripts ---
+  - { id: "MIG-<NAME>", kind: flow, subtype: migration, status: planned,
+      reason_note: "<what it seeds/migrates>", history: [] }

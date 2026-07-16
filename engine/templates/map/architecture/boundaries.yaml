@@ -1,0 +1,23 @@
+# TEMPLATE — import/architecture boundaries. Copy to project/map/architecture/boundaries.yaml.
+# `roya verify` lint-checks these: a cross-domain edge from `from` to `to` is legal ONLY if it targets
+# a node listed in the destination domain's `contracts`. `enforce: true` makes a violation an ERROR.
+
+nodes:
+  - id: "BND-<FROM>-<TO>"
+    kind: boundary
+    mode: contract-only          # only mode today: cross-domain calls must hit a public contract
+    enforce: true                # true = error on violation; false = warning
+    from: "DOM-<FROM>"
+    to: "DOM-<TO>"
+    status: planned
+    reason_note: "<why this boundary exists — what may/may not cross>"
+
+  # Example (delete):
+  # - id: BND-REPORTING-DATA
+  #   kind: boundary
+  #   mode: contract-only
+  #   enforce: true
+  #   from: DOM-REPORTING
+  #   to: DOM-DATA
+  #   status: implemented
+  #   reason_note: "Reporting imports the Data contract only, never the repository/internals"

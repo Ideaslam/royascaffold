@@ -101,12 +101,15 @@ export function loadModel(projectDir) {
   }
 
   // Data model: entities live in map/data/<domain>/<entity>.yaml — one node per file, domain-owned
-  // (not module-owned). Logic services reference them via `deps: [ENT-...]`.
+  // (not module-owned). DTOs live in map/data/dto/<module>.yaml — a `nodes:` list under a file-level
+  // `module:` that the loader stamps onto each node (DTOs are module-owned, linked from surfaces via
+  // receives/returns). Logic services reference entities via `deps: [ENT-...]`.
   for (const f of walkYaml(join(mapDir, 'data'))) {
     const src = relative(projectDir, f);
     const doc = readYaml(f);
     model.sizeBytes.map += statSync(f).size;
-    if (Array.isArray(doc.nodes)) for (const n of doc.nodes) addNode(n, src);
+    const fileModule = doc.module; // dto bundles set this; entity files don't
+    if (Array.isArray(doc.nodes)) for (const n of doc.nodes) addNode(fileModule && !n.module ? { ...n, module: fileModule } : n, src);
     else if (doc.id) addNode(doc, src);
   }
 

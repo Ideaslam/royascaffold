@@ -47,8 +47,9 @@ tell you exactly where you stopped. No re-discovery — state is entirely on dis
 
 ## Phase 3 — Merge (the git-commit of the plan)
 1. **Apply each delta into the map.** `add/remove/set` → the target node in `map/modules/<m>.yaml`
-   (or `map/data/<domain>/<entity>.yaml` for an entity, `map/architecture/` for domains/boundaries);
-   `creates: true` → add the node (a new entity becomes a new file under `map/data/<domain>/`);
+   (or `map/data/<domain>/<entity>.yaml` for an entity, `map/data/dto/<m>.yaml` for a DTO,
+   `map/architecture/` for domains/boundaries); `creates: true` → add the node (a new entity becomes a
+   new file under `map/data/<domain>/`; a new DTO is appended to `map/data/dto/<m>.yaml`);
    `move/rename/reboundary` → relocate. Append the change id to the node's `history[]`. Set
    `status: implemented`.
 2. **Close the change.** `change.yaml.status: implemented`, deltas `implemented`, move the folder to

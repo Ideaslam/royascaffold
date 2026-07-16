@@ -368,12 +368,34 @@ async function renderDataModel() {
     </div>`;
   }).join('');
 
+  const dtoSections = (data.dtoModules || []).map((m) => {
+    const rows = m.dtos.map((d) => ({ ...d, hash: `#/node/${d.id}` }));
+    const modLabel = m.moduleId
+      ? `<button onclick="location.hash='#/module/${m.moduleId}'" class="text-indigo-600 hover:underline">${esc(m.module)}</button>`
+      : esc(m.module);
+    return `<div class="mb-6">
+      <h3 class="text-base font-semibold text-slate-800">${modLabel} <span class="text-slate-400 font-normal text-sm">(${m.dtos.length})</span></h3>
+      ${renderTable(
+        [
+          { label: 'DTO', render: (r) => `<span class="font-mono text-xs">${r.id}</span>` },
+          { label: 'Maps to', render: (r) => r.of ? `<span class="text-xs text-slate-500">${esc(r.of)}</span>` : '—' },
+          { label: 'Fields', render: (r) => r.fieldCount || 0 },
+          { label: 'Src', render: (r) => r.inferred ? '<span class="text-xs text-amber-600">inferred</span>' : '<span class="text-xs text-slate-400">doc</span>' },
+          { label: '', render: (r) => viewBtn(r.hash) },
+        ],
+        rows,
+      )}
+    </div>`;
+  }).join('');
+
   content.innerHTML = `
     <div class="mb-6">
       <h2 class="text-2xl font-semibold">Data Model</h2>
-      <p class="text-sm text-slate-500 mt-1">${data.total} entities across ${data.domains.length} domains. Each entity is owned by one domain and shared across modules via logic.</p>
+      <p class="text-sm text-slate-500 mt-1">${data.total} entities across ${data.domains.length} domains (owned by a domain, shared across modules via logic) · ${data.dtoTotal || 0} DTOs (request/response payloads, owned by their module).</p>
     </div>
-    ${sections || '<p class="text-slate-500 text-sm">No entities.</p>'}`;
+    <h2 class="text-lg font-semibold mb-3">Entities</h2>
+    ${sections || '<p class="text-slate-500 text-sm">No entities.</p>'}
+    ${dtoSections ? `<h2 class="text-lg font-semibold mb-3 mt-8">DTOs <span class="text-slate-500 text-sm font-normal">(${data.dtoTotal})</span></h2>${dtoSections}` : ''}`;
 }
 
 async function renderApp(key) {
@@ -496,6 +518,7 @@ function labeledBox(label, inner) {
 
 function renderDataSpec(spec) {
   const parts = [];
+  if (spec.of) parts.push(labeledBox('Maps to', `<p class="text-sm text-slate-700">${esc(spec.of)}</p>`));
   parts.push(`<h2 class="text-lg font-semibold mb-3">Fields <span class="text-slate-500 text-sm font-normal">(${(spec.fields || []).length})</span></h2>`);
   parts.push(renderFieldsTable(spec.fields));
   if (spec.relations) {
@@ -521,18 +544,64 @@ function renderShape(shape) {
   return `<pre class="text-xs font-mono text-slate-700 bg-slate-50 rounded p-2 overflow-x-auto whitespace-pre-wrap">${esc(JSON.stringify(shape, null, 2))}</pre>`;
 }
 
-function renderSurfaceSpec(spec) {
+function renderParamTable(params, emptyMsg) {
+  return renderTable(
+    [
+      { label: 'Name', render: (p) => `<span class="font-mono text-xs text-slate-800">${esc(p.name)}</span>` },
+      { label: 'In', render: (p) => `<span class="text-xs text-slate-500">${esc(p.in || 'query')}</span>` },
+      { label: 'Type', render: (p) => `<span class="text-xs font-mono text-slate-600">${esc(p.type) || '—'}</span>` },
+      { label: 'Req', render: (p) => p.required ? '<span class="text-emerald-600 text-xs">required</span>' : '<span class="text-slate-400 text-xs">optional</span>' },
+      { label: 'Note', render: (p) => p.note || p.description ? `<span class="text-xs text-slate-500">${esc(p.note || p.description)}</span>` : '—' },
+    ],
+    params || [],
+    emptyMsg,
+  );
+}
+
+// Endpoint I/O: merges route-derived path params, authored query/params, and the receives/returns
+// edges (body/response DTO or entity) into one Request / Response panel.
+function renderEndpointIO(node) {
+  const spec = node.spec || {};
+  const req = spec.request || {};
+  const resp = spec.response || {};
+
+  // Path params: authored `spec.request.params` win, else derived from the route string.
+  const authoredParams = (req.params || []).filter((p) => (p.in || 'path') === 'path');
+  const params = authoredParams.length ? authoredParams : (node.routeParams || []);
+  const query = req.query || (req.params || []).filter((p) => p.in === 'query');
+
+  const bodyEdges = node.edges?.receives || [];
+  const returnEdges = node.edges?.returns || [];
+
+  const linkList = (edges, fallback) => {
+    if (edges.length) return edges.map((e) => nodeLink(e.id, `${e.id}${e.name ? ` · ${e.name}` : ''}`)).join('<br>');
+    if (fallback) return renderShape(fallback);
+    return '<span class="text-slate-400 text-xs">— (inherits conventions)</span>';
+  };
+
+  const reqParts = [];
+  reqParts.push(`<div class="mb-3"><h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Path params</h4>${params.length ? renderParamTable(params) : '<p class="text-xs text-slate-400">none</p>'}</div>`);
+  reqParts.push(`<div class="mb-3"><h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Query string</h4>${query.length ? renderParamTable(query) : '<p class="text-xs text-slate-400">none (list endpoints inherit ?page&limit pagination)</p>'}</div>`);
+  reqParts.push(`<div><h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Body</h4><div class="text-sm">${(node.subtype || '').startsWith('rest.get') || node.subtype === 'rest.delete' ? '<span class="text-slate-400 text-xs">none</span>' : linkList(bodyEdges, req.body)}</div></div>`);
+
+  const respParts = [];
+  if (resp.status) respParts.push(`<p class="text-sm mb-1"><span class="text-xs uppercase text-slate-500">Status</span> <span class="font-mono text-slate-800">${esc(resp.status)}</span></p>`);
+  respParts.push(`<div><h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Body</h4><div class="text-sm">${linkList(returnEdges, resp.body || resp.shape)}</div></div>`);
+
   const parts = [];
-  if (spec.request) parts.push(labeledBox('Request', renderShape(spec.request)));
-  if (spec.response) parts.push(labeledBox('Response', renderShape(spec.response)));
-  if (spec.errors?.length) {
+  parts.push('<h2 class="text-lg font-semibold mb-3 mt-6">Request &amp; Response</h2>');
+  parts.push(`<div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div class="rounded-lg border border-slate-200 bg-white shadow-sm p-4"><h3 class="text-sm font-semibold text-slate-700 mb-3">Request</h3>${reqParts.join('')}</div>
+    <div class="rounded-lg border border-slate-200 bg-white shadow-sm p-4"><h3 class="text-sm font-semibold text-slate-700 mb-3">Response</h3>${respParts.join('')}</div>
+  </div>`);
+  const errors = spec.errors || resp.errors;
+  if (errors?.length) {
     parts.push(labeledBox('Errors', renderTable(
       [
         { label: 'Code', render: (e) => `<span class="font-mono text-xs">${esc(e.code)}</span>` },
         { label: 'When', render: (e) => `<span class="text-xs text-slate-600">${esc(e.when)}</span>` },
       ],
-      spec.errors,
-      'No errors documented.',
+      errors,
     )));
   }
   if (spec.narrative) parts.push(labeledBox('Narrative', `<p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">${esc(spec.narrative)}</p>`));
@@ -540,10 +609,10 @@ function renderSurfaceSpec(spec) {
 }
 
 function renderSpec(node) {
+  if (node.kind === 'surface') return renderEndpointIO(node);
   const spec = node.spec;
   if (!spec) return '';
   if (node.kind === 'data') return renderDataSpec(spec);
-  if (node.kind === 'surface' && (spec.request || spec.response || spec.errors)) return renderSurfaceSpec(spec);
   return `<div class="rounded-lg border border-slate-200 bg-white shadow-sm p-4 mb-4">
     <h3 class="text-xs uppercase text-slate-500 mb-2">Spec</h3>
     <pre class="text-xs font-mono text-slate-700 bg-slate-50 rounded p-3 overflow-x-auto whitespace-pre-wrap">${esc(JSON.stringify(spec, null, 2))}</pre>
@@ -585,7 +654,9 @@ async function renderNode(id) {
       data.rules,
     )}` : '';
 
+  const hiddenEdges = data.kind === 'surface' ? new Set(['receives', 'returns']) : new Set();
   const edgesHtml = Object.entries(data.edges || {})
+    .filter(([label]) => !hiddenEdges.has(label))
     .map(([label, items]) => {
       const rows = items.map((e) => ({
         target: e.target,

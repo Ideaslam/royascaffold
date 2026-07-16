@@ -72,6 +72,25 @@ link a surface to the request/response DTO shapes it consumes and produces.
 (`APP_UNASSIGNED`). The viewer renders an **Apps** view — pick an app to see its whole tree (modules →
 nodes by kind), and every node/module page shows the repos it ships in.
 
+### Endpoint request & response (params · query · body · DTOs)
+
+An endpoint's I/O is visible without opening code:
+
+- **Path params** are auto-derived from the `route` string (`:id`, `{id}`) — you only list them under
+  `spec.request.params` to add a type or note.
+- **Query string** goes in `spec.request.query` (`[{name, type, required}]`); pagination and the
+  success/error envelope are inherited from `profile.conventions`, so document them only when they
+  **deviate**.
+- **Request body** and **response body** are structured shapes → represented as **DTO nodes**
+  (`kind: data, subtype: dto`) carrying `spec.fields`, linked from the surface via the `receives:`
+  (request) and `returns:` (response) edges. When the response *is* an entity, point `returns:` at the
+  `ENT-` id directly — don't wrap it in a DTO.
+
+DTOs are **module-owned** and live in `map/data/dto/<module>.yaml` (a `nodes:` list under a file-level
+`module:`). `verify` warns `IO_UNDOCUMENTED` when a *planned* endpoint declares no `returns`/response.
+The viewer renders a **Request & Response** panel on every endpoint page and lists DTOs (grouped by
+module) in the Data Model view.
+
 ### Entities & the data model
 
 Entities (`kind: data`, subtype `entity`/`collection`) are **not owned by a module** — many modules

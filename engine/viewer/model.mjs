@@ -184,7 +184,7 @@ export function moduleView(projectDir, modId) {
     for (const r of refs) {
       const base = String(r).split('.')[0];
       const t = model.nodes.get(base);
-      if (t && t.kind === 'data') entityIds.add(base);
+      if (t && t.kind === 'data' && t.subtype !== 'dto') entityIds.add(base);
     }
   }
   const entitiesUsed = [...entityIds].sort().map((id) => {
@@ -259,13 +259,28 @@ export function appView(projectDir, key) {
   };
 }
 
-// Data Model: every entity (kind:data) grouped by its owning domain. Entities live in
-// map/data/<domain>/ and are shared across modules, so they get their own top-level view.
+// Data Model: entities (subtype entity/collection) grouped by owning domain, plus DTOs
+// (subtype dto — request/response payload shapes) grouped by their module. Entities live in
+// map/data/<domain>/; DTOs live in map/data/dto/<module>.yaml.
 export function dataModel(projectDir) {
   const { model } = loadContext(projectDir);
   const byDomain = new Map();
+  const dtoByModule = new Map();
   for (const [id, n] of model.nodes) {
     if (n.kind !== 'data') continue;
+    if (n.subtype === 'dto') {
+      const mod = n.module || '(unassigned)';
+      if (!dtoByModule.has(mod)) dtoByModule.set(mod, []);
+      dtoByModule.get(mod).push({
+        id,
+        name: n.name || id,
+        status: n.status || 'implemented',
+        of: n.spec?.of || null,
+        fieldCount: (n.spec?.fields || []).length,
+        inferred: n.spec?.source === 'inferred',
+      });
+      continue;
+    }
     const dom = n.domain || 'unassigned';
     if (!byDomain.has(dom)) byDomain.set(dom, []);
     byDomain.get(dom).push({
@@ -289,9 +304,20 @@ export function dataModel(projectDir) {
       entities: byDomain.get(domId).sort((a, b) => a.id.localeCompare(b.id)),
     };
   });
+  const dtoModules = [...dtoByModule.keys()].sort().map((mod) => {
+    const mn = model.nodes.get(`MOD-${String(mod).toUpperCase()}`);
+    return {
+      module: mod,
+      moduleId: mn ? mn.id : null,
+      dtos: dtoByModule.get(mod).sort((a, b) => a.id.localeCompare(b.id)),
+    };
+  });
+  const all = [...model.nodes.values()].filter((n) => n.kind === 'data');
   return {
-    total: [...model.nodes.values()].filter((n) => n.kind === 'data').length,
+    total: all.filter((n) => n.subtype !== 'dto').length,
     domains,
+    dtoTotal: all.filter((n) => n.subtype === 'dto').length,
+    dtoModules,
   };
 }
 
@@ -366,10 +392,18 @@ export function nodeView(projectDir, nodeId) {
 
   const allKinds = kindsInfo();
 
+  // Path params are derivable from the route string (`:id`, `{id}`) — no need to author them.
+  let routeParams = null;
+  if (n.kind === 'surface' && n.route) {
+    const names = [...String(n.route).matchAll(/[:{]([A-Za-z0-9_]+)\}?/g)].map((m) => m[1]);
+    if (names.length) routeParams = [...new Set(names)].map((name) => ({ name, in: 'path', required: true }));
+  }
+
   return {
     id: base,
     ...pickNodeFields(n),
     kindInfo: allKinds[n.kind] || null,
+    routeParams,
     doc: n.doc || null,
     spec: n.spec || null,
     source: n._source || null,

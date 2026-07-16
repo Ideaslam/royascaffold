@@ -1,0 +1,112 @@
+# DTOs for module `auth` — request/response payload shapes.
+# Linked from surfaces via receives: (body) / returns: (response).
+# Path params + query stay inline on the surface's spec.request.
+module: auth
+
+nodes:
+  - id: DTO-AUTH-REGISTER
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-01"
+      fields:
+        - { name: email, type: string, required: true }
+        - { name: password, type: string, required: true, constraints: "min length per RULE-AUTH-001" }
+        - { name: name, type: string, required: true }
+
+  - id: DTO-AUTH-LOGIN
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-02"
+      fields:
+        - { name: email, type: string, required: true }
+        - { name: password, type: string, required: true }
+
+  - id: DTO-AUTH-OAUTH
+    kind: data
+    subtype: dto
+    status: partial
+    reason: "OAuth callback is a stub"
+    spec:
+      source: inferred
+      of: "request body of EP-AUTH-03"
+      fields:
+        - { name: provider, type: string, required: true }
+        - { name: code, type: string, required: true }
+        - { name: state, type: string, required: false }
+
+  - id: DTO-AUTH-REFRESH
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-04"
+      fields:
+        - { name: refreshToken, type: string, required: true }
+
+  - id: DTO-AUTH-FORGOT
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-05"
+      fields:
+        - { name: email, type: string, required: true }
+
+  - id: DTO-AUTH-RESET
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-06"
+      fields:
+        - { name: token, type: string, required: true }
+        - { name: password, type: string, required: true }
+
+  - id: DTO-AUTH-VERIFY
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "request body of EP-AUTH-09"
+      fields:
+        - { name: token, type: string, required: true }
+
+  - id: DTO-AUTH-TOKEN
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "response body of EP-AUTH-01/02/03/04 (login/register/oauth/refresh)"
+      fields:
+        - { name: accessToken, type: string, required: true }
+        - { name: refreshToken, type: string, required: false }
+        - { name: expiresIn, type: number, required: false }
+        - { name: user, type: object, required: true, ref: ENT-USER, constraints: "profile subset — never passwordHash" }
+
+  - id: DTO-AUTH-PROFILE
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "response body of EP-AUTH-08 (GET /auth/me)"
+      fields:
+        - { name: id, type: ObjectId, required: true, ref: ENT-USER }
+        - { name: email, type: string, required: true }
+        - { name: name, type: string, required: true }
+        - { name: role, type: string, required: true }
+        - { name: status, type: string, required: true }
+        - { name: emailVerifiedAt, type: Date, required: false }
+
+  - id: DTO-AUTH-OK
+    kind: data
+    subtype: dto
+    status: implemented
+    spec:
+      of: "empty/ack response for logout · forgot · reset · verify · resend"
+      fields:
+        - { name: success, type: boolean, required: true }
+        - { name: message, type: string, required: false }

@@ -1,0 +1,44 @@
+# TEMPLATE — one module's DTOs (request/response payload shapes). Copy to
+# project/map/data/dto/<module>.yaml. DTOs are MODULE-owned (unlike entities, which are
+# domain-owned). A surface links to them via its `receives:` (request body) and `returns:`
+# (response body) edges. Path params + query string are NOT DTOs — put them inline on the
+# surface's spec.request (or let the viewer derive path params from the route). A response that
+# is just the entity should `returns: [ENT-...]` — don't wrap it in a DTO.
+# Placeholders are quoted so this stays valid YAML; drop the quotes when you fill real values.
+
+module: "<module>"        # file-level owner; stamped onto every node below (matches the module bundle)
+
+nodes:
+  # Request body for a create endpoint.
+  - id: "DTO-<NAME>-CREATE"
+    kind: data
+    subtype: dto
+    status: planned
+    spec:
+      of: "request body of EP-<MODULE>-01"
+      # source: inferred        # add when fields are guessed (no code) — flags "validate me"
+      fields:
+        - { name: "<field>", type: string, required: true }
+        - { name: status, type: string, enum: [active, inactive], required: false }
+
+  # Request body for an update endpoint (usually all-optional).
+  - id: "DTO-<NAME>-UPDATE"
+    kind: data
+    subtype: dto
+    status: planned
+    spec:
+      of: "request body of EP-<MODULE>-02 (PATCH)"
+      fields:
+        - { name: "<field>", type: string, required: false }
+
+  # A custom response shape (only when the response is NOT just an entity — e.g. a login result,
+  # a stats summary, or a list wrapper). Otherwise the endpoint's `returns: [ENT-...]` is enough.
+  - id: "DTO-<NAME>-RESULT"
+    kind: data
+    subtype: dto
+    status: planned
+    spec:
+      of: "response body of EP-<MODULE>-03"
+      fields:
+        - { name: token, type: string, required: true }
+        - { name: user, type: ENT-USER, required: true, ref: ENT-USER }

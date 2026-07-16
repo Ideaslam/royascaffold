@@ -64,6 +64,14 @@ export function verify(projectDir) {
   }
   report.checks.specs = specOk ? 'COMPLETE' : 'INCOMPLETE';
 
+  // Planned endpoints must declare what they return (the response contract): a `returns` edge
+  // (DTO/entity) or a spec.response. Request body is optional (GET/DELETE have none).
+  for (const [id, n] of model.nodes) {
+    if (n.kind !== 'surface' || (n.status || 'implemented') !== 'planned' || n.intentional_drift) continue;
+    const hasResponse = (n.edges?.returns || []).length || n.spec?.response;
+    if (!hasResponse) warn(`IO_UNDOCUMENTED ${id} is a planned endpoint with no returns/response (add receives/returns or spec.response)`);
+  }
+
   // --- 2b. App / repository assignment: explicit keys must exist; UI must be placed somewhere ---
   const appKeys = new Set((model.profile.apps || []).map((a) => a.key));
   let appsOk = true;

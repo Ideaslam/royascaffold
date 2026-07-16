@@ -60,16 +60,9 @@ nodes:
   #    A module "uses" an entity through its logic `deps: [ENT-...]` — the viewer derives the
   #    module's "Entities used" list from those deps. Never redefine an entity in a module bundle.
 
-  # ── data (dto) — a request/response payload shape. Surfaces link to it via receives/returns. ──
-  - id: "DTO-<NAME>-CREATE"
-    kind: data
-    subtype: dto
-    status: planned
-    spec:
-      of: "request body of EP-<MODULE>-01"
-      fields:
-        - { name: "<field>", type: String, required: true }
-        - { name: status, type: String, enum: [active, inactive], required: false }
+  # ── DTOs (request/response payload shapes) DO NOT live here either. ──
+  #    They are module-owned but kept in project/map/data/dto/<module>.yaml (copy
+  #    engine/templates/dto.yaml). A surface links to them via receives:/returns: below.
 
   # ── contract — an interface / port plus its DI token ──
   - id: "IF-<NAME>"
@@ -94,19 +87,26 @@ nodes:
         - { sig: "list(q): Paginated<Name>", does: "paginated query", side_effects: none }
 
   # ── surface — an externally reachable entry point (endpoint/webhook/cli/event) ──
+  #    receives: = request body DTO · returns: = response DTO or the entity itself.
+  #    Path params are auto-derived from the route (`:id`) — only list them in spec.request.params
+  #    to add a type/note. Query string goes in spec.request.query. Pagination/envelope are inherited
+  #    from profile.conventions, so document them only when they DEVIATE.
   - id: "EP-<MODULE>-01"
     kind: surface
     subtype: rest.post
     status: planned
     calls: ["SVC-<NAME>.create"]
-    receives: ["DTO-<NAME>-CREATE"]      # request payload shape (a dto data node)
+    receives: ["DTO-<NAME>-CREATE"]       # request body shape (a dto node in map/data/dto/<module>.yaml)
     returns: ["ENT-<NAME>"]               # response shape — often the entity itself
     spec:
       route: "POST /<resource>"
       auth: "role, or omit when it equals the conventions default"
-      request: { body: "DTO-<NAME>-CREATE" }
-      response: { status: 201, shape: "ENT-<NAME>" }
-      errors: ["{ code: 401, when: unauthenticated }", "{ code: 422, when: validation failed }"]
+      request:
+        # params: [{ name: id, in: path, type: ObjectId, required: true }]   # only to add type/note
+        query: [{ name: page, type: number, required: false }]               # omit if none
+        body: "DTO-<NAME>-CREATE"
+      response: { status: 201, body: "ENT-<NAME>" }
+      errors: [{ code: 401, when: unauthenticated }, { code: 422, when: validation failed }]
 
   # ── ui — something rendered for a human (page/component/layout/theme) ──
   #    REQUIRED: `app` (which repo it ships in) — or `apps: [..]` if shared across frontends.
